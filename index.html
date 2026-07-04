@@ -777,7 +777,6 @@
       const subdomain = document.getElementById('subdomain').value.trim()
       const name = document.getElementById('name').value.trim()
       
-      // 必填校验
       if (!subdomain) {
         alert('请填写专属网址')
         return
@@ -787,29 +786,10 @@
         return
       }
       
-      // 显示加载
       document.getElementById('loadingOverlay').classList.add('active')
       
       try {
-        // 1. 上传简历
-        let resumeUrl = ''
-        if (uploadedResume) {
-          const resumeRes = await uploadFile(uploadedResume)
-          if (resumeRes.ok) {
-            resumeUrl = resumeRes.url
-          }
-        }
-        
-        // 2. 上传作品集
-        const portfolioUrls = []
-        for (const file of uploadedPortfolio) {
-          const res = await uploadFile(file)
-          if (res.ok) {
-            portfolioUrls.push(res.url)
-          }
-        }
-        
-        // 3. 提交用户信息
+        // 不上传文件，直接提交
         const userData = {
           subdomain,
           name,
@@ -817,10 +797,12 @@
           bio: document.getElementById('bio').value.trim(),
           email: document.getElementById('email').value.trim(),
           phone: document.getElementById('phone').value.trim(),
-          resumeUrl,
-          portfolioUrls,
+          resumeUrl: '',
+          portfolioUrls: [],
           templateId: selectedTemplate
         }
+        
+        console.log('提交数据:', userData)
         
         const res = await fetch(`${API_BASE}/register`, {
           method: 'POST',
@@ -828,22 +810,19 @@
           body: JSON.stringify(userData)
         })
         const text = await res.text()
+        console.log('register 返回:', text)
         const data = JSON.parse(text)
         
-        // 隐藏加载
         document.getElementById('loadingOverlay').classList.remove('active')
         
         if (data.ok) {
-          // 显示成功结果
           document.getElementById('resultUrl').textContent = data.url
           document.getElementById('resultUrl').href = data.url
           document.getElementById('infoModal').classList.remove('active')
           document.getElementById('resultModal').classList.add('active')
-          
-          // 清空表单
           resetForm()
         } else {
-          alert(data.error || '生成失败')
+          alert('生成失败: ' + (data.error || '未知错误'))
         }
         
       } catch (error) {
