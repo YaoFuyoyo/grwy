@@ -789,7 +789,6 @@
       document.getElementById('loadingOverlay').classList.add('active')
       
       try {
-        // 不上传文件，直接提交
         const userData = {
           subdomain,
           name,
@@ -811,7 +810,13 @@
         })
         const text = await res.text()
         console.log('register 返回:', text)
-        const data = JSON.parse(text)
+        
+        // 解析外层
+        const response = JSON.parse(text)
+        // 解析内层 body
+        const data = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+        
+        console.log('解析后数据:', data)
         
         document.getElementById('loadingOverlay').classList.remove('active')
         
