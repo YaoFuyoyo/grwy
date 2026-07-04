@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生成你的个人主页</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    /* ===== 页面容器 ===== */
+    .page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+    
+    .page-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+    
+    .page-subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: #888;
+      margin-bottom: 60px;
+    }
+    
+    /* ===== 模板选择区 ===== */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .template-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    
+    .template-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    
+    .template-card.selected {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102,126,234,0.15);
+    }
+    
+    .template-preview {
+      height: 200px;
+      position: relative;
+    }
+    
+    /* 模板1预览 - 极简白 */
+    .preview-minimal {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .preview-minimal .p-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+    .preview-minimal .p-title {
+      font-size: 12px;
+      color: #999;
+    }
+    .preview-minimal .p-line {
+      width: 40px;
+      height: 2px;
+      background: #1a1a1a;
+      margin: 12px 0;
+    }
+    
+    /* 模板2预览 - 深色科技 */
+    .preview-dark {
+      background: #0a0a0f;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .preview-dark .p-name {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+    .preview-dark .p-title {
+      font-size: 12px;
+      color: #888;
+    }
+    .preview-dark .p-line {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin: 12px 0;
+    }
+    
+    /* 模板3预览 - 卡片暖色 */
+    .preview-card {
+      background: #faf6f1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .preview-card .p-card {
+      background: #fff;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .preview-card .p-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c2c2c;
+      margin-bottom: 4px;
+    }
+    .preview-card .p-title {
+      font-size: 12px;
+      color: #c17817;
+    }
+    
+    .template-info {
+      padding: 20px;
+    }
+    
+    .template-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .template-desc {
+      font-size: 14px;
+      color: #888;
+    }
+    
+    /* ===== 确认按钮 ===== */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* ===== 弹窗遮罩 ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    /* ===== 弹窗内容 ===== */
+    .modal-content {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: modalSlideIn 0.3s ease;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .modal-header {
+      padding: 24px 32px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: #f5f5f5;
+      cursor: pointer;
+      font-size: 20px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-close:hover {
+      background: #eee;
+    }
+    
+    .modal-body {
+      padding: 24px 32px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    
+    .form-label .required {
+      color: #e74c3c;
+      margin-left: 2px;
+    }
+    
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .subdomain-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .subdomain-input {
+      flex: 1;
+    }
+    
+    .subdomain-suffix {
+      color: #888;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+    }
+    
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border: 2px dashed #e0e0e0;
+      border-radius: 10px;
+      color: #888;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .file-input-wrapper:hover .file-button {
+      border-color: #667eea;
+      color: #667eea;
+    }
+    
+    .file-list {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .file-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: #f0f0f0;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #555;
+    }
+    
+    .file-tag .remove {
+      cursor: pointer;
+      color: #999;
+      font-weight: 600;
+    }
+    
+    .file-tag .remove:hover {
+      color: #e74c3c;
+    }
+    
+    .modal-footer {
+      padding: 0 32px 32px;
+    }
+    
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .btn-submit:hover {
+      opacity: 0.9;
+    }
+    
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* ===== 结果弹窗 ===== */
+    .result-box {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    
+    .result-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    
+    .result-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .result-url {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #f0f0f0;
+      border-radius: 10px;
+      font-size: 16px;
+      color: #667eea;
+      text-decoration: none;
+      margin: 16px 0;
+      word-break: break-all;
+    }
+    
+    .result-url:hover {
+      background: #e8e8e8;
+    }
+    
+    .result-tip {
+      font-size: 14px;
+      color: #888;
+      margin-top: 12px;
+    }
+    
+    /* ===== 加载状态 ===== */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .loading-overlay.active {
+      display: flex;
+    }
+    
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #f0f0f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      font-size: 16px;
+      color: #666;
+    }
+    
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .template-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        max-height: 95vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 页面内容 -->
+  <div class="page-container">
+    <h1 class="page-title">选择你的专属模板</h1>
+    <p class="page-subtitle">3种风格，一键生成你的个人主页</p>
+    
+    <div class="template-grid">
+      <!-- 模板1：极简白 -->
+      <div class="template-card" data-template="template1" onclick="selectTemplate(this)">
+        <div class="template-preview preview-minimal">
+          <div class="p-name">张 三</div>
+          <div class="p-line"></div>
+          <div class="p-title">产品经理</div>
+        </div>
+        <div class="template-info">
+          <div class="template-name">极简白</div>
+          <div class="template-desc">干净留白，适合所有职业</div>
+        </div>
+      </div>
+      
+      <!-- 模板2：深色科技 -->
+      <div class="template-card" data-template="template2" onclick="selectTemplate(this)">
+        <div class="template-preview preview-dark">
+          <div class="p-name">李 四</div>
+          <div class="p-line"></div>
+          <div class="p-title">全栈工程师</div>
+        </div>
+        <div class="template-info">
+          <div class="template-name">深色科技</div>
+          <div class="template-desc">渐变强调，适合技术与设计</div>
+        </div>
+      </div>
+      
+      <!-- 模板3：卡片暖色 -->
+      <div class="template-card" data-template="template3" onclick="selectTemplate(this)">
+        <div class="template-preview preview-card">
+          <div class="p-card">
+            <div class="p-name">王 五</div>
+            <div class="p-title">自由咨询师</div>
+          </div>
+        </div>
+        <div class="template-info">
+          <div class="template-name">卡片暖色</div>
+          <div class="template-desc">圆角亲和，适合教育与服务</div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="btn-primary" id="confirmBtn" onclick="openModal()" disabled>
+      确认选择
+    </button>
+  </div>
+  
+  <!-- 填写信息弹窗 -->
+  <div class="modal-overlay" id="infoModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">填写个人信息</h2>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">
+            专属网址 <span class="required">*</span>
+          </label>
+          <div class="subdomain-wrapper">
+            <input 
+              type="text" 
+              class="form-input subdomain-input" 
+              id="subdomain" 
+              placeholder="如：fuyao"
+              oninput="validateSubdomain(this)"
+            >
+            <span class="subdomain-suffix">.zzyy99.cn</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">
+            姓名 <span class="required">*</span>
+          </label>
+          <input type="text" class="form-input" id="name" placeholder="你的姓名">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">职位/头衔</label>
+          <input type="text" class="form-input" id="title" placeholder="如：UI设计师">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">个人简介</label>
+          <textarea class="form-textarea" id="bio" placeholder="简单介绍一下自己..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">邮箱</label>
+          <input type="email" class="form-input" id="email" placeholder="example@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">电话</label>
+          <input type="tel" class="form-input" id="phone" placeholder="138xxxxxxx">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">简历（PDF）</label>
+          <div class="file-input-wrapper">
+            <input 
+              type="file" 
+              class="file-input" 
+              id="resume" 
+              accept=".pdf"
+              onchange="handleFileSelect(this, 'resume')"
+            >
+            <div class="file-button">
+              <span>📄</span>
+              <span>点击上传简历</span>
+            </div>
+          </div>
+          <div class="file-list" id="resumeList"></div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">作品集图片</label>
+          <div class="file-input-wrapper">
+            <input 
+              type="file" 
+              class="file-input" 
+              id="portfolio" 
+              accept="image/*" 
+              multiple
+              onchange="handleFileSelect(this, 'portfolio')"
+            >
+            <div class="file-button">
+              <span>🖼️</span>
+              <span>点击上传作品集（可多选）</span>
+            </div>
+          </div>
+          <div class="file-list" id="portfolioList"></div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-submit" id="submitBtn" onclick="submitForm()">
+          生成我的主页
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 结果弹窗 -->
+  <div class="modal-overlay" id="resultModal">
+    <div class="modal-content">
+      <div class="result-box">
+        <div class="result-icon">🎉</div>
+        <h2 class="result-title">生成成功！</h2>
+        <p>你的个人主页已创建</p>
+        <a href="#" class="result-url" id="resultUrl" target="_blank"></a>
+        <p class="result-tip">点击上方链接查看你的主页</p>
+        <button class="btn-primary" style="margin-top: 24px;" onclick="closeResultModal()">
+          知道了
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 加载中 -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p class="loading-text">正在生成你的主页...</p>
+  </div>
+
+  <script>
+    // ===== 配置 =====
+    const API_BASE = 'https://fuax8z452l.sealoshzh.site'
+    
+    // ===== 状态 =====
+    let selectedTemplate = null
+    let uploadedResume = null
+    let uploadedPortfolio = []
+    
+    // ===== 选择模板 =====
+    function selectTemplate(card) {
+      // 移除其他选中状态
+      document.querySelectorAll('.template-card').forEach(c => {
+        c.classList.remove('selected')
+      })
+      
+      // 添加选中状态
+      card.classList.add('selected')
+      selectedTemplate = card.dataset.template
+      
+      // 启用确认按钮
+      document.getElementById('confirmBtn').disabled = false
+    }
+    
+    // ===== 打开弹窗 =====
+    function openModal() {
+      if (!selectedTemplate) {
+        alert('请先选择一个模板')
+        return
+      }
+      document.getElementById('infoModal').classList.add('active')
+      document.body.style.overflow = 'hidden'
+    }
+    
+    // ===== 关闭弹窗 =====
+    function closeModal() {
+      document.getElementById('infoModal').classList.remove('active')
+      document.body.style.overflow = ''
+    }
+    
+    // ===== 验证子域名 =====
+    function validateSubdomain(input) {
+      // 只允许小写字母、数字、连字符
+      input.value = input.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
+    }
+    
+    // ===== 文件选择处理 =====
+    function handleFileSelect(input, type) {
+      if (type === 'resume') {
+        const file = input.files[0]
+        if (file) {
+          uploadedResume = file
+          document.getElementById('resumeList').innerHTML = `
+            <span class="file-tag">
+              📄 ${file.name}
+              <span class="remove" onclick="removeFile('resume')">×</span>
+            </span>
+          `
+        }
+      } else if (type === 'portfolio') {
+        const files = Array.from(input.files)
+        uploadedPortfolio = [...uploadedPortfolio, ...files]
+        renderPortfolioList()
+      }
+    }
+    
+    // ===== 渲染作品集列表 =====
+    function renderPortfolioList() {
+      const html = uploadedPortfolio.map((file, index) => `
+        <span class="file-tag">
+          🖼️ ${file.name}
+          <span class="remove" onclick="removePortfolio(${index})">×</span>
+        </span>
+      `).join('')
+      document.getElementById('portfolioList').innerHTML = html
+    }
+    
+    // ===== 移除文件 =====
+    function removeFile(type) {
+      if (type === 'resume') {
+        uploadedResume = null
+        document.getElementById('resumeList').innerHTML = ''
+        document.getElementById('resume').value = ''
+      }
+    }
+    
+    function removePortfolio(index) {
+      uploadedPortfolio.splice(index, 1)
+      renderPortfolioList()
+    }
+    
+    // ===== 上传文件到后端 =====
+    async function uploadFile(file) {
+      const formData = new FormData()
+      formData.append('file', file)
+      
+      const res = await fetch(`${API_BASE}/upload`, {
+        method: 'POST',
+        body: formData
+      })
+      const text = await res.text()
+      return JSON.parse(text)
+    }
+    
+    // ===== 提交表单 =====
+    async function submitForm() {
+      const subdomain = document.getElementById('subdomain').value.trim()
+      const name = document.getElementById('name').value.trim()
+      
+      // 必填校验
+      if (!subdomain) {
+        alert('请填写专属网址')
+        return
+      }
+      if (!name) {
+        alert('请填写姓名')
+        return
+      }
+      
+      // 显示加载
+      document.getElementById('loadingOverlay').classList.add('active')
+      
+      try {
+        // 1. 上传简历
+        let resumeUrl = ''
+        if (uploadedResume) {
+          const resumeRes = await uploadFile(uploadedResume)
+          if (resumeRes.ok) {
+            resumeUrl = resumeRes.url
+          }
+        }
+        
+        // 2. 上传作品集
+        const portfolioUrls = []
+        for (const file of uploadedPortfolio) {
+          const res = await uploadFile(file)
+          if (res.ok) {
+            portfolioUrls.push(res.url)
+          }
+        }
+        
+        // 3. 提交用户信息
+        const userData = {
+          subdomain,
+          name,
+          title: document.getElementById('title').value.trim(),
+          bio: document.getElementById('bio').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          resumeUrl,
+          portfolioUrls,
+          templateId: selectedTemplate
+        }
+        
+        const res = await fetch(`${API_BASE}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData)
+        })
+        const text = await res.text()
+        const data = JSON.parse(text)
+        
+        // 隐藏加载
+        document.getElementById('loadingOverlay').classList.remove('active')
+        
+        if (data.ok) {
+          // 显示成功结果
+          document.getElementById('resultUrl').textContent = data.url
+          document.getElementById('resultUrl').href = data.url
+          document.getElementById('infoModal').classList.remove('active')
+          document.getElementById('resultModal').classList.add('active')
+          
+          // 清空表单
+          resetForm()
+        } else {
+          alert(data.error || '生成失败')
+        }
+        
+      } catch (error) {
+        document.getElementById('loadingOverlay').classList.remove('active')
+        alert('提交失败：' + error.message)
+      }
+    }
+    
+    // ===== 重置表单 =====
+    function resetForm() {
+      document.getElementById('subdomain').value = ''
+      document.getElementById('name').value = ''
+      document.getElementById('title').value = ''
+      document.getElementById('bio').value = ''
+      document.getElementById('email').value = ''
+      document.getElementById('phone').value = ''
+      uploadedResume = null
+      uploadedPortfolio = []
+      document.getElementById('resumeList').innerHTML = ''
+      document.getElementById('portfolioList').innerHTML = ''
+      document.getElementById('resume').value = ''
+      document.getElementById('portfolio').value = ''
+    }
+    
+    // ===== 关闭结果弹窗 =====
+    function closeResultModal() {
+      document.getElementById('resultModal').classList.remove('active')
+      document.body.style.overflow = ''
+    }
+    
+    // ===== 点击遮罩关闭弹窗 =====
+    document.getElementById('infoModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal()
+    })
+    
+    document.getElementById('resultModal').addEventListener('click', function(e) {
+      if (e.target === this) closeResultModal()
+    })
+    
+    // ===== ESC 关闭弹窗 =====
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal()
+        closeResultModal()
+      }
+    })
+  </script>
+</body>
+</html>
