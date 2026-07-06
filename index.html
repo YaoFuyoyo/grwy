@@ -154,6 +154,34 @@
       padding: 20px;
     }
     
+    .template-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    
+    .btn-preview {
+      flex: 1;
+      padding: 8px 12px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      color: #666;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    
+    .btn-preview:hover {
+      background: #eee;
+      border-color: #667eea;
+      color: #667eea;
+    }
+    
     .template-name {
       font-size: 18px;
       font-weight: 600;
@@ -512,6 +540,9 @@
         <div class="template-info">
           <div class="template-name">极简白</div>
           <div class="template-desc">干净留白，适合所有职业</div>
+          <div class="template-actions">
+            <button class="btn-preview" onclick="event.stopPropagation(); openPreview('template1')">👁️ 预览</button>
+          </div>
         </div>
       </div>
       
@@ -525,6 +556,9 @@
         <div class="template-info">
           <div class="template-name">深色科技</div>
           <div class="template-desc">渐变强调，适合技术与设计</div>
+          <div class="template-actions">
+            <button class="btn-preview" onclick="event.stopPropagation(); openPreview('template2')">👁️ 预览</button>
+          </div>
         </div>
       </div>
       
@@ -539,6 +573,9 @@
         <div class="template-info">
           <div class="template-name">卡片暖色</div>
           <div class="template-desc">圆角亲和，适合教育与服务</div>
+          <div class="template-actions">
+            <button class="btn-preview" onclick="event.stopPropagation(); openPreview('template3')">👁️ 预览</button>
+          </div>
         </div>
       </div>
     </div>
@@ -676,6 +713,11 @@
     let selectedTemplate = null
     let uploadedResume = null
     let uploadedPortfolio = []
+    
+    // ===== 打开预览 =====
+    function openPreview(templateId) {
+      window.open(`templates/preview.html?template=${templateId}`, '_blank', 'width=900,height=900,top=50,left=50')
+    }
     
     // ===== 选择模板 =====
     function selectTemplate(card) {
