@@ -789,6 +789,31 @@
       document.getElementById('loadingOverlay').classList.add('active')
       
       try {
+        // 1. 上传简历
+        let resumeUrl = ''
+        if (uploadedResume) {
+          const resumeRes = await uploadFile(uploadedResume)
+          console.log('简历上传结果:', resumeRes)
+          if (resumeRes.ok) {
+            resumeUrl = resumeRes.url
+          } else {
+            console.error('简历上传失败:', resumeRes.error)
+          }
+        }
+        
+        // 2. 上传作品集
+        const portfolioUrls = []
+        for (const file of uploadedPortfolio) {
+          const res = await uploadFile(file)
+          console.log('作品集上传结果:', res)
+          if (res.ok) {
+            portfolioUrls.push(res.url)
+          } else {
+            console.error('作品集上传失败:', res.error)
+          }
+        }
+        
+        // 3. 提交用户信息
         const userData = {
           subdomain,
           name,
@@ -796,8 +821,8 @@
           bio: document.getElementById('bio').value.trim(),
           email: document.getElementById('email').value.trim(),
           phone: document.getElementById('phone').value.trim(),
-          resumeUrl: '',
-          portfolioUrls: [],
+          resumeUrl,
+          portfolioUrls,
           templateId: selectedTemplate
         }
         
@@ -821,11 +846,8 @@
         document.getElementById('loadingOverlay').classList.remove('active')
         
         if (data.ok) {
-          const response = JSON.parse(text)
-          const result = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
-          
-          document.getElementById('resultUrl').textContent = result.url
-          document.getElementById('resultUrl').href = result.url
+          document.getElementById('resultUrl').textContent = data.url
+          document.getElementById('resultUrl').href = data.url
           document.getElementById('infoModal').classList.remove('active')
           document.getElementById('resultModal').classList.add('active')
           resetForm()
@@ -835,6 +857,7 @@
         
       } catch (error) {
         document.getElementById('loadingOverlay').classList.remove('active')
+        console.error('提交失败:', error)
         alert('提交失败：' + error.message)
       }
     }
