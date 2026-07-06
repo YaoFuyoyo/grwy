@@ -794,10 +794,14 @@
         if (uploadedResume) {
           const resumeRes = await uploadFile(uploadedResume)
           console.log('简历上传结果:', resumeRes)
-          if (resumeRes.ok) {
-            resumeUrl = resumeRes.url
+          
+          // 兼容两种格式
+          const resumeData = resumeRes.ok ? resumeRes : JSON.parse(resumeRes.body)
+          
+          if (resumeData.ok) {
+            resumeUrl = resumeData.url
           } else {
-            console.error('简历上传失败:', resumeRes.error)
+            console.error('简历上传失败:', resumeData.error)
           }
         }
         
@@ -806,10 +810,14 @@
         for (const file of uploadedPortfolio) {
           const res = await uploadFile(file)
           console.log('作品集上传结果:', res)
-          if (res.ok) {
-            portfolioUrls.push(res.url)
+          
+          // 兼容两种格式
+          const fileData = res.ok ? res : JSON.parse(res.body)
+          
+          if (fileData.ok) {
+            portfolioUrls.push(fileData.url)
           } else {
-            console.error('作品集上传失败:', res.error)
+            console.error('作品集上传失败:', fileData.error)
           }
         }
         
