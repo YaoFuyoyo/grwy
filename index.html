@@ -821,8 +821,11 @@
         document.getElementById('loadingOverlay').classList.remove('active')
         
         if (data.ok) {
-          document.getElementById('resultUrl').textContent = data.url
-          document.getElementById('resultUrl').href = data.url
+          const response = JSON.parse(text)
+          const result = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+          
+          document.getElementById('resultUrl').textContent = result.url
+          document.getElementById('resultUrl').href = result.url
           document.getElementById('infoModal').classList.remove('active')
           document.getElementById('resultModal').classList.add('active')
           resetForm()

@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/:subdomain/:userId",
+      "destination": "/profile.html?subdomain=:subdomain&userId=:userId"
+    }
+  ]
+}
