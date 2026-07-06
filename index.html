@@ -828,6 +828,7 @@
           email: document.getElementById('email').value.trim(),
           phone: document.getElementById('phone').value.trim(),
           resumeUrl,
+          resumeFilename: uploadedResume ? uploadedResume.name : '',  // 新增：上传的原始文件名
           portfolioUrls,
           templateId: selectedTemplate
         }
