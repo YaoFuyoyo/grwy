@@ -4,5 +4,11 @@
     "api/*.js": {
       "maxDuration": 10
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/:subdomain/:userId",
+      "destination": "/api/getPage?subdomain=:subdomain&userId=:userId"
+    }
+  ]
 }
