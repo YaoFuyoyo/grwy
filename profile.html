@@ -32,7 +32,7 @@
   </div>
 
   <script>
-    const API_BASE = 'https://fuax8z452l.sealoshzh.site'
+    const API_BASE = 'https://grwy.zzyy99.cn/api'
     
     console.log('完整 URL:', window.location.href)
     console.log('pathname:', window.location.pathname)
@@ -68,16 +68,7 @@
         
         console.log('getPage 返回:', text.substring(0, 200))
         
-        // 解析 Laf 返回格式
-        let html = text
-        try {
-          const data = JSON.parse(text)
-          if (data.body && typeof data.body === 'string') {
-            html = data.body
-          }
-        } catch (e) {
-          // 不是 JSON，直接使用
-        }
+        const html = text
         
         // 检查是否是 HTML
         if (html.includes('<!DOCTYPE html>') || html.includes('<html')) {
