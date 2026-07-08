@@ -849,12 +849,8 @@
           const resumeRes = await uploadFile(uploadedResume)
           console.log('简历上传结果:', resumeRes)
           
-          // 直接解析外层对象的 body
-          if (resumeRes.body) {
-            const resumeData = JSON.parse(resumeRes.body)
-            if (resumeData.ok) {
-              resumeUrl = resumeData.url
-            }
+          if (resumeRes.ok) {
+            resumeUrl = resumeRes.url
           }
         }
         
@@ -864,12 +860,8 @@
           const res = await uploadFile(file)
           console.log('作品集上传结果:', res)
           
-          // 直接解析外层对象的 body
-          if (res.body) {
-            const fileData = JSON.parse(res.body)
-            if (fileData.ok) {
-              portfolioUrls.push(fileData.url)
-            }
+          if (res.ok) {
+            portfolioUrls.push(res.url)
           }
         }
         
