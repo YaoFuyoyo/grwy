@@ -402,6 +402,19 @@ module.exports = async (req, res) => {
     let userId = req.query.userId || '';
     let subdomain = req.query.subdomain || '';
 
+    // 新增：参数校验
+    if (!userId && !subdomain) {
+      return res.status(404).send(`<!DOCTYPE html>
+    <html>
+    <head><title>404</title></head>
+    <body style="font-family:Arial;text-align:center;padding:80px 20px;">
+      <h1 style="font-size:72px;color:#ddd;margin-bottom:20px;">404</h1>
+      <p style="font-size:18px;color:#666;">页面不存在</p>
+      <p style="color:#999;">请提供用户ID或子域名</p>
+    </body>
+    </html>`);
+    }
+
     const db = await getDb();
     const users = db.collection('users');
 
