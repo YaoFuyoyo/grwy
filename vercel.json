@@ -1,8 +1,8 @@
 {
-  "rewrites": [
-    {
-      "source": "/:subdomain/:userId",
-      "destination": "/profile.html?subdomain=:subdomain&userId=:userId"
+  "version": 2,
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 10
     }
-  ]
+  }
 }
