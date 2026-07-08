@@ -4,14 +4,14 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Content-Type', 'application/json');
   
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
   }
 
   try {
-    // Vercel 中文件上传需要用 multipart/form-data
-    // 这里简化处理，前端把文件转成 base64 直接传
+    // 前端把文件转成 base64 直接传
     const body = req.body || {};
     const { fileData, filename } = body;
 
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ ok: false, error: '没有上传文件' });
     }
 
-    return res.json({
+    return res.status(200).json({
       ok: true,
       url: fileData,
       filename: filename || 'unnamed'
