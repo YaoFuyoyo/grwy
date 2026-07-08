@@ -53,10 +53,10 @@ module.exports = async (req, res) => {
       createdAt: new Date()
     });
 
-    return res.status(200).json({
+    return res.status(200).send(JSON.stringify({
       ok: true,
       url: `https://grwy.zzyy99.cn/${subdomain}/${userIdStr}`
-    });
+    }));
 
   } catch (error) {
     console.log('register 错误:', error.message);
