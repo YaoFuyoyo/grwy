@@ -14,7 +14,6 @@
       line-height: 1.6;
     }
     
-    /* ===== 页面容器 ===== */
     .page-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -36,7 +35,6 @@
       margin-bottom: 60px;
     }
     
-    /* ===== 模板选择区 ===== */
     .template-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -65,135 +63,124 @@
     }
     
     .template-preview {
-      height: 200px;
+      height: 180px;
       position: relative;
-    }
-    
-    /* 模板1预览 - 极简白 */
-    .preview-minimal {
-      background: #fff;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       padding: 20px;
     }
-    .preview-minimal .p-name {
-      font-size: 20px;
+    
+    .preview-simple-white { background: #f5f5f5; }
+    .preview-graphite-gray { background: #EDF2F7; }
+    .preview-onyx-black { background: #0d0d0d; }
+    .preview-red-east { background: linear-gradient(135deg, #c41e3a, #8b0000); }
+    .preview-vibrant-orange { background: linear-gradient(135deg, #ff6b35, #f7931e); }
+    .preview-amber-yellow { background: linear-gradient(135deg, #ffbf00, #ff8c00); }
+    .preview-forest-green { background: linear-gradient(135deg, #2d5a27, #1a3a16); }
+    .preview-tech-blue { background: linear-gradient(135deg, #1e3a8a, #0f172a); }
+    .preview-future-purple { background: linear-gradient(135deg, #6b21a8, #312e81); }
+    
+    .template-preview .p-name {
+      font-size: 18px;
       font-weight: 600;
-      color: #1a1a1a;
       margin-bottom: 4px;
     }
-    .preview-minimal .p-title {
+    .template-preview .p-title {
       font-size: 12px;
-      color: #999;
+      opacity: 0.8;
     }
-    .preview-minimal .p-line {
-      width: 40px;
+    .template-preview .p-line {
+      width: 30px;
       height: 2px;
-      background: #1a1a1a;
-      margin: 12px 0;
+      margin: 8px 0;
     }
     
-    /* 模板2预览 - 深色科技 */
-    .preview-dark {
-      background: #0a0a0f;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .preview-dark .p-name {
-      font-size: 20px;
-      font-weight: 700;
+    .preview-simple-white .p-name,
+    .preview-graphite-gray .p-name,
+    .preview-onyx-black .p-name {
       background: linear-gradient(135deg, #667eea, #764ba2);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 4px;
     }
-    .preview-dark .p-title {
-      font-size: 12px;
-      color: #888;
-    }
-    .preview-dark .p-line {
-      width: 40px;
-      height: 2px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      margin: 12px 0;
-    }
+    .preview-simple-white .p-title { color: #888; }
+    .preview-simple-white .p-line { background: #ddd; }
     
-    /* 模板3预览 - 卡片暖色 */
-    .preview-card {
-      background: #faf6f1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
+    .preview-graphite-gray .p-title { color: #aaa; }
+    .preview-graphite-gray .p-line { background: #555; }
+    
+    .preview-onyx-black .p-title { color: #666; }
+    .preview-onyx-black .p-line { background: #333; }
+    
+    .preview-red-east .p-name,
+    .preview-red-east .p-title,
+    .preview-vibrant-orange .p-name,
+    .preview-vibrant-orange .p-title,
+    .preview-amber-yellow .p-name,
+    .preview-amber-yellow .p-title,
+    .preview-forest-green .p-name,
+    .preview-forest-green .p-title,
+    .preview-tech-blue .p-name,
+    .preview-tech-blue .p-title,
+    .preview-future-purple .p-name,
+    .preview-future-purple .p-title {
+      color: #fff;
     }
-    .preview-card .p-card {
-      background: #fff;
-      padding: 16px 24px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-    .preview-card .p-name {
-      font-size: 18px;
-      font-weight: 700;
-      color: #2c2c2c;
-      margin-bottom: 4px;
-    }
-    .preview-card .p-title {
-      font-size: 12px;
-      color: #c17817;
+    .preview-red-east .p-line,
+    .preview-vibrant-orange .p-line,
+    .preview-amber-yellow .p-line,
+    .preview-forest-green .p-line,
+    .preview-tech-blue .p-line,
+    .preview-future-purple .p-line {
+      background: rgba(255,255,255,0.3);
     }
     
     .template-info {
-      padding: 20px;
+      padding: 16px;
+      text-align: center;
     }
-    
-    .template-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    
-    .btn-preview {
-      flex: 1;
-      padding: 8px 12px;
-      background: #f5f5f5;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      color: #666;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-    
-    .btn-preview:hover {
-      background: #eee;
-      border-color: #667eea;
-      color: #667eea;
-    }
-    
     .template-name {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       margin-bottom: 4px;
     }
-    
     .template-desc {
-      font-size: 14px;
+      font-size: 13px;
       color: #888;
+      margin-bottom: 8px;
     }
     
-    /* ===== 确认按钮 ===== */
+    .preview-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.2s;
+      opacity: 0.7;
+    }
+    
+    .preview-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .preview-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #333;
+    }
+    
     .btn-primary {
       display: block;
       width: 100%;
@@ -209,17 +196,9 @@
       cursor: pointer;
       transition: opacity 0.2s;
     }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
     
-    .btn-primary:hover {
-      opacity: 0.9;
-    }
-    
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    
-    /* ===== 弹窗遮罩 ===== */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -233,17 +212,13 @@
       align-items: center;
       padding: 20px;
     }
+    .modal-overlay.active { display: flex; }
     
-    .modal-overlay.active {
-      display: flex;
-    }
-    
-    /* ===== 弹窗内容 ===== */
     .modal-content {
       background: #fff;
       border-radius: 20px;
       width: 100%;
-      max-width: 560px;
+      max-width: 700px;
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
@@ -251,14 +226,8 @@
     }
     
     @keyframes modalSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     .modal-header {
@@ -267,12 +236,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    
-    .modal-title {
-      font-size: 24px;
-      font-weight: 700;
-    }
-    
+    .modal-title { font-size: 24px; font-weight: 700; }
     .modal-close {
       width: 36px;
       height: 36px;
@@ -286,74 +250,44 @@
       align-items: center;
       justify-content: center;
     }
+    .modal-close:hover { background: #eee; }
     
-    .modal-close:hover {
-      background: #eee;
-    }
+    .modal-body { padding: 24px 32px; }
     
-    .modal-body {
-      padding: 24px 32px;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
+    .form-group { margin-bottom: 16px; }
     .form-label {
       display: block;
       font-size: 14px;
       font-weight: 600;
       color: #555;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
+    .form-label .required { color: #e74c3c; margin-left: 2px; }
     
-    .form-label .required {
-      color: #e74c3c;
-      margin-left: 2px;
-    }
-    
-    .form-input,
-    .form-textarea {
+    .form-input, .form-textarea, .form-select {
       width: 100%;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border: 1px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 15px;
+      border-radius: 8px;
+      font-size: 14px;
       transition: border-color 0.2s;
       font-family: inherit;
     }
-    
-    .form-input:focus,
-    .form-textarea:focus {
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
       outline: none;
       border-color: #667eea;
     }
-    
-    .form-textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
+    .form-textarea { resize: vertical; min-height: 80px; }
     
     .subdomain-wrapper {
       display: flex;
       align-items: center;
       gap: 8px;
     }
+    .subdomain-input { flex: 1; }
+    .subdomain-suffix { color: #888; font-size: 14px; white-space: nowrap; }
     
-    .subdomain-input {
-      flex: 1;
-    }
-    
-    .subdomain-suffix {
-      color: #888;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-    
-    .file-input-wrapper {
-      position: relative;
-    }
-    
+    .file-input-wrapper { position: relative; }
     .file-input {
       position: absolute;
       opacity: 0;
@@ -361,96 +295,128 @@
       height: 100%;
       cursor: pointer;
     }
-    
     .file-button {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px;
+      padding: 10px;
       border: 2px dashed #e0e0e0;
-      border-radius: 10px;
+      border-radius: 8px;
       color: #888;
-      font-size: 14px;
+      font-size: 13px;
       transition: all 0.2s;
     }
-    
     .file-input-wrapper:hover .file-button {
       border-color: #667eea;
       color: #667eea;
     }
     
     .file-list {
-      margin-top: 12px;
+      margin-top: 8px;
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
-    
     .file-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
+      gap: 4px;
+      padding: 4px 10px;
       background: #f0f0f0;
-      border-radius: 20px;
-      font-size: 13px;
+      border-radius: 16px;
+      font-size: 12px;
       color: #555;
     }
+    .file-tag .remove { cursor: pointer; color: #999; font-weight: 600; }
+    .file-tag .remove:hover { color: #e74c3c; }
     
-    .file-tag .remove {
-      cursor: pointer;
-      color: #999;
-      font-weight: 600;
-    }
-    
-    .file-tag .remove:hover {
-      color: #e74c3c;
-    }
-    
-    .modal-footer {
-      padding: 0 32px 32px;
-    }
+    .modal-footer { padding: 0 32px 32px; }
     
     .btn-submit {
       width: 100%;
-      padding: 16px;
+      padding: 14px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #fff;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: opacity 0.2s;
     }
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
     
-    .btn-submit:hover {
-      opacity: 0.9;
+    .section-divider {
+      height: 1px;
+      background: #eee;
+      margin: 24px 0;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+      padding-left: 10px;
+      border-left: 3px solid #667eea;
     }
     
-    .btn-submit:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .dynamic-section {
+      border: 1px dashed #ddd;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #fafafa;
     }
+    .dynamic-section .form-group { margin-bottom: 12px; }
+    .dynamic-section .dynamic-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #eee;
+    }
+    .add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      color: #666;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .add-btn:hover {
+      background: #eee;
+      border-color: #667eea;
+      color: #667eea;
+    }
+    .remove-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      background: #fff;
+      border: 1px solid #ffcccc;
+      border-radius: 4px;
+      color: #e74c3c;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .remove-btn:hover { background: #ffeaea; }
     
-    /* ===== 结果弹窗 ===== */
     .result-box {
       text-align: center;
       padding: 40px 20px;
     }
-    
-    .result-icon {
-      font-size: 64px;
-      margin-bottom: 20px;
-    }
-    
-    .result-title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-    
+    .result-icon { font-size: 64px; margin-bottom: 20px; }
+    .result-title { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
     .result-url {
       display: inline-block;
       padding: 12px 24px;
@@ -462,18 +428,9 @@
       margin: 16px 0;
       word-break: break-all;
     }
+    .result-url:hover { background: #e8e8e8; }
+    .result-tip { font-size: 14px; color: #888; margin-top: 12px; }
     
-    .result-url:hover {
-      background: #e8e8e8;
-    }
-    
-    .result-tip {
-      font-size: 14px;
-      color: #888;
-      margin-top: 12px;
-    }
-    
-    /* ===== 加载状态 ===== */
     .loading-overlay {
       display: none;
       position: fixed;
@@ -488,10 +445,7 @@
       flex-direction: column;
       gap: 16px;
     }
-    
-    .loading-overlay.active {
-      display: flex;
-    }
+    .loading-overlay.active { display: flex; }
     
     .spinner {
       width: 48px;
@@ -501,81 +455,156 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 16px; color: #666; }
     
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-      font-size: 16px;
-      color: #666;
-    }
-    
-    /* ===== 响应式 ===== */
     @media (max-width: 768px) {
-      .template-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .modal-content {
-        max-height: 95vh;
-      }
+      .template-grid { grid-template-columns: repeat(2, 1fr); }
+      .modal-content { max-height: 95vh; }
+    }
+    @media (max-width: 480px) {
+      .template-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <!-- 页面内容 -->
   <div class="page-container">
     <h1 class="page-title">选择你的专属模板</h1>
-    <p class="page-subtitle">3种风格，一键生成你的个人主页</p>
+    <p class="page-subtitle">9种色彩主题，一键生成你的个人主页</p>
     
     <div class="template-grid">
-      <!-- 模板1：极简白 -->
-      <div class="template-card" data-template="template1" onclick="selectTemplate(this)">
-        <div class="template-preview preview-minimal">
-          <div class="p-name">张 三</div>
+      <div class="template-card" data-template="theme-simple-white" onclick="selectTemplate(this)">
+        <div class="template-preview preview-simple-white">
+          <div class="p-name">极简白</div>
           <div class="p-line"></div>
-          <div class="p-title">产品经理</div>
+          <div class="p-title">干净清爽</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-simple-white')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
         </div>
         <div class="template-info">
-          <div class="template-name">极简白</div>
-          <div class="template-desc">干净留白，适合所有职业</div>
-          <div class="template-actions">
-            <button class="btn-preview" onclick="event.stopPropagation(); openPreview('template1')">👁️ 预览</button>
-          </div>
+          <div class="template-name">克制・纯粹・留白</div>
+          <div class="template-desc">文字工作者、作家、极简主义设计师</div>
         </div>
       </div>
       
-      <!-- 模板2：深色科技 -->
-      <div class="template-card" data-template="template2" onclick="selectTemplate(this)">
-        <div class="template-preview preview-dark">
-          <div class="p-name">李 四</div>
+      <div class="template-card" data-template="theme-graphite-gray" onclick="selectTemplate(this)">
+        <div class="template-preview preview-graphite-gray">
+          <div class="p-name">石墨灰</div>
           <div class="p-line"></div>
-          <div class="p-title">全栈工程师</div>
+          <div class="p-title">沉稳大气</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-graphite-gray')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
         </div>
         <div class="template-info">
-          <div class="template-name">深色科技</div>
-          <div class="template-desc">渐变强调，适合技术与设计</div>
-          <div class="template-actions">
-            <button class="btn-preview" onclick="event.stopPropagation(); openPreview('template2')">👁️ 预览</button>
-          </div>
+          <div class="template-name">专业・冷静・秩序</div>
+          <div class="template-desc">咨询、金融、技术文档、商务人士</div>
         </div>
       </div>
       
-      <!-- 模板3：卡片暖色 -->
-      <div class="template-card" data-template="template3" onclick="selectTemplate(this)">
-        <div class="template-preview preview-card">
-          <div class="p-card">
-            <div class="p-name">王 五</div>
-            <div class="p-title">自由咨询师</div>
-          </div>
+      <div class="template-card" data-template="theme-onyx-black" onclick="selectTemplate(this)">
+        <div class="template-preview preview-onyx-black">
+          <div class="p-name">曜石黑</div>
+          <div class="p-line"></div>
+          <div class="p-title">深邃神秘</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-onyx-black')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
         </div>
         <div class="template-info">
-          <div class="template-name">卡片暖色</div>
-          <div class="template-desc">圆角亲和，适合教育与服务</div>
-          <div class="template-actions">
-            <button class="btn-preview" onclick="event.stopPropagation(); openPreview('template3')">👁️ 预览</button>
-          </div>
+          <div class="template-name">深邃・纯粹・张力</div>
+          <div class="template-desc">设计、摄影、艺术创作者</div>
+        </div>
+      </div>
+      
+      <div class="template-card" data-template="theme-red-east" onclick="selectTemplate(this)">
+        <div class="template-preview preview-red-east">
+          <div class="p-name">东方红</div>
+          <div class="p-line"></div>
+          <div class="p-title">热情活力</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-red-east')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+        <div class="template-info">
+          <div class="template-name">气韵・热烈・东方</div>
+          <div class="template-desc">文化创作者、党建工作者、国风设计师</div>
+        </div>
+      </div>
+      
+      <div class="template-card" data-template="theme-vibrant-orange" onclick="selectTemplate(this)">
+        <div class="template-preview preview-vibrant-orange">
+          <div class="p-name">活力橙</div>
+          <div class="p-line"></div>
+          <div class="p-title">阳光积极</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-vibrant-orange')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+        <div class="template-info">
+          <div class="template-name">热情・外向・能量</div>
+          <div class="template-desc">自媒体、销售、创业者、社群运营者</div>
+        </div>
+      </div>
+      
+      <div class="template-card" data-template="theme-amber-yellow" onclick="selectTemplate(this)">
+        <div class="template-preview preview-amber-yellow">
+          <div class="p-name">琥珀黄</div>
+          <div class="p-line"></div>
+          <div class="p-title">温暖亲和</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-amber-yellow')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+        <div class="template-info">
+          <div class="template-name">阳光・活力・亲和</div>
+          <div class="template-desc">适合教育、生活方式、亲子类创作者</div>
+        </div>
+      </div>
+      
+      <div class="template-card" data-template="theme-forest-green" onclick="selectTemplate(this)">
+        <div class="template-preview preview-forest-green">
+          <div class="p-name">森野绿</div>
+          <div class="p-line"></div>
+          <div class="p-title">自然清新</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-forest-green')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+        <div class="template-info">
+          <div class="template-name">生态・有机・治愈</div>
+          <div class="template-desc">环保、户外、健康、可持续领域</div>
+        </div>
+      </div>
+      
+      <div class="template-card" data-template="theme-tech-blue" onclick="selectTemplate(this)">
+        <div class="template-preview preview-tech-blue">
+          <div class="p-name">科技蓝</div>
+          <div class="p-line"></div>
+          <div class="p-title">专业前沿</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-tech-blue')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+        <div class="template-info">
+          <div class="template-name">可信・专业・精密</div>
+          <div class="template-desc">开发者、产品经理、技术博主</div>
+        </div>
+      </div>
+      
+      <div class="template-card" data-template="theme-future-purple" onclick="selectTemplate(this)">
+        <div class="template-preview preview-future-purple">
+          <div class="p-name">未来紫</div>
+          <div class="p-line"></div>
+          <div class="p-title">创新未来</div>
+          <button class="preview-btn" onclick="event.stopPropagation(); openPreview('theme-future-purple')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+        <div class="template-info">
+          <div class="template-name">前沿・探索・幻境</div>
+          <div class="template-desc">AI、Web3、前沿科技领域创作者</div>
         </div>
       </div>
     </div>
@@ -585,7 +614,6 @@
     </button>
   </div>
   
-  <!-- 填写信息弹窗 -->
   <div class="modal-overlay" id="infoModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -594,37 +622,37 @@
       </div>
       
       <div class="modal-body">
+        <div class="section-title">基础信息</div>
+        
         <div class="form-group">
-          <label class="form-label">
-            专属网址 <span class="required">*</span>
-          </label>
+          <label class="form-label">专属网址 <span class="required">*</span></label>
           <div class="subdomain-wrapper">
-            <input 
-              type="text" 
-              class="form-input subdomain-input" 
-              id="subdomain" 
-              placeholder="如：fuyao"
-              oninput="validateSubdomain(this)"
-            >
+            <input type="text" class="form-input subdomain-input" id="subdomain" placeholder="如：fuyao" oninput="validateSubdomain(this)">
             <span class="subdomain-suffix">.zzyy99.cn</span>
           </div>
         </div>
         
         <div class="form-group">
-          <label class="form-label">
-            姓名 <span class="required">*</span>
-          </label>
+          <label class="form-label">姓名 <span class="required">*</span></label>
           <input type="text" class="form-input" id="name" placeholder="你的姓名">
         </div>
         
         <div class="form-group">
           <label class="form-label">职位/头衔</label>
-          <input type="text" class="form-input" id="title" placeholder="如：UI设计师">
+          <input type="text" class="form-input" id="title" placeholder="如：产品经理">
         </div>
         
         <div class="form-group">
           <label class="form-label">个人简介</label>
           <textarea class="form-textarea" id="bio" placeholder="简单介绍一下自己..."></textarea>
+        </div>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">联系信息</div>
+        
+        <div class="form-group">
+          <label class="form-label">电话</label>
+          <input type="tel" class="form-input" id="phone" placeholder="138xxxxxxx">
         </div>
         
         <div class="form-group">
@@ -633,24 +661,96 @@
         </div>
         
         <div class="form-group">
-          <label class="form-label">电话</label>
-          <input type="tel" class="form-input" id="phone" placeholder="138xxxxxxx">
+          <label class="form-label">出生日期</label>
+          <input type="date" class="form-input" id="birthDate">
         </div>
+        
+        <div class="form-group">
+          <label class="form-label">学历</label>
+          <select class="form-select" id="educationLevel">
+            <option value="">请选择</option>
+            <option value="博士">博士</option>
+            <option value="硕士">硕士</option>
+            <option value="本科">本科</option>
+            <option value="大专">大专</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">社交媒体</div>
+        
+        <div class="form-group">
+          <label class="form-label">微信号</label>
+          <input type="text" class="form-input" id="wechat" placeholder="你的微信号">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">QQ号</label>
+          <input type="text" class="form-input" id="qq" placeholder="你的QQ号">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">微博</label>
+          <input type="text" class="form-input" id="weibo" placeholder="你的微博昵称">
+        </div>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">图片上传</div>
+        
+        <div class="form-group">
+          <label class="form-label">头像</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="avatar" accept="image/*" onchange="handleFileSelect(this, 'avatar')">
+            <div class="file-button"><span>🖼️</span><span>点击上传头像</span></div>
+          </div>
+          <div class="file-list" id="avatarList"></div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">证件照</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="idPhoto" accept="image/*" onchange="handleFileSelect(this, 'idPhoto')">
+            <div class="file-button"><span>🖼️</span><span>点击上传证件照</span></div>
+          </div>
+          <div class="file-list" id="idPhotoList"></div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">微信二维码</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="wechatQr" accept="image/*" onchange="handleFileSelect(this, 'wechatQr')">
+            <div class="file-button"><span>📱</span><span>点击上传微信二维码</span></div>
+          </div>
+          <div class="file-list" id="wechatQrList"></div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">QQ二维码</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="qqQr" accept="image/*" onchange="handleFileSelect(this, 'qqQr')">
+            <div class="file-button"><span>💬</span><span>点击上传QQ二维码</span></div>
+          </div>
+          <div class="file-list" id="qqQrList"></div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">微博二维码</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="weiboQr" accept="image/*" onchange="handleFileSelect(this, 'weiboQr')">
+            <div class="file-button"><span>🌐</span><span>点击上传微博二维码</span></div>
+          </div>
+          <div class="file-list" id="weiboQrList"></div>
+        </div>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">简历与作品集</div>
         
         <div class="form-group">
           <label class="form-label">简历（PDF）</label>
           <div class="file-input-wrapper">
-            <input 
-              type="file" 
-              class="file-input" 
-              id="resume" 
-              accept=".pdf"
-              onchange="handleFileSelect(this, 'resume')"
-            >
-            <div class="file-button">
-              <span>📄</span>
-              <span>点击上传简历</span>
-            </div>
+            <input type="file" class="file-input" id="resume" accept=".pdf" onchange="handleFileSelect(this, 'resume')">
+            <div class="file-button"><span>📄</span><span>点击上传简历</span></div>
           </div>
           <div class="file-list" id="resumeList"></div>
         </div>
@@ -658,21 +758,211 @@
         <div class="form-group">
           <label class="form-label">作品集图片</label>
           <div class="file-input-wrapper">
-            <input 
-              type="file" 
-              class="file-input" 
-              id="portfolio" 
-              accept="image/*" 
-              multiple
-              onchange="handleFileSelect(this, 'portfolio')"
-            >
-            <div class="file-button">
-              <span>🖼️</span>
-              <span>点击上传作品集（可多选）</span>
-            </div>
+            <input type="file" class="file-input" id="portfolio" accept="image/*" multiple onchange="handleFileSelect(this, 'portfolio')">
+            <div class="file-button"><span>🖼️</span><span>点击上传作品集（可多选）</span></div>
           </div>
           <div class="file-list" id="portfolioList"></div>
         </div>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">个人优势</div>
+        
+        <div id="strengths-container">
+          <div class="dynamic-section" data-index="0">
+            <div class="dynamic-title">优势 1</div>
+            <div class="form-group">
+              <label class="form-label">优势名称</label>
+              <input type="text" class="form-input" id="strengthName0" placeholder="如：跨学科背景">
+            </div>
+            <div class="form-group">
+              <label class="form-label">优势描述</label>
+              <textarea class="form-textarea" id="strengthDesc0" placeholder="详细描述你的优势..."></textarea>
+            </div>
+            <button class="remove-btn" onclick="removeStrength(0)">删除</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addStrength()">+ 添加优势</button>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">专业技能</div>
+        
+        <div id="skills-container">
+          <div class="dynamic-section" data-index="0">
+            <div class="dynamic-title">技能 1</div>
+            <div class="form-group">
+              <label class="form-label">技能名称</label>
+              <input type="text" class="form-input" id="skillName0" placeholder="如：Python">
+            </div>
+            <div class="form-group">
+              <label class="form-label">技能图标</label>
+              <div class="file-input-wrapper">
+                <input type="file" class="file-input" id="skillIcon0" accept="image/*" onchange="handleFileSelect(this, 'skillIcon', 0)">
+                <div class="file-button"><span>🖼️</span><span>上传图标</span></div>
+              </div>
+              <div class="file-list" id="skillIconList0"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">熟练度</label>
+              <select class="form-select" id="skillLevel0">
+                <option value="精通">精通</option>
+                <option value="熟练">熟练</option>
+                <option value="掌握">掌握</option>
+                <option value="了解">了解</option>
+              </select>
+            </div>
+            <button class="remove-btn" onclick="removeSkill(0)">删除</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addSkill()">+ 添加技能</button>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">工作经历</div>
+        
+        <div id="work-container">
+          <div class="dynamic-section" data-index="0">
+            <div class="dynamic-title">工作经历 1</div>
+            <div class="form-group">
+              <label class="form-label">公司名称</label>
+              <input type="text" class="form-input" id="workCompany0" placeholder="公司名称">
+            </div>
+            <div class="form-group">
+              <label class="form-label">职位</label>
+              <input type="text" class="form-input" id="workPosition0" placeholder="你的职位">
+            </div>
+            <div class="form-group">
+              <label class="form-label">时间段</label>
+              <input type="text" class="form-input" id="workPeriod0" placeholder="如：2023.07 - 至今">
+            </div>
+            <div class="form-group">
+              <label class="form-label">工作内容</label>
+              <textarea class="form-textarea" id="workContent0" placeholder="描述你的工作职责和成就..."></textarea>
+            </div>
+            <button class="remove-btn" onclick="removeWork(0)">删除</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addWork()">+ 添加工作经历</button>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">教育背景</div>
+        
+        <div id="education-container">
+          <div class="dynamic-section" data-index="0">
+            <div class="dynamic-title">教育经历 1</div>
+            <div class="form-group">
+              <label class="form-label">学历</label>
+              <select class="form-select" id="eduDegree0">
+                <option value="博士">博士</option>
+                <option value="硕士">硕士</option>
+                <option value="本科">本科</option>
+                <option value="大专">大专</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">学校名称</label>
+              <input type="text" class="form-input" id="eduSchool0" placeholder="学校名称">
+            </div>
+            <div class="form-group">
+              <label class="form-label">专业</label>
+              <input type="text" class="form-input" id="eduMajor0" placeholder="专业名称">
+            </div>
+            <div class="form-group">
+              <label class="form-label">时间段</label>
+              <input type="text" class="form-input" id="eduPeriod0" placeholder="如：2019.09 - 2023.06">
+            </div>
+            <button class="remove-btn" onclick="removeEducation(0)">删除</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addEducation()">+ 添加教育经历</button>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">学术论文</div>
+        
+        <div id="papers-container">
+          <div class="dynamic-section" data-index="0">
+            <div class="dynamic-title">论文 1</div>
+            <div class="form-group">
+              <label class="form-label">论文标题</label>
+              <input type="text" class="form-input" id="paperTitle0" placeholder="论文标题">
+            </div>
+            <div class="form-group">
+              <label class="form-label">论文类型</label>
+              <select class="form-select" id="paperType0">
+                <option value="SCI">SCI</option>
+                <option value="EI">EI</option>
+                <option value="CSSCI">CSSCI</option>
+                <option value="其他">其他</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">论文封面图</label>
+              <div class="file-input-wrapper">
+                <input type="file" class="file-input" id="paperCover0" accept="image/*" onchange="handleFileSelect(this, 'paperCover', 0)">
+                <div class="file-button"><span>🖼️</span><span>上传封面图</span></div>
+              </div>
+              <div class="file-list" id="paperCoverList0"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">论文PDF</label>
+              <div class="file-input-wrapper">
+                <input type="file" class="file-input" id="paperPdf0" accept=".pdf" onchange="handleFileSelect(this, 'paperPdf', 0)">
+                <div class="file-button"><span>📄</span><span>上传PDF</span></div>
+              </div>
+              <div class="file-list" id="paperPdfList0"></div>
+            </div>
+            <button class="remove-btn" onclick="removePaper(0)">删除</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addPaper()">+ 添加论文</button>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">资格证书</div>
+        
+        <div id="certs-container">
+          <div class="dynamic-section" data-index="0">
+            <div class="dynamic-title">证书 1</div>
+            <div class="form-group">
+              <label class="form-label">证书名称</label>
+              <input type="text" class="form-input" id="certName0" placeholder="证书名称">
+            </div>
+            <div class="form-group">
+              <label class="form-label">证书图片（可多选）</label>
+              <div class="file-input-wrapper">
+                <input type="file" class="file-input" id="certImages0" accept="image/*" multiple onchange="handleFileSelect(this, 'certImages', 0)">
+                <div class="file-button"><span>🖼️</span><span>上传证书图片</span></div>
+              </div>
+              <div class="file-list" id="certImagesList0"></div>
+            </div>
+            <button class="remove-btn" onclick="removeCert(0)">删除</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addCert()">+ 添加证书</button>
+        
+        <div class="section-divider"></div>
+        <div class="section-title">荣誉奖项</div>
+        
+        <div id="awards-container">
+          <div class="dynamic-section" data-index="0">
+            <div class="dynamic-title">奖项 1</div>
+            <div class="form-group">
+              <label class="form-label">奖项名称</label>
+              <input type="text" class="form-input" id="awardName0" placeholder="奖项名称">
+            </div>
+            <div class="form-group">
+              <label class="form-label">奖项描述</label>
+              <input type="text" class="form-input" id="awardDesc0" placeholder="奖项描述">
+            </div>
+            <div class="form-group">
+              <label class="form-label">奖项图片</label>
+              <div class="file-input-wrapper">
+                <input type="file" class="file-input" id="awardImage0" accept="image/*" onchange="handleFileSelect(this, 'awardImage', 0)">
+                <div class="file-button"><span>🏆</span><span>上传奖项图片</span></div>
+              </div>
+              <div class="file-list" id="awardImageList0"></div>
+            </div>
+            <button class="remove-btn" onclick="removeAward(0)">删除</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addAward()">+ 添加奖项</button>
       </div>
       
       <div class="modal-footer">
@@ -683,7 +973,6 @@
     </div>
   </div>
   
-  <!-- 结果弹窗 -->
   <div class="modal-overlay" id="resultModal">
     <div class="modal-content">
       <div class="result-box">
@@ -699,100 +988,84 @@
     </div>
   </div>
   
-  <!-- 加载中 -->
   <div class="loading-overlay" id="loadingOverlay">
     <div class="spinner"></div>
     <p class="loading-text">正在生成你的主页...</p>
   </div>
 
   <script>
-    // ===== 配置 =====
     const API_BASE = 'https://grwy.zzyy99.cn/api'
     
-    // ===== 状态 =====
     let selectedTemplate = null
-    let uploadedResume = null
+    let uploadedFiles = {}
     let uploadedPortfolio = []
     
-    // ===== 打开预览 =====
-    function openPreview(templateId) {
-      window.open(`templates/preview.html?template=${templateId}`, '_blank', 'width=900,height=900,top=50,left=50')
-    }
-    
-    // ===== 选择模板 =====
     function selectTemplate(card) {
-      // 移除其他选中状态
-      document.querySelectorAll('.template-card').forEach(c => {
-        c.classList.remove('selected')
-      })
-      
-      // 添加选中状态
+      document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'))
       card.classList.add('selected')
       selectedTemplate = card.dataset.template
-      
-      // 启用确认按钮
       document.getElementById('confirmBtn').disabled = false
     }
     
-    // ===== 打开弹窗 =====
+    function openPreview(templateId) {
+      window.open(`templates/preview.html?template=${templateId}`, '_blank', 'width=900,height=1000')
+    }
+    
     function openModal() {
-      if (!selectedTemplate) {
-        alert('请先选择一个模板')
-        return
-      }
+      if (!selectedTemplate) { alert('请先选择一个模板'); return }
       document.getElementById('infoModal').classList.add('active')
       document.body.style.overflow = 'hidden'
     }
     
-    // ===== 关闭弹窗 =====
     function closeModal() {
       document.getElementById('infoModal').classList.remove('active')
       document.body.style.overflow = ''
     }
     
-    // ===== 验证子域名 =====
     function validateSubdomain(input) {
-      // 只允许小写字母、数字、连字符
       input.value = input.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
     }
     
-    // ===== 文件选择处理 =====
-    function handleFileSelect(input, type) {
-      if (type === 'resume') {
-        const file = input.files[0]
-        if (file) {
-          uploadedResume = file
-          document.getElementById('resumeList').innerHTML = `
-            <span class="file-tag">
-              📄 ${file.name}
-              <span class="remove" onclick="removeFile('resume')">×</span>
-            </span>
-          `
-        }
-      } else if (type === 'portfolio') {
-        const files = Array.from(input.files)
+    function handleFileSelect(input, type, index) {
+      const files = Array.from(input.files)
+      if (!uploadedFiles[type]) uploadedFiles[type] = {}
+      
+      if (type === 'portfolio') {
         uploadedPortfolio = [...uploadedPortfolio, ...files]
         renderPortfolioList()
+      } else if (index !== undefined) {
+        uploadedFiles[type][index] = files[0]
+        const listId = `${type}List${index}`
+        const listEl = document.getElementById(listId)
+        if (listEl && files[0]) {
+          listEl.innerHTML = `<span class="file-tag">📄 ${files[0].name} <span class="remove" onclick="removeFile('${type}', ${index})">×</span></span>`
+        }
+      } else {
+        uploadedFiles[type] = files[0]
+        const listId = `${type}List`
+        const listEl = document.getElementById(listId)
+        if (listEl && files[0]) {
+          listEl.innerHTML = `<span class="file-tag">📄 ${files[0].name} <span class="remove" onclick="removeFile('${type}')">×</span></span>`
+        }
       }
     }
     
-    // ===== 渲染作品集列表 =====
     function renderPortfolioList() {
       const html = uploadedPortfolio.map((file, index) => `
-        <span class="file-tag">
-          🖼️ ${file.name}
-          <span class="remove" onclick="removePortfolio(${index})">×</span>
-        </span>
+        <span class="file-tag">🖼️ ${file.name} <span class="remove" onclick="removePortfolio(${index})">×</span></span>
       `).join('')
       document.getElementById('portfolioList').innerHTML = html
     }
     
-    // ===== 移除文件 =====
-    function removeFile(type) {
-      if (type === 'resume') {
-        uploadedResume = null
-        document.getElementById('resumeList').innerHTML = ''
-        document.getElementById('resume').value = ''
+    function removeFile(type, index) {
+      if (index !== undefined) {
+        uploadedFiles[type][index] = null
+        document.getElementById(`${type}List${index}`).innerHTML = ''
+        document.getElementById(`${type}${index}`).value = ''
+      } else {
+        uploadedFiles[type] = null
+        document.getElementById(`${type}List`).innerHTML = ''
+        document.getElementById(type).value = ''
       }
     }
     
@@ -801,7 +1074,290 @@
       renderPortfolioList()
     }
     
-    // 把文件转成 base64
+    function addStrength() {
+      const container = document.getElementById('strengths-container')
+      const index = container.children.length
+      const div = document.createElement('div')
+      div.className = 'dynamic-section'
+      div.dataset.index = index
+      div.innerHTML = `
+        <div class="dynamic-title">优势 ${index + 1}</div>
+        <div class="form-group">
+          <label class="form-label">优势名称</label>
+          <input type="text" class="form-input" id="strengthName${index}" placeholder="如：跨学科背景">
+        </div>
+        <div class="form-group">
+          <label class="form-label">优势描述</label>
+          <textarea class="form-textarea" id="strengthDesc${index}" placeholder="详细描述你的优势..."></textarea>
+        </div>
+        <button class="remove-btn" onclick="removeStrength(${index})">删除</button>
+      `
+      container.appendChild(div)
+    }
+    
+    function removeStrength(index) {
+      const container = document.getElementById('strengths-container')
+      container.removeChild(container.children[index])
+      Array.from(container.children).forEach((child, i) => {
+        child.dataset.index = i
+        child.querySelector('.dynamic-title').textContent = `优势 ${i + 1}`
+        child.querySelector('button').onclick = () => removeStrength(i)
+      })
+    }
+    
+    function addSkill() {
+      const container = document.getElementById('skills-container')
+      const index = container.children.length
+      const div = document.createElement('div')
+      div.className = 'dynamic-section'
+      div.dataset.index = index
+      div.innerHTML = `
+        <div class="dynamic-title">技能 ${index + 1}</div>
+        <div class="form-group">
+          <label class="form-label">技能名称</label>
+          <input type="text" class="form-input" id="skillName${index}" placeholder="如：Python">
+        </div>
+        <div class="form-group">
+          <label class="form-label">技能图标</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="skillIcon${index}" accept="image/*" onchange="handleFileSelect(this, 'skillIcon', ${index})">
+            <div class="file-button"><span>🖼️</span><span>上传图标</span></div>
+          </div>
+          <div class="file-list" id="skillIconList${index}"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">熟练度</label>
+          <select class="form-select" id="skillLevel${index}">
+            <option value="精通">精通</option>
+            <option value="熟练">熟练</option>
+            <option value="掌握">掌握</option>
+            <option value="了解">了解</option>
+          </select>
+        </div>
+        <button class="remove-btn" onclick="removeSkill(${index})">删除</button>
+      `
+      container.appendChild(div)
+    }
+    
+    function removeSkill(index) {
+      const container = document.getElementById('skills-container')
+      container.removeChild(container.children[index])
+      Array.from(container.children).forEach((child, i) => {
+        child.dataset.index = i
+        child.querySelector('.dynamic-title').textContent = `技能 ${i + 1}`
+        child.querySelector('button').onclick = () => removeSkill(i)
+      })
+    }
+    
+    function addWork() {
+      const container = document.getElementById('work-container')
+      const index = container.children.length
+      const div = document.createElement('div')
+      div.className = 'dynamic-section'
+      div.dataset.index = index
+      div.innerHTML = `
+        <div class="dynamic-title">工作经历 ${index + 1}</div>
+        <div class="form-group">
+          <label class="form-label">公司名称</label>
+          <input type="text" class="form-input" id="workCompany${index}" placeholder="公司名称">
+        </div>
+        <div class="form-group">
+          <label class="form-label">职位</label>
+          <input type="text" class="form-input" id="workPosition${index}" placeholder="你的职位">
+        </div>
+        <div class="form-group">
+          <label class="form-label">时间段</label>
+          <input type="text" class="form-input" id="workPeriod${index}" placeholder="如：2023.07 - 至今">
+        </div>
+        <div class="form-group">
+          <label class="form-label">工作内容</label>
+          <textarea class="form-textarea" id="workContent${index}" placeholder="描述你的工作职责和成就..."></textarea>
+        </div>
+        <button class="remove-btn" onclick="removeWork(${index})">删除</button>
+      `
+      container.appendChild(div)
+    }
+    
+    function removeWork(index) {
+      const container = document.getElementById('work-container')
+      container.removeChild(container.children[index])
+      Array.from(container.children).forEach((child, i) => {
+        child.dataset.index = i
+        child.querySelector('.dynamic-title').textContent = `工作经历 ${i + 1}`
+        child.querySelector('button').onclick = () => removeWork(i)
+      })
+    }
+    
+    function addEducation() {
+      const container = document.getElementById('education-container')
+      const index = container.children.length
+      const div = document.createElement('div')
+      div.className = 'dynamic-section'
+      div.dataset.index = index
+      div.innerHTML = `
+        <div class="dynamic-title">教育经历 ${index + 1}</div>
+        <div class="form-group">
+          <label class="form-label">学历</label>
+          <select class="form-select" id="eduDegree${index}">
+            <option value="博士">博士</option>
+            <option value="硕士">硕士</option>
+            <option value="本科">本科</option>
+            <option value="大专">大专</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">学校名称</label>
+          <input type="text" class="form-input" id="eduSchool${index}" placeholder="学校名称">
+        </div>
+        <div class="form-group">
+          <label class="form-label">专业</label>
+          <input type="text" class="form-input" id="eduMajor${index}" placeholder="专业名称">
+        </div>
+        <div class="form-group">
+          <label class="form-label">时间段</label>
+          <input type="text" class="form-input" id="eduPeriod${index}" placeholder="如：2019.09 - 2023.06">
+        </div>
+        <button class="remove-btn" onclick="removeEducation(${index})">删除</button>
+      `
+      container.appendChild(div)
+    }
+    
+    function removeEducation(index) {
+      const container = document.getElementById('education-container')
+      container.removeChild(container.children[index])
+      Array.from(container.children).forEach((child, i) => {
+        child.dataset.index = i
+        child.querySelector('.dynamic-title').textContent = `教育经历 ${i + 1}`
+        child.querySelector('button').onclick = () => removeEducation(i)
+      })
+    }
+    
+    function addPaper() {
+      const container = document.getElementById('papers-container')
+      const index = container.children.length
+      const div = document.createElement('div')
+      div.className = 'dynamic-section'
+      div.dataset.index = index
+      div.innerHTML = `
+        <div class="dynamic-title">论文 ${index + 1}</div>
+        <div class="form-group">
+          <label class="form-label">论文标题</label>
+          <input type="text" class="form-input" id="paperTitle${index}" placeholder="论文标题">
+        </div>
+        <div class="form-group">
+          <label class="form-label">论文类型</label>
+          <select class="form-select" id="paperType${index}">
+            <option value="SCI">SCI</option>
+            <option value="EI">EI</option>
+            <option value="CSSCI">CSSCI</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">论文封面图</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="paperCover${index}" accept="image/*" onchange="handleFileSelect(this, 'paperCover', ${index})">
+            <div class="file-button"><span>🖼️</span><span>上传封面图</span></div>
+          </div>
+          <div class="file-list" id="paperCoverList${index}"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">论文PDF</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="paperPdf${index}" accept=".pdf" onchange="handleFileSelect(this, 'paperPdf', ${index})">
+            <div class="file-button"><span>📄</span><span>上传PDF</span></div>
+          </div>
+          <div class="file-list" id="paperPdfList${index}"></div>
+        </div>
+        <button class="remove-btn" onclick="removePaper(${index})">删除</button>
+      `
+      container.appendChild(div)
+    }
+    
+    function removePaper(index) {
+      const container = document.getElementById('papers-container')
+      container.removeChild(container.children[index])
+      Array.from(container.children).forEach((child, i) => {
+        child.dataset.index = i
+        child.querySelector('.dynamic-title').textContent = `论文 ${i + 1}`
+        child.querySelector('button').onclick = () => removePaper(i)
+      })
+    }
+    
+    function addCert() {
+      const container = document.getElementById('certs-container')
+      const index = container.children.length
+      const div = document.createElement('div')
+      div.className = 'dynamic-section'
+      div.dataset.index = index
+      div.innerHTML = `
+        <div class="dynamic-title">证书 ${index + 1}</div>
+        <div class="form-group">
+          <label class="form-label">证书名称</label>
+          <input type="text" class="form-input" id="certName${index}" placeholder="证书名称">
+        </div>
+        <div class="form-group">
+          <label class="form-label">证书图片（可多选）</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="certImages${index}" accept="image/*" multiple onchange="handleFileSelect(this, 'certImages', ${index})">
+            <div class="file-button"><span>🖼️</span><span>上传证书图片</span></div>
+          </div>
+          <div class="file-list" id="certImagesList${index}"></div>
+        </div>
+        <button class="remove-btn" onclick="removeCert(${index})">删除</button>
+      `
+      container.appendChild(div)
+    }
+    
+    function removeCert(index) {
+      const container = document.getElementById('certs-container')
+      container.removeChild(container.children[index])
+      Array.from(container.children).forEach((child, i) => {
+        child.dataset.index = i
+        child.querySelector('.dynamic-title').textContent = `证书 ${i + 1}`
+        child.querySelector('button').onclick = () => removeCert(i)
+      })
+    }
+    
+    function addAward() {
+      const container = document.getElementById('awards-container')
+      const index = container.children.length
+      const div = document.createElement('div')
+      div.className = 'dynamic-section'
+      div.dataset.index = index
+      div.innerHTML = `
+        <div class="dynamic-title">奖项 ${index + 1}</div>
+        <div class="form-group">
+          <label class="form-label">奖项名称</label>
+          <input type="text" class="form-input" id="awardName${index}" placeholder="奖项名称">
+        </div>
+        <div class="form-group">
+          <label class="form-label">奖项描述</label>
+          <input type="text" class="form-input" id="awardDesc${index}" placeholder="奖项描述">
+        </div>
+        <div class="form-group">
+          <label class="form-label">奖项图片</label>
+          <div class="file-input-wrapper">
+            <input type="file" class="file-input" id="awardImage${index}" accept="image/*" onchange="handleFileSelect(this, 'awardImage', ${index})">
+            <div class="file-button"><span>🏆</span><span>上传奖项图片</span></div>
+          </div>
+          <div class="file-list" id="awardImageList${index}"></div>
+        </div>
+        <button class="remove-btn" onclick="removeAward(${index})">删除</button>
+      `
+      container.appendChild(div)
+    }
+    
+    function removeAward(index) {
+      const container = document.getElementById('awards-container')
+      container.removeChild(container.children[index])
+      Array.from(container.children).forEach((child, i) => {
+        child.dataset.index = i
+        child.querySelector('.dynamic-title').textContent = `奖项 ${i + 1}`
+        child.querySelector('button').onclick = () => removeAward(i)
+      })
+    }
+    
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
@@ -810,72 +1366,187 @@
         reader.readAsDataURL(file)
       })
     }
-
-    // 上传文件
+    
     async function uploadFile(file) {
       const fileData = await fileToBase64(file)
-      
       const res = await fetch(`${API_BASE}/upload`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileData: fileData,
-          filename: file.name
-        })
+        body: JSON.stringify({ fileData, filename: file.name })
       })
       return await res.json()
     }
     
-    // ===== 提交表单 =====
     async function submitForm() {
       const subdomain = document.getElementById('subdomain').value.trim()
       const name = document.getElementById('name').value.trim()
       
-      if (!subdomain) {
-        alert('请填写专属网址')
-        return
-      }
-      if (!name) {
-        alert('请填写姓名')
-        return
-      }
+      if (!subdomain) { alert('请填写专属网址'); return }
+      if (!name) { alert('请填写姓名'); return }
       
       document.getElementById('loadingOverlay').classList.add('active')
       
       try {
-        // 1. 上传简历
-        let resumeUrl = ''
-        if (uploadedResume) {
-          const resumeRes = await uploadFile(uploadedResume)
-          console.log('简历上传结果:', resumeRes)
-          
-          if (resumeRes.ok) {
-            resumeUrl = resumeRes.url
+        const uploadResults = {}
+        
+        const singleFiles = ['avatar', 'idPhoto', 'wechatQr', 'qqQr', 'weiboQr', 'resume']
+        for (const key of singleFiles) {
+          if (uploadedFiles[key]) {
+            const res = await uploadFile(uploadedFiles[key])
+            if (res.ok) uploadResults[key] = res.url
           }
         }
         
-        // 2. 上传作品集
         const portfolioUrls = []
         for (const file of uploadedPortfolio) {
           const res = await uploadFile(file)
-          console.log('作品集上传结果:', res)
-          
-          if (res.ok) {
-            portfolioUrls.push(res.url)
+          if (res.ok) portfolioUrls.push(res.url)
+        }
+        
+        const skillIcons = {}
+        if (uploadedFiles['skillIcon']) {
+          for (const [index, file] of Object.entries(uploadedFiles['skillIcon'])) {
+            if (file) {
+              const res = await uploadFile(file)
+              if (res.ok) skillIcons[index] = res.url
+            }
           }
         }
         
-        // 3. 提交用户信息
+        const paperCovers = {}
+        const paperPdfs = {}
+        if (uploadedFiles['paperCover']) {
+          for (const [index, file] of Object.entries(uploadedFiles['paperCover'])) {
+            if (file) {
+              const res = await uploadFile(file)
+              if (res.ok) paperCovers[index] = res.url
+            }
+          }
+        }
+        if (uploadedFiles['paperPdf']) {
+          for (const [index, file] of Object.entries(uploadedFiles['paperPdf'])) {
+            if (file) {
+              const res = await uploadFile(file)
+              if (res.ok) paperPdfs[index] = res.url
+            }
+          }
+        }
+        
+        const certImages = {}
+        if (uploadedFiles['certImages']) {
+          for (const [index, files] of Object.entries(uploadedFiles['certImages'])) {
+            if (files) {
+              const urls = []
+              for (const file of files) {
+                const res = await uploadFile(file)
+                if (res.ok) urls.push(res.url)
+              }
+              certImages[index] = urls
+            }
+          }
+        }
+        
+        const awardImages = {}
+        if (uploadedFiles['awardImage']) {
+          for (const [index, file] of Object.entries(uploadedFiles['awardImage'])) {
+            if (file) {
+              const res = await uploadFile(file)
+              if (res.ok) awardImages[index] = res.url
+            }
+          }
+        }
+        
+        const strengths = []
+        const strengthContainer = document.getElementById('strengths-container')
+        Array.from(strengthContainer.children).forEach((child, i) => {
+          const name = document.getElementById(`strengthName${i}`).value.trim()
+          const desc = document.getElementById(`strengthDesc${i}`).value.trim()
+          if (name) strengths.push({ name, desc })
+        })
+        
+        const skills = []
+        const skillContainer = document.getElementById('skills-container')
+        Array.from(skillContainer.children).forEach((child, i) => {
+          const name = document.getElementById(`skillName${i}`).value.trim()
+          const level = document.getElementById(`skillLevel${i}`).value
+          const icon = skillIcons[i] || ''
+          if (name) skills.push({ name, level, icon })
+        })
+        
+        const workExperiences = []
+        const workContainer = document.getElementById('work-container')
+        Array.from(workContainer.children).forEach((child, i) => {
+          const company = document.getElementById(`workCompany${i}`).value.trim()
+          const position = document.getElementById(`workPosition${i}`).value.trim()
+          const period = document.getElementById(`workPeriod${i}`).value.trim()
+          const content = document.getElementById(`workContent${i}`).value.trim()
+          if (company) workExperiences.push({ company, position, period, content })
+        })
+        
+        const education = []
+        const eduContainer = document.getElementById('education-container')
+        Array.from(eduContainer.children).forEach((child, i) => {
+          const degree = document.getElementById(`eduDegree${i}`).value
+          const school = document.getElementById(`eduSchool${i}`).value.trim()
+          const major = document.getElementById(`eduMajor${i}`).value.trim()
+          const period = document.getElementById(`eduPeriod${i}`).value.trim()
+          if (school) education.push({ degree, school, major, period })
+        })
+        
+        const papers = []
+        const paperContainer = document.getElementById('papers-container')
+        Array.from(paperContainer.children).forEach((child, i) => {
+          const title = document.getElementById(`paperTitle${i}`).value.trim()
+          const type = document.getElementById(`paperType${i}`).value
+          const cover = paperCovers[i] || ''
+          const pdf = paperPdfs[i] || ''
+          if (title) papers.push({ title, type, cover, pdf })
+        })
+        
+        const certifications = []
+        const certContainer = document.getElementById('certs-container')
+        Array.from(certContainer.children).forEach((child, i) => {
+          const name = document.getElementById(`certName${i}`).value.trim()
+          const images = certImages[i] || []
+          if (name) certifications.push({ name, images })
+        })
+        
+        const awards = []
+        const awardContainer = document.getElementById('awards-container')
+        Array.from(awardContainer.children).forEach((child, i) => {
+          const name = document.getElementById(`awardName${i}`).value.trim()
+          const desc = document.getElementById(`awardDesc${i}`).value.trim()
+          const image = awardImages[i] || ''
+          if (name) awards.push({ name, desc, image })
+        })
+        
         const userData = {
           subdomain,
           name,
           title: document.getElementById('title').value.trim(),
           bio: document.getElementById('bio').value.trim(),
-          email: document.getElementById('email').value.trim(),
           phone: document.getElementById('phone').value.trim(),
-          resumeUrl,
-          resumeFilename: uploadedResume ? uploadedResume.name : '',  // 新增：上传的原始文件名
+          email: document.getElementById('email').value.trim(),
+          birthDate: document.getElementById('birthDate').value,
+          educationLevel: document.getElementById('educationLevel').value,
+          wechat: document.getElementById('wechat').value.trim(),
+          qq: document.getElementById('qq').value.trim(),
+          weibo: document.getElementById('weibo').value.trim(),
+          avatarUrl: uploadResults['avatar'] || '',
+          idPhotoUrl: uploadResults['idPhoto'] || '',
+          wechatQrUrl: uploadResults['wechatQr'] || '',
+          qqQrUrl: uploadResults['qqQr'] || '',
+          weiboQrUrl: uploadResults['weiboQr'] || '',
+          resumeUrl: uploadResults['resume'] || '',
+          resumeFilename: uploadedFiles['resume'] ? uploadedFiles['resume'].name : '',
           portfolioUrls,
+          strengths,
+          skills,
+          workExperiences,
+          education,
+          papers,
+          certifications,
+          awards,
           templateId: selectedTemplate
         }
         
@@ -908,29 +1579,19 @@
       }
     }
     
-    // ===== 重置表单 =====
     function resetForm() {
-      document.getElementById('subdomain').value = ''
-      document.getElementById('name').value = ''
-      document.getElementById('title').value = ''
-      document.getElementById('bio').value = ''
-      document.getElementById('email').value = ''
-      document.getElementById('phone').value = ''
-      uploadedResume = null
+      document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(el => el.value = '')
+      uploadedFiles = {}
       uploadedPortfolio = []
-      document.getElementById('resumeList').innerHTML = ''
-      document.getElementById('portfolioList').innerHTML = ''
-      document.getElementById('resume').value = ''
-      document.getElementById('portfolio').value = ''
+      document.querySelectorAll('.file-list').forEach(el => el.innerHTML = '')
+      document.querySelectorAll('.file-input').forEach(el => el.value = '')
     }
     
-    // ===== 关闭结果弹窗 =====
     function closeResultModal() {
       document.getElementById('resultModal').classList.remove('active')
       document.body.style.overflow = ''
     }
     
-    // ===== 点击遮罩关闭弹窗 =====
     document.getElementById('infoModal').addEventListener('click', function(e) {
       if (e.target === this) closeModal()
     })
@@ -939,7 +1600,6 @@
       if (e.target === this) closeResultModal()
     })
     
-    // ===== ESC 关闭弹窗 =====
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeModal()
