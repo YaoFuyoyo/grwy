@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模板预览</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #fff;
+      min-height: 100vh;
+    }
+    
+    .nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    
+    .nav-link {
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ccc;
+      font-size: 13px;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    
+    .nav-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-link.active {
+      color: #fff;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: transparent;
+    }
+    
+    .preview-container {
+      margin-top: 80px;
+      min-height: calc(100vh - 80px);
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    
+    .preview-wrapper {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+    
+    .preview-iframe {
+      width: 100%;
+      min-height: 1000px;
+      border: none;
+      background: #fff;
+    }
+    
+    .close-btn {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 101;
+    }
+    
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    @media (max-width: 768px) {
+      .nav-links {
+        gap: 6px;
+      }
+      
+      .nav-link {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+      
+      .close-btn {
+        top: 80px;
+        right: 16px;
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <div class="nav-title">模板预览</div>
+    <div class="nav-links">
+      <a href="preview.html?template=theme-simple-white" class="nav-link" id="link-theme-simple-white">极简白</a>
+      <a href="preview.html?template=theme-graphite-gray" class="nav-link" id="link-theme-graphite-gray">石墨灰</a>
+      <a href="preview.html?template=theme-onyx-black" class="nav-link" id="link-theme-onyx-black">曜石黑</a>
+      <a href="preview.html?template=theme-red-east" class="nav-link" id="link-theme-red-east">东方红</a>
+      <a href="preview.html?template=theme-vibrant-orange" class="nav-link" id="link-theme-vibrant-orange">活力橙</a>
+      <a href="preview.html?template=theme-amber-yellow" class="nav-link" id="link-theme-amber-yellow">琥珀黄</a>
+      <a href="preview.html?template=theme-forest-green" class="nav-link" id="link-theme-forest-green">森野绿</a>
+      <a href="preview.html?template=theme-tech-blue" class="nav-link" id="link-theme-tech-blue">科技蓝</a>
+      <a href="preview.html?template=theme-future-purple" class="nav-link" id="link-theme-future-purple">未来紫</a>
+    </div>
+  </div>
+  
+  <button class="close-btn" onclick="closePreview()">× 关闭预览</button>
+  
+  <div class="preview-container">
+    <div class="preview-wrapper">
+      <iframe class="preview-iframe" id="previewFrame" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const templates = {
+      'theme-simple-white': {
+        name: '张三',
+        title: '产品经理',
+        bio: '拥有5年互联网产品经验，专注于用户体验和增长策略。曾主导多个百万级用户产品的设计与迭代，擅长从0到1搭建产品体系。',
+        phone: '138-0000-0001',
+        email: 'zhangsan@example.com'
+      },
+      'theme-graphite-gray': {
+        name: '李四',
+        title: '全栈工程师',
+        bio: '热爱技术，追求极致。精通前后端开发，熟悉 React、Node.js、Go 等技术栈。热衷于开源社区，持续学习新技术。',
+        phone: '139-0000-0002',
+        email: 'lisi@example.com'
+      },
+      'theme-onyx-black': {
+        name: '王五',
+        title: 'UI设计师',
+        bio: '专注于界面设计和用户体验。擅长 Figma、Sketch 等设计工具，注重细节和视觉美感，追求简洁优雅的设计风格。',
+        phone: '137-0000-0003',
+        email: 'wangwu@example.com'
+      },
+      'theme-red-east': {
+        name: '赵六',
+        title: '市场营销',
+        bio: '资深营销专家，擅长品牌策划和数字营销。服务过多个知名品牌，帮助客户实现品牌价值提升和业务增长。',
+        phone: '136-0000-0004',
+        email: 'zhaoliu@example.com'
+      },
+      'theme-vibrant-orange': {
+        name: '孙七',
+        title: '教育培训',
+        bio: '热爱教育事业，专注于在线教育产品研发。擅长课程设计和教学方法创新，帮助学生实现学业突破。',
+        phone: '135-0000-0005',
+        email: 'sunqi@example.com'
+      },
+      'theme-amber-yellow': {
+        name: '周八',
+        title: '金融分析师',
+        bio: '资深金融分析师，擅长投资分析和风险管理。拥有丰富的行业经验，为客户提供专业的投资建议和财富管理方案。',
+        phone: '134-0000-0006',
+        email: 'zhouba@example.com'
+      },
+      'theme-forest-green': {
+        name: '吴九',
+        title: '环保工程师',
+        bio: '致力于环境保护和可持续发展。擅长环境监测和污染治理，为企业提供绿色环保解决方案。',
+        phone: '133-0000-0007',
+        email: 'wujiu@example.com'
+      },
+      'theme-tech-blue': {
+        name: '郑十',
+        title: '数据科学家',
+        bio: '专注于数据分析和机器学习。擅长 Python、SQL、TensorFlow 等工具，通过数据驱动为业务决策提供支持。',
+        phone: '132-0000-0008',
+        email: 'zhengshi@example.com'
+      },
+      'theme-future-purple': {
+        name: '冯十一',
+        title: '创意总监',
+        bio: '资深创意总监，擅长品牌创意和视觉设计。带领团队完成多个大型项目，注重创意和商业价值的结合。',
+        phone: '131-0000-0009',
+        email: 'fengshiyi@example.com'
+      }
+    };
+    
+    function getTemplateUrl(templateId) {
+      return `${templateId}.html`;
+    }
+    
+    function getCurrentTemplate() {
+      const params = new URLSearchParams(window.location.search);
+      const template = params.get('template');
+      return template && templates[template] ? template : 'theme-simple-white';
+    }
+    
+    function renderTemplate(templateId) {
+      const data = templates[templateId];
+      const iframe = document.getElementById('previewFrame');
+      
+      fetch(getTemplateUrl(templateId))
+        .then(response => response.text())
+        .then(html => {
+          html = html
+            .replace(/{{name}}/g, data.name)
+            .replace(/{{title}}/g, data.title)
+            .replace(/{{bio}}/g, data.bio)
+            .replace(/{{phone}}/g, data.phone)
+            .replace(/{{email}}/g, data.email)
+            .replace(/{{birthDate}}/g, '')
+            .replace(/{{educationLevel}}/g, '')
+            .replace(/{{wechat}}/g, '')
+            .replace(/{{qq}}/g, '')
+            .replace(/{{weibo}}/g, '')
+            .replace(/{{avatarUrl}}/g, '')
+            .replace(/{{idPhotoUrl}}/g, '')
+            .replace(/{{resumeUrl}}/g, '')
+            .replace(/{{currentYear}}/g, new Date().getFullYear())
+            .replace(/{{slogan}}/g, data.title)
+            .replace(/{{STRENGTHS_SECTION}}/g, '')
+            .replace(/{{SKILLS_SECTION}}/g, '')
+            .replace(/{{WORK_SECTION}}/g, '')
+            .replace(/{{EDUCATION_SECTION}}/g, '')
+            .replace(/{{PAPERS_SECTION}}/g, '')
+            .replace(/{{CERTIFICATIONS_SECTION}}/g, '')
+            .replace(/{{AWARDS_SECTION}}/g, '')
+            .replace(/{{PORTFOLIO_SECTION}}/g, '')
+            .replace(/{{WECHAT_SECTION}}/g, '')
+            .replace(/{{QQ_SECTION}}/g, '')
+            .replace(/{{WEIBO_SECTION}}/g, '')
+            .replace(/{{WECHAT_QRCODE}}/g, '')
+            .replace(/{{QQ_QRCODE}}/g, '')
+            .replace(/{{WEIBO_QRCODE}}/g, '');
+          
+          iframe.srcdoc = html;
+        })
+        .catch(error => {
+          console.error('加载模板失败:', error);
+          iframe.srcdoc = '<html><body style="text-align:center;padding:50px;color:#666;">模板加载失败</body></html>';
+        });
+      
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.getElementById(`link-${templateId}`).classList.add('active');
+    }
+    
+    function closePreview() {
+      window.close();
+    }
+    
+    renderTemplate(getCurrentTemplate());
+  </script>
+</body>
+</html>
