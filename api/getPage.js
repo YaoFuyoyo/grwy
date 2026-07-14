@@ -80,24 +80,41 @@ module.exports = async (req, res) => {
     }
 
     const template = loadTemplate(user.templateId);
-
     let html = template;
 
-    if (user.name) html = html.replace(/志在瑶远/g, user.name);
-    if (user.title) html = html.replace('产品经理 · 数据分析 · 创新赋能', user.title);
-    if (user.bio) html = html.replace(/金融\+统计复合背景，兼具数据驱动思维与商业逻辑视角。<br>历任数据经理、产品经理，主导多个从0到1的产品落地。<br>绩效考核持续评优，工作主动性与交付质量稳定突出。/g, user.bio.replace(/\n/g, '<br>'));
-    if (user.phone) html = html.replace(/1394198888|1399999999/g, user.phone);
-    if (user.email) html = html.replace(/zzyy99_cn@qq\.com|zzyy99@qq\.com/g, user.email);
-    if (user.birthDate) html = html.replace('2026-07-01', user.birthDate);
-    if (user.educationLevel) html = html.replace('博士', user.educationLevel);
-    if (user.wechat) html = html.replace(/微信：zzyy99/g, `微信：${user.wechat}`);
-    if (user.qq) html = html.replace(/QQ：zzyy99/g, `QQ：${user.qq}`);
-    if (user.weibo) html = html.replace(/微博：zzyy99/g, `微博：${user.weibo}`);
-    if (user.avatarUrl) html = html.replace('头像.png', user.avatarUrl);
-    if (user.idPhotoUrl) html = html.replace('证件照.png', user.idPhotoUrl);
-    if (user.resumeUrl) html = html.replace('「志在瑶远」简历.pdf', user.resumeUrl);
+    html = html.replace(/志在瑶远/g, user.name || '');
+    html = html.replace('产品经理 · 数据分析 · 创新赋能', user.title || '');
+    html = html.replace(/金融\+统计复合背景，兼具数据驱动思维与商业逻辑视角。<br>历任数据经理、产品经理，主导多个从0到1的产品落地。<br>绩效考核持续评优，工作主动性与交付质量稳定突出。/g, user.bio || '');
+    html = html.replace(/1394198888|1399999999/g, user.phone || '');
+    html = html.replace(/zzyy99_cn@qq\.com|zzyy99@qq\.com/g, user.email || '');
+    html = html.replace('2026-07-01', user.birthDate || '');
+    html = html.replace('博士', user.educationLevel || '');
+    html = html.replace(/微信：zzyy99/g, user.wechat ? `微信：${user.wechat}` : '');
+    html = html.replace(/QQ：zzyy99/g, user.qq ? `QQ：${user.qq}` : '');
+    html = html.replace(/微博：zzyy99/g, user.weibo ? `微博：${user.weibo}` : '');
+    html = html.replace('头像.png', user.avatarUrl || '');
+    html = html.replace('证件照.png', user.idPhotoUrl || '');
+    html = html.replace('「志在瑶远」简历.pdf', user.resumeUrl || '');
+    html = html.replace('让生活更聪明', user.title || '');
 
-    html = html.replace('让生活更聪明', user.title || '让生活更聪明');
+    html = html.replace(/INTJ/g, '');
+    html = html.replace(/游泳、跑步、台球/g, '');
+    html = html.replace(/9年/g, '');
+
+    const sections = ['skills', 'work', 'internship', 'projects', 'education', 'papers', 'intellectual', 'certifications', 'awards', 'portfolio'];
+    sections.forEach(section => {
+      const data = user[section + (section === 'portfolio' ? 'Urls' : 's')] || user[section] || [];
+      if (!data || data.length === 0) {
+        html = html.replace(new RegExp(`<section id="${section}"[\\s\\S]*?</section>`, 'g'), '');
+      }
+    });
+
+    if (!user.wechat && !user.qq && !user.weibo) {
+      html = html.replace(/<div class="footer-qrcodes"[\s\S]*?<\/div>/g, '');
+    }
+
+    html = html.replace(/<img src=""[^>]*>/g, '');
+    html = html.replace(/href=""/g, 'href="#"');
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     return res.status(200).send(html);

@@ -1557,10 +1557,20 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userData)
         })
-        const data = await res.json()
-        console.log('register 返回:', data)
         
         document.getElementById('loadingOverlay').classList.remove('active')
+        
+        let data
+        try {
+          data = await res.json()
+        } catch (e) {
+          const text = await res.text()
+          console.error('服务器返回非JSON响应:', text)
+          alert('提交失败：服务器返回异常')
+          return
+        }
+        
+        console.log('register 返回:', data)
         
         if (data.ok) {
           document.getElementById('resultUrl').textContent = data.url

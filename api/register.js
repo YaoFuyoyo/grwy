@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const body = req.body || {};
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     const { 
       subdomain, 
       name, 
@@ -83,22 +83,22 @@ module.exports = async (req, res) => {
       weiboQrUrl: weiboQrUrl || '',
       resumeUrl: resumeUrl || '',
       resumeFilename: resumeFilename || '简历.pdf',
-      portfolioUrls: portfolioUrls || [],
-      strengths: strengths || [],
-      skills: skills || [],
-      workExperiences: workExperiences || [],
-      education: education || [],
-      papers: papers || [],
-      certifications: certifications || [],
-      awards: awards || [],
+      portfolioUrls: Array.isArray(portfolioUrls) ? portfolioUrls : [],
+      strengths: Array.isArray(strengths) ? strengths : [],
+      skills: Array.isArray(skills) ? skills : [],
+      workExperiences: Array.isArray(workExperiences) ? workExperiences : [],
+      education: Array.isArray(education) ? education : [],
+      papers: Array.isArray(papers) ? papers : [],
+      certifications: Array.isArray(certifications) ? certifications : [],
+      awards: Array.isArray(awards) ? awards : [],
       templateId: templateId || 'theme-simple-white',
       createdAt: new Date()
     });
 
-    return res.status(200).send(JSON.stringify({
+    return res.status(200).json({
       ok: true,
       url: `https://grwy.zzyy99.cn/${subdomain}/${userIdStr}`
-    }));
+    });
 
   } catch (error) {
     console.log('register 错误:', error.message);
