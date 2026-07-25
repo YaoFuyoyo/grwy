@@ -2,41 +2,14 @@
   "version": 2,
   "functions": {
     "api/**/*.js": {
-      "maxDuration": 10
+      "maxDuration": 10,
+      "memory": 256
     }
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/:subdomain/:pageId",
-      "dest": "/api/pages/getPage.js"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/editor",
-      "dest": "/editor.html"
-    },
-    {
-      "src": "/history",
-      "dest": "/history.html"
-    },
-    {
-      "src": "/examples",
-      "dest": "/examples.html"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/css/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/:subdomain/:pageId",
+      "destination": "/api/pages/getPage.js"
     }
   ]
 }
