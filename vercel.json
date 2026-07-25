@@ -5,14 +5,38 @@
       "maxDuration": 10
     }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/:subdomain/:pageId",
-      "destination": "/api/pages/getPage.js"
+      "src": "/:subdomain/:pageId",
+      "dest": "/api/pages/getPage.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/public/$1"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/public/index.html"
+    },
+    {
+      "src": "/editor",
+      "dest": "/public/editor.html"
+    },
+    {
+      "src": "/history",
+      "dest": "/public/history.html"
+    },
+    {
+      "src": "/examples",
+      "dest": "/public/examples.html"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }
