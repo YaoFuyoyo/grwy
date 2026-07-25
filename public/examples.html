@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>案例展示 - 志在瑶远</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 20px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 16px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      color: #64748b;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .example-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .example-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .example-preview {
+      height: 200px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      position: relative;
+    }
+
+    .example-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .example-info {
+      padding: 20px;
+    }
+
+    .example-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .example-title {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .example-bio {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .example-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .example-url {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .example-btn {
+      padding: 6px 16px;
+      background: #f1f5f9;
+      color: #3b82f6;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .example-btn:hover {
+      background: #dbeafe;
+    }
+
+    @media (max-width: 900px) {
+      .examples-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .examples-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-content">
+      <a href="/" class="logo">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text">志在瑶远</div>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">首页</a>
+        <a href="editor.html" class="nav-link">编辑器</a>
+        <a href="history.html" class="nav-link">历史记录</a>
+      </nav>
+      <div class="auth-buttons" id="authButtons">
+        <button class="btn btn-secondary" onclick="window.location.href='/'">登录</button>
+        <button class="btn btn-primary" onclick="window.location.href='/'">注册</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-header">
+      <h1 class="page-title">案例展示</h1>
+      <p class="page-subtitle">看看其他人如何使用志在瑶远创建个人网页，获取灵感和创意</p>
+    </div>
+
+    <div class="examples-grid" id="examplesGrid">
+      <div class="example-card" onclick="openExample('example/001')">
+        <div class="example-preview" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
+          <div class="example-avatar">👨‍💼</div>
+        </div>
+        <div class="example-info">
+          <div class="example-name">张三</div>
+          <div class="example-title">产品经理 | 科技蓝主题</div>
+          <div class="example-bio">专注于用户体验设计和产品策略规划，拥有丰富的互联网产品经验...</div>
+          <div class="example-footer">
+            <div class="example-url">grwy.zzyy99.cn/example/001</div>
+            <button class="example-btn">查看详情</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card" onclick="openExample('example/002')">
+        <div class="example-preview" style="background: linear-gradient(135deg, #a855f7, #d946ef);">
+          <div class="example-avatar">🎨</div>
+        </div>
+        <div class="example-info">
+          <div class="example-name">李四</div>
+          <div class="example-title">UI设计师 | 未来紫主题</div>
+          <div class="example-bio">热爱设计，追求极致视觉体验，作品涵盖品牌设计、界面设计...</div>
+          <div class="example-footer">
+            <div class="example-url">grwy.zzyy99.cn/example/002</div>
+            <button class="example-btn">查看详情</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card" onclick="openExample('example/003')">
+        <div class="example-preview" style="background: linear-gradient(135deg, #0f172a, #1e293b);">
+          <div class="example-avatar">💻</div>
+        </div>
+        <div class="example-info">
+          <div class="example-name">王五</div>
+          <div class="example-title">全栈工程师 | 曜石黑主题</div>
+          <div class="example-bio">热爱技术，专注于Web开发和系统架构，参与多个大型项目...</div>
+          <div class="example-footer">
+            <div class="example-url">grwy.zzyy99.cn/example/003</div>
+            <button class="example-btn">查看详情</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card" onclick="openExample('example/004')">
+        <div class="example-preview" style="background: linear-gradient(135deg, #22c55e, #4ade80);">
+          <div class="example-avatar">📚</div>
+        </div>
+        <div class="example-info">
+          <div class="example-name">赵六</div>
+          <div class="example-title">研究员 | 森林绿主题</div>
+          <div class="example-bio">专注于人工智能领域研究，发表多篇学术论文，拥有多项专利...</div>
+          <div class="example-footer">
+            <div class="example-url">grwy.zzyy99.cn/example/004</div>
+            <button class="example-btn">查看详情</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card" onclick="openExample('example/005')">
+        <div class="example-preview" style="background: linear-gradient(135deg, #f97316, #fb923c);">
+          <div class="example-avatar">📊</div>
+        </div>
+        <div class="example-info">
+          <div class="example-name">钱七</div>
+          <div class="example-title">数据分析师 | 活力橙主题</div>
+          <div class="example-bio">擅长数据分析和可视化，帮助企业做出数据驱动的决策...</div>
+          <div class="example-footer">
+            <div class="example-url">grwy.zzyy99.cn/example/005</div>
+            <button class="example-btn">查看详情</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card" onclick="openExample('example/006')">
+        <div class="example-preview" style="background: linear-gradient(135deg, #ffffff, #f8fafc); color: #64748b;">
+          <div class="example-avatar">📝</div>
+        </div>
+        <div class="example-info">
+          <div class="example-name">孙八</div>
+          <div class="example-title">自由撰稿人 | 极简白主题</div>
+          <div class="example-bio">热爱写作，专注于科技和生活类内容创作，作品广受好评...</div>
+          <div class="example-footer">
+            <div class="example-url">grwy.zzyy99.cn/example/006</div>
+            <button class="example-btn">查看详情</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">© 2026 志在瑶远信息技术有限公司</p>
+    </div>
+  </footer>
+
+  <script>
+    function openExample(url) {
+      window.open(`/${url}`, '_blank')
+    }
+  </script>
+</body>
+</html>
