@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生成记录 - 志在瑶远</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 20px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: #64748b;
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .records-table {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 200px 200px 200px 120px 150px;
+      gap: 20px;
+      padding: 16px 24px;
+      background: #f8fafc;
+      font-weight: 600;
+      font-size: 14px;
+      color: #64748b;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 200px 200px 200px 120px 150px;
+      gap: 20px;
+      padding: 20px 24px;
+      border-bottom: 1px solid #f1f5f9;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .table-row:hover {
+      background: #f8fafc;
+    }
+
+    .table-row:last-child {
+      border-bottom: none;
+    }
+
+    .record-name {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .record-url {
+      color: #3b82f6;
+      text-decoration: none;
+      font-size: 14px;
+      word-break: break-all;
+    }
+
+    .record-url:hover {
+      text-decoration: underline;
+    }
+
+    .record-time {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .record-status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-active {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .record-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .action-btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .action-btn-secondary {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+
+    .action-btn-danger {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 900px) {
+      .table-header, .table-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .table-header {
+        display: none;
+      }
+      
+      .table-row {
+        padding: 16px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      
+      .record-actions {
+        margin-top: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-content">
+      <a href="/" class="logo">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text">志在瑶远</div>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">首页</a>
+        <a href="editor.html" class="nav-link">编辑器</a>
+        <a href="examples.html" class="nav-link">案例</a>
+      </nav>
+      <button class="btn btn-secondary" onclick="logout()">退出</button>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">生成记录</h1>
+        <p class="page-subtitle">管理您已生成的个人网页</p>
+      </div>
+      <a href="editor.html" class="btn btn-primary">新建网页</a>
+    </div>
+
+    <div id="recordsContainer">
+      <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <div class="empty-title">暂无生成记录</div>
+        <div>点击上方按钮开始创建您的第一个个人网页</div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">确认删除</h3>
+        <button class="modal-close" onclick="closeModal('deleteModal')">×</button>
+      </div>
+      <div style="text-align: center; padding: 24px 0;">
+        <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+        <div style="font-size: 16px; color: #1e293b; margin-bottom: 24px;">确认删除该网页？此操作不可恢复。</div>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn btn-secondary" style="flex: 1;" onclick="closeModal('deleteModal')">取消</button>
+          <button class="btn btn-primary" style="flex: 1; background: #ef4444;" onclick="confirmDelete()">确认删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : '/api'
+    let deletePageId = ''
+
+    function getToken() {
+      return localStorage.getItem('token') || ''
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast')
+      toast.textContent = message
+      toast.className = `toast toast-${type}`
+      setTimeout(() => toast.classList.add('show'), 10)
+      setTimeout(() => toast.classList.remove('show'), 3000)
+    }
+
+    async function logout() {
+      localStorage.removeItem('token')
+      window.location.href = '/'
+    }
+
+    async function loadRecords() {
+      const token = getToken()
+      if (!token) {
+        window.location.href = '/'
+        return
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/pages/list`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        const data = await response.json()
+
+        if (data.ok && data.pages && data.pages.length > 0) {
+          renderRecords(data.pages)
+        }
+      } catch (err) {
+        console.error('Load records error:', err)
+      }
+    }
+
+    function renderRecords(pages) {
+      const container = document.getElementById('recordsContainer')
+      container.innerHTML = `
+        <div class="records-table">
+          <div class="table-header">
+            <div>网页名称</div>
+            <div>访问链接</div>
+            <div>创建时间</div>
+            <div>状态</div>
+            <div>操作</div>
+          </div>
+          ${pages.map(page => `
+            <div class="table-row">
+              <div class="record-name">${page.name || '未命名'}</div>
+              <div><a href="/${page.subdomain}/${page.pageId}" target="_blank" class="record-url">grwy.zzyy99.cn/${page.subdomain}/${page.pageId}</a></div>
+              <div class="record-time">${formatDate(page.createdAt)}</div>
+              <div><span class="record-status status-active">已生成</span></div>
+              <div class="record-actions">
+                <a href="/${page.subdomain}/${page.pageId}" target="_blank" class="action-btn action-btn-primary">预览</a>
+                <a href="editor.html?edit=${page.pageId}" class="action-btn action-btn-secondary">修改</a>
+                <button class="action-btn action-btn-danger" onclick="openDeleteModal('${page.pageId}')">删除</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr)
+      return date.toLocaleString('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    }
+
+    function openDeleteModal(pageId) {
+      deletePageId = pageId
+      document.getElementById('deleteModal').classList.add('active')
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active')
+    }
+
+    async function confirmDelete() {
+      const token = getToken()
+      
+      try {
+        const response = await fetch(`${API_BASE}/pages/delete?pageId=${deletePageId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        const data = await response.json()
+
+        if (data.ok) {
+          closeModal('deleteModal')
+          showToast('删除成功')
+          loadRecords()
+        } else {
+          showToast(data.message, 'error')
+        }
+      } catch (err) {
+        showToast('删除失败', 'error')
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadRecords)
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        e.target.classList.remove('active')
+      }
+    })
+  </script>
+</body>
+</html>

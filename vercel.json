@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/:subdomain/:pageId",
+      "destination": "/api/pages/getPage.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/public/$1"
+    }
+  ]
+}
