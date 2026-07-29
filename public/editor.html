@@ -161,6 +161,12 @@
       align-items: center;
       gap: 12px;
       margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .resume-upload-section #photo-grid {
+      flex-basis: 100%;
+      margin-top: 8px;
     }
 
     #resume-file-info, #photo-file-info, .skill-icon-file-info, .file-info {
@@ -425,6 +431,12 @@
       margin-top: 4px;
     }
 
+    .flex-row .field-hint {
+      margin-top: 0;
+      margin-left: 8px;
+      white-space: nowrap;
+    }
+
     .upload-box {
       border: 2px dashed var(--border-default);
       border-radius: var(--radius-md);
@@ -476,9 +488,18 @@
       width: 100px;
     }
 
-    .flex-row .file-info {
-      flex-shrink: 0;
-      max-width: calc(100% - 108px);
+    .portfolio-item {
+      position: relative;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-default);
+      background: var(--border-light);
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .upload-preview {
@@ -497,6 +518,42 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
+    }
+
+    .portfolio-item {
+      position: relative;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-default);
+      background: var(--border-light);
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .portfolio-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .portfolio-remove:hover {
+      background: rgba(239, 68, 68, 0.9);
     }
 
     .portfolio-upload {
@@ -653,11 +710,17 @@
       padding: 14px;
       background: var(--gradient-primary);
       color: white;
+      border: none;
       border-radius: var(--radius-md);
       font-size: var(--font-size-md);
       font-weight: 600;
       font-size: 14px;
-      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-generate:focus,
+    .btn-generate:active {
+      outline: none;
     }
 
     .input-field:focus {
@@ -918,15 +981,45 @@
   <header class="header">
     <div class="container header-content">
       <a href="/" class="logo">
-        <div class="logo-icon">Z</div>
-        <div class="logo-text">志在瑶远</div>
+        <img src="/images/logo.svg" alt="志在瑶远" class="logo-svg">
+        <span class="logo-text">志在瑶远</span>
       </a>
-      <nav class="nav-links">
-        <a href="/" class="nav-link">首页</a>
-        <a href="history.html" class="nav-link">历史记录</a>
-        <a href="examples.html" class="nav-link">案例</a>
-      </nav>
-      <button class="btn btn-secondary" onclick="logout()">退出</button>
+      <div class="header-right">
+        <a href="editor.html" class="nav-link active">编辑器</a>
+        <a href="examples.html" class="nav-link">模板范例</a>
+        <div class="user-avatar-container" id="userAvatarContainer">
+        <div class="user-avatar" id="userAvatar">
+          <img id="userAvatarImg" src="/images/default-avatar.svg" alt="用户头像">
+        </div>
+        <div class="user-dropdown">
+          <div class="user-dropdown-header">
+            <img class="user-dropdown-avatar" id="userDropdownAvatar" src="/images/default-avatar.svg" alt="用户头像">
+            <div class="user-dropdown-info">
+              <div class="user-dropdown-name" id="userName">加载中...</div>
+              <div class="user-dropdown-id" id="userId">ID: --</div>
+            </div>
+          </div>
+          <div class="user-dropdown-items">
+            <button class="user-dropdown-item" onclick="goToAccount('settings')">
+              账户设置
+            </button>
+            <button class="user-dropdown-item" onclick="goToAccount('profile')">
+              个人资料
+            </button>
+            <button class="user-dropdown-item" onclick="goToAccount('records')">
+              生成记录
+            </button>
+            <button class="user-dropdown-item" onclick="goToAccount('feedback')">
+              问题反馈
+            </button>
+            <div class="user-dropdown-divider"></div>
+            <button class="user-dropdown-item logout" onclick="logout()">
+              退出登录
+            </button>
+          </div>
+        </div>
+      </div>
+      </div>
     </div>
   </header>
 
@@ -1033,7 +1126,10 @@
               </div>
             </div>
             <div class="resume-upload-section">
+              <!-- 第一行：标签 + 按钮 + 文字说明 -->
               <label class="button-section-title">照片</label>
+              
+              <!-- 单图模式（证件照） -->
               <div id="photo-upload-container">
                 <div class="upload-box small" onclick="document.getElementById('file-photo').click()">
                   <p>点击上传照片</p>
@@ -1043,8 +1139,20 @@
                 <span class="resume-filename"></span>
                 <button class="btn-delete-resume" onclick="removePhoto()">✕</button>
               </div>
+              
+              <!-- 多图模式（生活照-中 / 生活照-大）第一行：按钮 + 文字 -->
+              <div id="photo-multi-first-row" style="display:none">
+                <div class="upload-box small" id="photo-add-more" onclick="document.getElementById('file-photo-multi').click()">
+                  <p>点击上传照片</p>
+                </div>
+              </div>
+              
               <input type="file" id="file-photo" style="display:none" accept="image/*" onchange="handlePhotoUpload(this)">
+              <input type="file" id="file-photo-multi" style="display:none" accept="image/*" multiple onchange="handlePhotoMultiUpload(this)">
               <p class="field-hint" id="photo-hint">1寸，比例1:1.4</p>
+              
+              <!-- 第二行：图片网格（仅多图模式且有照片时显示） -->
+              <div id="photo-grid" class="upload-grid" style="display:none"></div>
             </div>
           </div>
         </div>
@@ -1289,8 +1397,7 @@
       </div>
 
       <div class="generate-bar">
-        <button class="btn-generate" onclick="generatePage()">生成网页 ¥19.9</button>
-        <p class="generate-hint">一次生成，永久使用</p>
+        <button class="btn-generate" onclick="generatePage()">生成网页</button>
       </div>
     </aside>
 
@@ -1321,35 +1428,30 @@
   </div>
 
   <div class="modal-overlay" id="paymentModal">
-    <div class="modal" style="width: 480px;">
+    <div class="modal" style="width: 420px;">
       <div class="modal-header">
         <h3 class="modal-title">支付确认</h3>
         <button class="modal-close" onclick="closeModal('paymentModal')">×</button>
       </div>
-      <div style="text-align: center; margin: 32px 0;">
-        <div style="font-size: 48px; font-weight: 700; color: #a855f7; margin-bottom: 16px;">¥19.9</div>
-        <div style="color: #64748b; margin-bottom: 32px;">生成个人网页</div>
+      <div style="text-align: center; padding: 24px 0;">
+        <div style="font-size: 42px; font-weight: 700; color: #a855f7; margin-bottom: 8px;">¥19.9</div>
+        <div style="color: #64748b; margin-bottom: 24px;">生成个人网页</div>
         
-        <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 32px;">
-          <div class="pay-option" id="payAlipay" onclick="selectPayChannel('alipay')" style="padding: 20px; border: 2px solid #a855f7; border-radius: 12px; cursor: pointer;">
-            <div style="font-size: 32px; margin-bottom: 8px;">📱</div>
-            <div style="font-size: 14px; font-weight: 500;">支付宝</div>
-          </div>
-          <div class="pay-option" id="payWechat" onclick="selectPayChannel('wechat')" style="padding: 20px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer;">
-            <div style="font-size: 32px; margin-bottom: 8px;">💬</div>
-            <div style="font-size: 14px; font-weight: 500;">微信支付</div>
+        <div style="background: #fff; border: 2px dashed #e2e8f0; border-radius: 12px; padding: 16px; margin: 0 auto 16px; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center;">
+          <img src="/images/alipay-placeholder.png" alt="支付宝收款码" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; document.getElementById('qrPlaceholder').style.display='flex';">
+          <div id="qrPlaceholder" style="display: none; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8;">
+            <div style="font-size: 48px; margin-bottom: 8px;">📱</div>
+            <div style="font-size: 12px;">支付宝收款码</div>
           </div>
         </div>
 
-        <div id="qrCodeArea" style="display: none;">
-          <div style="width: 200px; height: 200px; background: white; border: 2px dashed #e2e8f0; border-radius: 12px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;">
-            <div style="font-size: 64px;">🔄</div>
-          </div>
-          <div style="font-size: 14px; color: #64748b;">请使用支付宝扫码支付</div>
-          <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">支付成功后页面将自动跳转</div>
+        <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">请使用支付宝扫码支付</div>
+        <div style="font-size: 12px; color: #94a3b8;">支付成功后页面将自动跳转</div>
+        
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #f1f5f9;">
+          <div style="font-size: 13px; color: #64748b;">支付剩余时间</div>
+          <div id="countdown" style="font-size: 24px; font-weight: 700; color: #f43f5e; margin-top: 4px;">10:00</div>
         </div>
-
-        <button class="btn btn-primary" style="width: 100%; margin-top: 16px; background: linear-gradient(135deg, #a855f7, #d946ef);" onclick="startPayment()">确认支付</button>
       </div>
     </div>
   </div>
@@ -1384,8 +1486,9 @@
     let selectedHomeButtons = ['home-resume', 'home-contact']
     let homeDisplay = 'id-photo'
     let currentDevice = 'web'
-    let currentPayChannel = 'alipay'
     let generatedPageUrl = ''
+    let countdownInterval = null
+    let countdownSeconds = 600
 
     const profileData = {
       name: '',
@@ -1395,6 +1498,7 @@
       position: '',
       bio: '',
       hometown: '',
+      educationLevel: '',
       birthday: '',
       zodiac: '',
       driving: '',
@@ -1410,7 +1514,8 @@
       weibo: '',
       weiboQr: '',
       idPhoto: '',
-      lifePhoto: '',
+      lifePhotoMedium: [],
+      lifePhotoLarge: [],
       resumeUrl: '',
       resumeFilename: '',
       advantages: [],
@@ -1441,8 +1546,53 @@
     }
 
     async function logout() {
+      const token = getToken()
+      if (token) {
+        try {
+          await fetch(`${API_BASE}/auth?action=logout`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          })
+        } catch (err) {}
+      }
       localStorage.removeItem('token')
       window.location.href = '/'
+    }
+
+    async function loadUserInfo() {
+      const token = getToken()
+      if (!token) return
+
+      try {
+        const response = await fetch(`${API_BASE}/auth?action=verify`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        const data = await response.json()
+        if (data.ok && data.user) {
+          updateUserDisplay(data.user)
+        }
+      } catch (err) {
+        console.error('Load user info error:', err)
+      }
+    }
+
+    function updateUserDisplay(user) {
+      const defaultAvatar = '/images/default-avatar.svg'
+      const avatarUrl = user.avatar || defaultAvatar
+      
+      document.getElementById('userAvatarImg').src = avatarUrl
+      document.getElementById('userDropdownAvatar').src = avatarUrl
+      document.getElementById('userName').textContent = user.name || '用户'
+      document.getElementById('userId').textContent = 'ID: ' + (user.userId || '--')
+    }
+
+    function goToAccount(section) {
+      const token = getToken()
+      if (!token) {
+        openLogin()
+        return
+      }
+      window.location.href = `account.html?section=${section}`
     }
 
     async function loadProfile() {
@@ -1472,12 +1622,24 @@
     }
 
     function fillForm() {
+      const containers = [
+        'advantages-container', 'portfolio-grid', 'skills-container',
+        'work-container', 'internship-container', 'project-container',
+        'education-container', 'papers-container', 'patents-container',
+        'copyrights-container', 'trademarks-container', 'certifications-container', 'honors-container'
+      ]
+      containers.forEach(id => {
+        const el = document.getElementById(id)
+        if (el) el.innerHTML = ''
+      })
+
       document.getElementById('input-name').value = profileData.name || ''
       document.getElementById('input-url').value = profileData.url || ''
       document.getElementById('input-slogan').value = profileData.slogan || ''
       document.getElementById('input-position').value = profileData.position || ''
       document.getElementById('input-bio').value = profileData.bio || ''
       document.getElementById('input-hometown').value = profileData.hometown || ''
+      document.getElementById('input-education').value = profileData.educationLevel || ''
       document.getElementById('input-birthday').value = profileData.birthday || ''
       document.getElementById('input-zodiac').value = profileData.zodiac || ''
       document.getElementById('input-driving').value = profileData.driving || ''
@@ -1493,13 +1655,360 @@
       if (profileData.avatar) {
         const preview = document.getElementById('avatar-preview')
         preview.innerHTML = `<img src="${profileData.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />`
+        document.getElementById('avatar-upload-container').style.display = 'none'
+        document.getElementById('avatar-file-info').style.display = 'flex'
+        document.getElementById('avatar-file-info').querySelector('.resume-filename').textContent = '已上传头像'
       }
+
+      if (profileData.resumeUrl) {
+        document.getElementById('resume-upload-container').style.display = 'none'
+        document.getElementById('resume-file-info').style.display = 'flex'
+        document.getElementById('resume-file-info').querySelector('.resume-filename').textContent = profileData.resumeFilename || '已上传简历'
+      }
+
+      // 加载照片数据
+      if (homeDisplay === 'id-photo') {
+        // 单图模式
+        const hasPhoto = profileData.photoUrl || profileData.idPhoto
+        if (hasPhoto) {
+          document.getElementById('photo-upload-container').style.display = 'none'
+          document.getElementById('photo-file-info').style.display = 'flex'
+          document.getElementById('photo-file-info').querySelector('.resume-filename').textContent = profileData.photoFilename || '已上传照片'
+        } else {
+          document.getElementById('photo-upload-container').style.display = 'flex'
+          document.getElementById('photo-file-info').style.display = 'none'
+        }
+        document.getElementById('photo-multi-first-row').style.display = 'none'
+      } else {
+        // 多图模式
+        document.getElementById('photo-upload-container').style.display = 'none'
+        document.getElementById('photo-file-info').style.display = 'none'
+        document.getElementById('photo-multi-first-row').style.display = 'flex'
+        
+        // 加载对应类型的照片，兼容两种格式：字符串数组和对象数组
+        let rawData = []
+        if (homeDisplay === 'life-small') {
+          rawData = profileData.lifePhotoMedium || []
+        } else {
+          rawData = profileData.lifePhotoLarge || []
+        }
+        
+        // 转换为 base64 字符串数组
+        photoList = rawData.map(item => {
+          if (typeof item === 'string') return item
+          if (item && item.url) return item.url
+          return ''
+        }).filter(Boolean)
+        
+        renderPhotoGrid()
+      }
+
+      if (profileData.wechatQr) {
+        document.getElementById('wechat-qr-upload-container').style.display = 'none'
+        document.getElementById('wechat-qr-file-info').style.display = 'flex'
+        document.getElementById('wechat-qr-file-info').querySelector('.resume-filename').textContent = '已上传二维码'
+      }
+      if (profileData.qqQr) {
+        document.getElementById('qq-qr-upload-container').style.display = 'none'
+        document.getElementById('qq-qr-file-info').style.display = 'flex'
+        document.getElementById('qq-qr-file-info').querySelector('.resume-filename').textContent = '已上传二维码'
+      }
+      if (profileData.weiboQr) {
+        document.getElementById('weibo-qr-upload-container').style.display = 'none'
+        document.getElementById('weibo-qr-file-info').style.display = 'flex'
+        document.getElementById('weibo-qr-file-info').querySelector('.resume-filename').textContent = '已上传二维码'
+      }
+
+      renderPortfolioGrid()
+
+      renderAdvantages()
+      renderSkills()
+      renderWorkExperiences()
+      renderInternships()
+      renderProjects()
+      renderEducation()
+      renderPapers()
+      renderPatents()
+      renderCopyrights()
+      renderTrademarks()
+      renderCertifications()
+      renderHonors()
 
       const urlParams = new URLSearchParams(window.location.search)
       const theme = urlParams.get('theme')
       if (theme) {
         selectColor(theme)
       }
+
+      refreshPreview()
+    }
+
+    function renderAdvantages() {
+      if (!profileData.advantages || profileData.advantages.length === 0) return
+      profileData.advantages.forEach((adv) => {
+        addAdvantageGroup()
+        const groups = document.querySelectorAll('#advantages-container .advantage-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.adv-name').value = adv.name || ''
+        group.querySelector('.adv-desc').value = adv.desc || ''
+      })
+    }
+
+    function renderSkills() {
+      if (!profileData.skills || profileData.skills.length === 0) return
+      profileData.skills.forEach((skill) => {
+        addSkillGroup()
+        const groups = document.querySelectorAll('#skills-container .skill-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.skill-name').value = skill.name || ''
+        group.querySelector('.skill-level').value = skill.level || '了解'
+        if (skill.icon) {
+          group.iconBase64 = skill.icon
+          const uploadContainer = group.querySelector('.skill-icon-upload-container')
+          const fileInfo = group.querySelector('.skill-icon-file-info')
+          uploadContainer.style.display = 'none'
+          fileInfo.style.display = 'flex'
+          fileInfo.querySelector('.resume-filename').textContent = '已上传图标'
+        }
+      })
+    }
+
+    function renderWorkExperiences() {
+      if (!profileData.workExperiences || profileData.workExperiences.length === 0) return
+      profileData.workExperiences.forEach((exp) => {
+        addWorkGroup()
+        const groups = document.querySelectorAll('#work-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.work-company').value = exp.company || ''
+        group.querySelector('.work-industry').value = exp.industry || ''
+        group.querySelector('.work-time').value = exp.time || ''
+        group.querySelector('.work-position').value = exp.position || ''
+        group.querySelector('.work-result').value = exp.result || ''
+
+        const tasksContainer = group.querySelector('[id^="work-tasks-"]')
+        const defaultTask = tasksContainer.querySelector('.work-task')
+        if (defaultTask && exp.tasks && exp.tasks.length > 0) {
+          defaultTask.querySelector('.work-task-type').value = exp.tasks[0].type || ''
+          defaultTask.querySelector('.work-task-desc').value = exp.tasks[0].desc || ''
+        }
+        if (exp.tasks && exp.tasks.length > 1) {
+          for (let i = 1; i < exp.tasks.length; i++) {
+            addWorkTask(group)
+            const allTasks = group.querySelectorAll('.work-task')
+            const taskEl = allTasks[allTasks.length - 1]
+            taskEl.querySelector('.work-task-type').value = exp.tasks[i].type || ''
+            taskEl.querySelector('.work-task-desc').value = exp.tasks[i].desc || ''
+          }
+        }
+
+        if (exp.resultFile) {
+          group._resultFile = exp.resultFile
+          group._resultFileName = exp.resultFileName || ''
+          const uploadContainer = group.querySelector('[id^="work-result-upload-"]')
+          const fileInfo = group.querySelector('[id^="work-result-file-info-"]')
+          if (uploadContainer) uploadContainer.style.display = 'none'
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            fileInfo.querySelector('.resume-filename').textContent = exp.resultFileName || '已上传成果展示'
+          }
+        }
+      })
+    }
+
+    function renderInternships() {
+      if (!profileData.internships || profileData.internships.length === 0) return
+      profileData.internships.forEach((intern) => {
+        addInternshipGroup()
+        const groups = document.querySelectorAll('#internship-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.intern-company').value = intern.company || ''
+        group.querySelector('.intern-time').value = intern.time || ''
+        group.querySelector('.intern-position').value = intern.position || ''
+        group.querySelector('.intern-desc').value = intern.desc || ''
+      })
+    }
+
+    function renderProjects() {
+      if (!profileData.projects || profileData.projects.length === 0) return
+      profileData.projects.forEach((proj) => {
+        addProjectGroup()
+        const groups = document.querySelectorAll('#project-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.proj-name').value = proj.name || ''
+        group.querySelector('.proj-time').value = proj.time || ''
+        group.querySelector('.proj-position').value = proj.position || ''
+        group.querySelector('.proj-desc').value = proj.desc || ''
+        group.querySelector('.proj-detail').value = proj.content || ''
+      })
+    }
+
+    function renderEducation() {
+      if (!profileData.education || profileData.education.length === 0) return
+      profileData.education.forEach((edu) => {
+        addEducationGroup()
+        const groups = document.querySelectorAll('#education-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.edu-school').value = edu.school || ''
+        group.querySelector('.edu-degree').value = edu.degree || '硕士'
+        group.querySelector('.edu-time').value = edu.time || ''
+        group.querySelector('.edu-major').value = edu.major || ''
+        group.querySelector('.edu-gpa').value = edu.score || ''
+        group.querySelector('.edu-courses').value = edu.courses || ''
+        group.querySelector('.edu-experience').value = edu.experience || ''
+        group.querySelector('.edu-thesis').value = edu.thesis || ''
+
+        if (edu.designFile) {
+          group._designFile = edu.designFile
+          group._designFileName = edu.designFileName || ''
+          const uploadContainer = group.querySelector('[id^="edu-design-upload-"]')
+          const fileInfo = group.querySelector('[id^="edu-design-file-info-"]')
+          if (uploadContainer) uploadContainer.style.display = 'none'
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            fileInfo.querySelector('.resume-filename').textContent = edu.designFileName || '已上传毕业设计'
+          }
+        }
+        if (edu.diplomaFile) {
+          group._diplomaFile = edu.diplomaFile
+          group._diplomaFileName = edu.diplomaFileName || ''
+          const uploadContainer = group.querySelector('[id^="edu-diploma-upload-"]')
+          const fileInfo = group.querySelector('[id^="edu-diploma-file-info-"]')
+          if (uploadContainer) uploadContainer.style.display = 'none'
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            fileInfo.querySelector('.resume-filename').textContent = edu.diplomaFileName || '已上传毕业证书'
+          }
+        }
+      })
+    }
+
+    function renderPapers() {
+      if (!profileData.papers || profileData.papers.length === 0) return
+      profileData.papers.forEach((paper) => {
+        addPaperGroup()
+        const groups = document.querySelectorAll('#papers-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.paper-name').value = paper.name || ''
+        group.querySelector('.paper-type').value = paper.type || '期刊论文'
+        group.querySelector('.paper-journal').value = paper.journal || ''
+
+        if (paper.coverFile) {
+          group._coverFile = paper.coverFile
+          group._coverFileName = paper.coverFileName || ''
+          const uploadContainer = group.querySelector('[id^="paper-cover-upload-"]')
+          const fileInfo = group.querySelector('[id^="paper-cover-file-info-"]')
+          if (uploadContainer) uploadContainer.style.display = 'none'
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            fileInfo.querySelector('.resume-filename').textContent = paper.coverFileName || '已上传论文首页'
+          }
+        }
+        if (paper.attachFile) {
+          group._attachFile = paper.attachFile
+          group._attachFileName = paper.attachFileName || ''
+          const uploadContainer = group.querySelector('[id^="paper-attach-upload-"]')
+          const fileInfo = group.querySelector('[id^="paper-attach-file-info-"]')
+          if (uploadContainer) uploadContainer.style.display = 'none'
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            fileInfo.querySelector('.resume-filename').textContent = paper.attachFileName || '已上传论文附件'
+          }
+        }
+      })
+    }
+
+    function renderPatents() {
+      if (!profileData.patents || profileData.patents.length === 0) return
+      profileData.patents.forEach((patent) => {
+        addPatentGroup()
+        const groups = document.querySelectorAll('#patents-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.patent-name').value = patent.name || ''
+        group.querySelector('.patent-type').value = patent.type || '外观设计'
+        group.querySelector('.patent-number').value = patent.number || ''
+      })
+    }
+
+    function renderCopyrights() {
+      if (!profileData.copyrights || profileData.copyrights.length === 0) return
+      profileData.copyrights.forEach((copyright) => {
+        addCopyrightGroup()
+        const groups = document.querySelectorAll('#copyrights-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.copyright-name').value = copyright.name || ''
+        group.querySelector('.copyright-type').value = copyright.type || '图形作品'
+        group.querySelector('.copyright-number').value = copyright.number || ''
+      })
+    }
+
+    function renderTrademarks() {
+      if (!profileData.trademarks || profileData.trademarks.length === 0) return
+      profileData.trademarks.forEach((tm) => {
+        addTrademarkGroup()
+        const groups = document.querySelectorAll('#trademarks-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.trademark-name').value = tm.name || ''
+        group.querySelector('.trademark-number').value = tm.number || ''
+
+        if (tm.logoFile) {
+          group._logoFile = tm.logoFile
+          group._logoFileName = tm.logoFileName || ''
+          const uploadContainer = group.querySelector('[id^="trademark-logo-upload-"]')
+          const fileInfo = group.querySelector('[id^="trademark-logo-file-info-"]')
+          if (uploadContainer) uploadContainer.style.display = 'none'
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            fileInfo.querySelector('.resume-filename').textContent = tm.logoFileName || '已上传商标图案'
+          }
+        }
+      })
+    }
+
+    function renderCertifications() {
+      if (!profileData.certifications || profileData.certifications.length === 0) return
+      profileData.certifications.forEach((cert) => {
+        addCertificationGroup()
+        const groups = document.querySelectorAll('#certifications-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.cert-name').value = cert.name || ''
+        group.querySelector('.cert-time').value = cert.time || ''
+
+        if (cert.certFile) {
+          group._certFile = cert.certFile
+          group._certFileName = cert.certFileName || ''
+          const uploadContainer = group.querySelector('[id^="cert-upload-"]')
+          const fileInfo = group.querySelector('[id^="cert-file-info-"]')
+          if (uploadContainer) uploadContainer.style.display = 'none'
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            fileInfo.querySelector('.resume-filename').textContent = cert.certFileName || '已上传证书'
+          }
+        }
+      })
+    }
+
+    function renderHonors() {
+      if (!profileData.honors || profileData.honors.length === 0) return
+      profileData.honors.forEach((honor) => {
+        addHonorGroup()
+        const groups = document.querySelectorAll('#honors-container .work-group')
+        const group = groups[groups.length - 1]
+        group.querySelector('.honor-name').value = honor.name || ''
+        group.querySelector('.honor-time').value = honor.time || ''
+        group.querySelector('.honor-desc').value = honor.desc || ''
+
+        if (honor.honorFile) {
+          group._honorFile = honor.honorFile
+          group._honorFileName = honor.honorFileName || ''
+          const uploadContainer = group.querySelector('[id^="honor-upload-"]')
+          const fileInfo = group.querySelector('[id^="honor-file-info-"]')
+          if (uploadContainer) uploadContainer.style.display = 'none'
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            fileInfo.querySelector('.resume-filename').textContent = honor.honorFileName || '已上传奖项证明'
+          }
+        }
+      })
     }
 
     function selectColor(color) {
@@ -1644,17 +2153,175 @@
       event.currentTarget.classList.add('active')
       
       const photoHint = document.getElementById('photo-hint')
-      if (photoHint) {
-        if (display === 'id-photo') {
-          photoHint.textContent = '1寸，比例1:1.4'
-        } else if (display === 'life-small') {
-          photoHint.textContent = '比例1:1，可上传多张，最多10张'
-        } else if (display === 'life-large') {
-          photoHint.textContent = '比例2:1，可上传多张，最多10张'
+      const singleContainer = document.getElementById('photo-upload-container')
+      const singleFileInfo = document.getElementById('photo-file-info')
+      const multiFirstRow = document.getElementById('photo-multi-first-row')
+      const grid = document.getElementById('photo-grid')
+      
+      // 切换上传模式
+      if (display === 'id-photo') {
+        // 单图模式
+        singleContainer.style.display = 'flex'
+        singleFileInfo.style.display = profileData.photoUrl ? 'flex' : 'none'
+        multiFirstRow.style.display = 'none'
+        grid.style.display = 'none'
+        if (photoHint) photoHint.textContent = '1寸，比例1:1.4'
+      } else {
+        // 多图模式（生活照-中 或 生活照-大）
+        singleContainer.style.display = 'none'
+        singleFileInfo.style.display = 'none'
+        multiFirstRow.style.display = 'flex'
+        
+        // 加载对应类型的照片数据（独立参数）
+        if (display === 'life-small') {
+          if (photoHint) photoHint.textContent = '比例1:1，可上传多张，最多10张'
+          photoList = profileData.lifePhotoMedium || []
+        } else {
+          if (photoHint) photoHint.textContent = '比例2:1，可上传多张，最多10张'
+          photoList = profileData.lifePhotoLarge || []
         }
+        
+        renderPhotoGrid()
       }
       
       refreshPreview()
+    }
+
+    // 多图数据存储
+    let photoList = []
+
+    // 获取当前显示模式的宽高比
+    function getPhotoAspectRatio() {
+      if (homeDisplay === 'life-small') return 1  // 1:1
+      if (homeDisplay === 'life-large') return 2  // 2:1
+      return 1
+    }
+
+    // 根据比例裁剪图片
+    function cropImageToAspectRatio(file, aspectRatio) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          const img = new Image()
+          img.onload = () => {
+            const srcWidth = img.width
+            const srcHeight = img.height
+            const srcAspect = srcWidth / srcHeight
+            
+            let cropWidth, cropHeight, offsetX, offsetY
+            
+            if (srcAspect > aspectRatio) {
+              // 源图更宽，按高度裁剪
+              cropHeight = srcHeight
+              cropWidth = srcHeight * aspectRatio
+              offsetX = (srcWidth - cropWidth) / 2
+              offsetY = 0
+            } else {
+              // 源图更高，按宽度裁剪
+              cropWidth = srcWidth
+              cropHeight = srcWidth / aspectRatio
+              offsetX = 0
+              offsetY = (srcHeight - cropHeight) / 2
+            }
+            
+            // 创建画布并绘制裁剪后的图片
+            const canvas = document.createElement('canvas')
+            canvas.width = cropWidth
+            canvas.height = cropHeight
+            const ctx = canvas.getContext('2d')
+            ctx.drawImage(img, offsetX, offsetY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight)
+            
+            // 转换为 base64
+            resolve(canvas.toDataURL('image/jpeg', 0.9))
+          }
+          img.onerror = reject
+          img.src = e.target.result
+        }
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
+    }
+
+    function renderPhotoGrid() {
+      const grid = document.getElementById('photo-grid')
+      const addMore = document.getElementById('photo-add-more')
+      const aspectRatio = getPhotoAspectRatio()
+      
+      grid.innerHTML = ''
+      
+      // 照片网格：有照片时显示
+      if (photoList.length > 0) {
+        grid.style.display = 'grid'
+        grid.style.gap = '8px'
+        
+        // 根据比例设置网格模板：生活照-中 一行4个，生活照-大 一行3个
+        if (aspectRatio === 1) {
+          grid.style.gridTemplateColumns = 'repeat(4, 1fr)'
+        } else {
+          grid.style.gridTemplateColumns = 'repeat(3, 1fr)'
+        }
+        
+        photoList.forEach((item, index) => {
+          const div = document.createElement('div')
+          div.className = 'portfolio-item'
+          if (aspectRatio === 1) {
+            div.style.aspectRatio = '1/1'
+          } else {
+            div.style.aspectRatio = '2/1'
+          }
+          div.innerHTML = `
+            <img src="${item}" alt="照片${index + 1}">
+            <button class="portfolio-remove" onclick="removePhotoItem(${index})">×</button>
+          `
+          grid.appendChild(div)
+        })
+      } else {
+        grid.style.display = 'none'
+      }
+      
+      // 上传按钮：照片少于10张时显示
+      addMore.style.display = photoList.length < 10 ? 'flex' : 'none'
+    }
+
+    function removePhotoItem(index) {
+      photoList.splice(index, 1)
+      renderPhotoGrid()
+      updateProfileDataPhotos()
+      refreshPreview()
+    }
+
+    async function handlePhotoMultiUpload(input) {
+      const files = Array.from(input.files)
+      const remaining = 10 - photoList.length
+      const filesToUpload = files.slice(0, remaining)
+      const aspectRatio = getPhotoAspectRatio()
+      
+      if (files.length > remaining) {
+        showToast(`最多上传10张，已自动选择前${remaining}张`, 'error')
+      }
+      
+      for (const file of filesToUpload) {
+        if (!file.type.startsWith('image/')) {
+          showToast('仅支持图片格式', 'error')
+          continue
+        }
+        // 裁剪图片到指定比例
+        const croppedBase64 = await cropImageToAspectRatio(file, aspectRatio)
+        photoList.push(croppedBase64)
+      }
+      
+      renderPhotoGrid()
+      updateProfileDataPhotos()
+      input.value = ''
+      refreshPreview()
+    }
+
+    function updateProfileDataPhotos() {
+      if (homeDisplay === 'life-small') {
+        profileData.lifePhotoMedium = [...photoList]
+      } else if (homeDisplay === 'life-large') {
+        profileData.lifePhotoLarge = [...photoList]
+      }
     }
 
     function switchDevice(device) {
@@ -1804,8 +2471,6 @@
         const base64 = await fileToBase64(file)
         if (homeDisplay === 'id-photo') {
           profileData.idPhoto = base64
-        } else {
-          profileData.lifePhoto = base64
         }
         profileData.photoUrl = base64
         profileData.photoFilename = file.name
@@ -1826,10 +2491,8 @@
       profileData.photoFilename = ''
       if (homeDisplay === 'id-photo') {
         profileData.idPhoto = ''
-      } else {
-        profileData.lifePhoto = ''
       }
-      document.getElementById('photo-upload-container').style.display = 'block'
+      document.getElementById('photo-upload-container').style.display = 'flex'
       document.getElementById('photo-file-info').style.display = 'none'
       document.getElementById('file-photo').value = ''
       refreshPreview()
@@ -1922,7 +2585,7 @@
       refreshPreview()
     }
 
-    function createDynamicUploadHandler(uploadIdPrefix, fileInfoIdPrefix) {
+    function createDynamicUploadHandler(uploadIdPrefix, fileInfoIdPrefix, dataPropName) {
       return async function(input) {
         const files = input.files
         if (files && files.length > 0) {
@@ -1936,12 +2599,17 @@
           const fileInfo = document.getElementById(fileInfoId)
           fileInfo.style.display = 'flex'
           fileInfo.querySelector('.resume-filename').textContent = filename
+          const group = input.closest('.work-group') || input.closest('.skill-group')
+          if (group && dataPropName) {
+            group[dataPropName] = base64
+            group[dataPropName + 'Name'] = filename
+          }
           refreshPreview()
         }
       }
     }
 
-    function createDynamicRemoveHandler(uploadIdPrefix, fileInfoIdPrefix) {
+    function createDynamicRemoveHandler(uploadIdPrefix, fileInfoIdPrefix, dataPropName) {
       return function(btn) {
         const fileInfo = btn.parentElement
         const formField = fileInfo.parentElement
@@ -1952,27 +2620,32 @@
           document.getElementById(uploadId).style.display = 'block'
           document.getElementById(fileInfoId).style.display = 'none'
           input.value = ''
+          const group = input.closest('.work-group') || input.closest('.skill-group')
+          if (group && dataPropName) {
+            group[dataPropName] = ''
+            group[dataPropName + 'Name'] = ''
+          }
           refreshPreview()
         }
       }
     }
 
-    const handleWorkResultUpload = createDynamicUploadHandler('work-result-upload-', 'work-result-file-info-')
-    const removeWorkResult = createDynamicRemoveHandler('work-result-upload-', 'work-result-file-info-')
-    const handleEduDesignUpload = createDynamicUploadHandler('edu-design-upload-', 'edu-design-file-info-')
-    const removeEduDesign = createDynamicRemoveHandler('edu-design-upload-', 'edu-design-file-info-')
-    const handleEduDiplomaUpload = createDynamicUploadHandler('edu-diploma-upload-', 'edu-diploma-file-info-')
-    const removeEduDiploma = createDynamicRemoveHandler('edu-diploma-upload-', 'edu-diploma-file-info-')
-    const handlePaperCoverUpload = createDynamicUploadHandler('paper-cover-upload-', 'paper-cover-file-info-')
-    const removePaperCover = createDynamicRemoveHandler('paper-cover-upload-', 'paper-cover-file-info-')
-    const handlePaperAttachUpload = createDynamicUploadHandler('paper-attach-upload-', 'paper-attach-file-info-')
-    const removePaperAttach = createDynamicRemoveHandler('paper-attach-upload-', 'paper-attach-file-info-')
-    const handleTrademarkLogoUpload = createDynamicUploadHandler('trademark-logo-upload-', 'trademark-logo-file-info-')
-    const removeTrademarkLogo = createDynamicRemoveHandler('trademark-logo-upload-', 'trademark-logo-file-info-')
-    const handleCertUpload = createDynamicUploadHandler('cert-upload-', 'cert-file-info-')
-    const removeCert = createDynamicRemoveHandler('cert-upload-', 'cert-file-info-')
-    const handleHonorUpload = createDynamicUploadHandler('honor-upload-', 'honor-file-info-')
-    const removeHonor = createDynamicRemoveHandler('honor-upload-', 'honor-file-info-')
+    const handleWorkResultUpload = createDynamicUploadHandler('work-result-upload-', 'work-result-file-info-', '_resultFile')
+    const removeWorkResult = createDynamicRemoveHandler('work-result-upload-', 'work-result-file-info-', '_resultFile')
+    const handleEduDesignUpload = createDynamicUploadHandler('edu-design-upload-', 'edu-design-file-info-', '_designFile')
+    const removeEduDesign = createDynamicRemoveHandler('edu-design-upload-', 'edu-design-file-info-', '_designFile')
+    const handleEduDiplomaUpload = createDynamicUploadHandler('edu-diploma-upload-', 'edu-diploma-file-info-', '_diplomaFile')
+    const removeEduDiploma = createDynamicRemoveHandler('edu-diploma-upload-', 'edu-diploma-file-info-', '_diplomaFile')
+    const handlePaperCoverUpload = createDynamicUploadHandler('paper-cover-upload-', 'paper-cover-file-info-', '_coverFile')
+    const removePaperCover = createDynamicRemoveHandler('paper-cover-upload-', 'paper-cover-file-info-', '_coverFile')
+    const handlePaperAttachUpload = createDynamicUploadHandler('paper-attach-upload-', 'paper-attach-file-info-', '_attachFile')
+    const removePaperAttach = createDynamicRemoveHandler('paper-attach-upload-', 'paper-attach-file-info-', '_attachFile')
+    const handleTrademarkLogoUpload = createDynamicUploadHandler('trademark-logo-upload-', 'trademark-logo-file-info-', '_logoFile')
+    const removeTrademarkLogo = createDynamicRemoveHandler('trademark-logo-upload-', 'trademark-logo-file-info-', '_logoFile')
+    const handleCertUpload = createDynamicUploadHandler('cert-upload-', 'cert-file-info-', '_certFile')
+    const removeCert = createDynamicRemoveHandler('cert-upload-', 'cert-file-info-', '_certFile')
+    const handleHonorUpload = createDynamicUploadHandler('honor-upload-', 'honor-file-info-', '_honorFile')
+    const removeHonor = createDynamicRemoveHandler('honor-upload-', 'honor-file-info-', '_honorFile')
 
     function removeGroup(btn) {
       const group = btn.parentElement
@@ -2293,7 +2966,7 @@
     }
 
     function addPatentGroup() {
-      const container = document.getElementById('ip-patents')
+      const container = document.getElementById('patents-container')
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
@@ -2315,11 +2988,11 @@
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
-      container.insertBefore(group, container.querySelector('.btn-small-add'))
+      container.appendChild(group)
     }
 
     function addCopyrightGroup() {
-      const container = document.getElementById('ip-copyrights')
+      const container = document.getElementById('copyrights-container')
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
@@ -2341,12 +3014,12 @@
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
-      container.insertBefore(group, container.querySelector('.btn-small-add'))
+      container.appendChild(group)
     }
 
     function addTrademarkGroup() {
-      const container = document.getElementById('ip-trademarks')
-      const count = container.querySelectorAll('.work-group').length
+      const container = document.getElementById('trademarks-container')
+      const count = container.children.length
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
@@ -2373,7 +3046,7 @@
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
-      container.insertBefore(group, container.querySelector('.btn-small-add'))
+      container.appendChild(group)
     }
 
     function addCertificationGroup() {
@@ -2527,7 +3200,7 @@
       profileData.position = document.getElementById('input-position').value || ''
       profileData.bio = document.getElementById('input-bio').value || ''
       profileData.hometown = document.getElementById('input-hometown').value || ''
-      profileData.education = document.getElementById('input-education').value || ''
+      profileData.educationLevel = document.getElementById('input-education').value || ''
       profileData.birthday = document.getElementById('input-birthday').value || ''
       profileData.zodiac = document.getElementById('input-zodiac').value || ''
       profileData.driving = document.getElementById('input-driving').value || ''
@@ -2573,7 +3246,9 @@
           time: group.querySelector('.work-time')?.value || '',
           position: group.querySelector('.work-position')?.value || '',
           tasks: tasks,
-          result: group.querySelector('.work-result')?.value || ''
+          result: group.querySelector('.work-result')?.value || '',
+          resultFile: group._resultFile || '',
+          resultFileName: group._resultFileName || ''
         })
       })
 
@@ -2590,25 +3265,29 @@
       profileData.projects = []
       document.querySelectorAll('#project-container .work-group').forEach((group) => {
         profileData.projects.push({
-          name: group.querySelector('.project-name')?.value || '',
-          time: group.querySelector('.project-time')?.value || '',
-          position: group.querySelector('.project-position')?.value || '',
-          desc: group.querySelector('.project-desc')?.value || '',
-          content: group.querySelector('.project-content')?.value || ''
+          name: group.querySelector('.proj-name')?.value || '',
+          time: group.querySelector('.proj-time')?.value || '',
+          position: group.querySelector('.proj-position')?.value || '',
+          desc: group.querySelector('.proj-desc')?.value || '',
+          content: group.querySelector('.proj-detail')?.value || ''
         })
       })
 
-      profileData.educations = []
+      profileData.education = []
       document.querySelectorAll('#education-container .work-group').forEach((group) => {
-        profileData.educations.push({
+        profileData.education.push({
           school: group.querySelector('.edu-school')?.value || '',
           degree: group.querySelector('.edu-degree')?.value || '',
           time: group.querySelector('.edu-time')?.value || '',
           major: group.querySelector('.edu-major')?.value || '',
-          score: group.querySelector('.edu-score')?.value || '',
+          score: group.querySelector('.edu-gpa')?.value || '',
           courses: group.querySelector('.edu-courses')?.value || '',
           experience: group.querySelector('.edu-experience')?.value || '',
-          thesis: group.querySelector('.edu-thesis')?.value || ''
+          thesis: group.querySelector('.edu-thesis')?.value || '',
+          designFile: group._designFile || '',
+          designFileName: group._designFileName || '',
+          diplomaFile: group._diplomaFile || '',
+          diplomaFileName: group._diplomaFileName || ''
         })
       })
 
@@ -2617,7 +3296,11 @@
         profileData.papers.push({
           name: group.querySelector('.paper-name')?.value || '',
           type: group.querySelector('.paper-type')?.value || '',
-          journal: group.querySelector('.paper-journal')?.value || ''
+          journal: group.querySelector('.paper-journal')?.value || '',
+          coverFile: group._coverFile || '',
+          coverFileName: group._coverFileName || '',
+          attachFile: group._attachFile || '',
+          attachFileName: group._attachFileName || ''
         })
       })
 
@@ -2643,7 +3326,9 @@
       document.querySelectorAll('#trademarks-container .work-group').forEach((group) => {
         profileData.trademarks.push({
           name: group.querySelector('.trademark-name')?.value || '',
-          number: group.querySelector('.trademark-number')?.value || ''
+          number: group.querySelector('.trademark-number')?.value || '',
+          logoFile: group._logoFile || '',
+          logoFileName: group._logoFileName || ''
         })
       })
 
@@ -2651,16 +3336,20 @@
       document.querySelectorAll('#certifications-container .work-group').forEach((group) => {
         profileData.certifications.push({
           name: group.querySelector('.cert-name')?.value || '',
-          time: group.querySelector('.cert-time')?.value || ''
+          time: group.querySelector('.cert-time')?.value || '',
+          certFile: group._certFile || '',
+          certFileName: group._certFileName || ''
         })
       })
 
-      profileData.awards = []
-      document.querySelectorAll('#awards-container .work-group').forEach((group) => {
-        profileData.awards.push({
-          name: group.querySelector('.award-name')?.value || '',
-          time: group.querySelector('.award-time')?.value || '',
-          desc: group.querySelector('.award-desc')?.value || ''
+      profileData.honors = []
+      document.querySelectorAll('#honors-container .work-group').forEach((group) => {
+        profileData.honors.push({
+          name: group.querySelector('.honor-name')?.value || '',
+          time: group.querySelector('.honor-time')?.value || '',
+          desc: group.querySelector('.honor-desc')?.value || '',
+          honorFile: group._honorFile || '',
+          honorFileName: group._honorFileName || ''
         })
       })
 
@@ -2773,11 +3462,48 @@
   </nav>
 
   ${modules.includes('home') ? `
-  <section class="hero" id="home">
+  <section class="hero hero-${config.homeDisplay}" id="home">
+    ${config.homeDisplay === 'life-large' ? `
+    <!-- 背景轮播模式 -->
+    <div class="hero-bg-slider">
+      ${(data.lifePhotoLarge && data.lifePhotoLarge.length > 0) ? data.lifePhotoLarge.map((img, i) => `
+        <div class="hero-bg-slide ${i === 0 ? 'active' : ''}" style="background-image: url('${img}')"></div>
+      `).join('') : ''}
+    </div>
+    <div class="hero-overlay"></div>
     <div class="hero-content">
-      <div class="hero-photo">
-        <img src="${data.idPhoto || data.lifePhoto || ''}" alt="照片">
+      <div class="hero-text hero-text-center">
+        <h1>${data.name || '姓名'}</h1>
+        <p class="subtitle">${data.position || ''}</p>
+        <p class="intro">${(data.bio || '').replace(/\n/g, '<br>')}</p>
+        <div class="hero-buttons">
+          ${hasHomePortfolio ? '<a href="#portfolio" class="btn" onclick="scrollToSection(event, \'portfolio\')">查看作品集</a>' : ''}
+          ${hasHomeResume ? `<a href="${data.resumeUrl || '#'}" class="btn" target="_blank">下载简历</a>` : ''}
+          ${hasHomeContact ? '<a href="#footer" class="btn" onclick="scrollToSection(event, \'footer\')">请联系我</a>' : ''}
+        </div>
       </div>
+    </div>
+    ` : `
+    <!-- 照片展示模式（证件照 / 生活照中） -->
+    <div class="hero-content">
+      ${config.homeDisplay === 'life-small' && data.lifePhotoMedium && data.lifePhotoMedium.length > 0 ? `
+      <!-- 多张照片轮播（1:1比例） -->
+      <div class="hero-photo-slider" id="heroPhotoSlider" data-images='${JSON.stringify(data.lifePhotoMedium)}'>
+        ${data.lifePhotoMedium.map((img, i) => `
+        <div class="hero-photo-slide ${i === 0 ? 'active' : ''}" style="background-image: url('${img}')"></div>
+        `).join('')}
+        ${data.lifePhotoMedium.length > 1 ? `
+        <div class="hero-slider-dots">
+          ${data.lifePhotoMedium.map((_, i) => `<span class="hero-slider-dot ${i === 0 ? 'active' : ''}" onclick="heroSliderGoTo(${i})"></span>`).join('')}
+        </div>
+        ` : ''}
+      </div>
+      ` : `
+      <!-- 单张证件照 -->
+      <div class="hero-photo">
+        <img src="${data.idPhoto || ''}" alt="照片">
+      </div>
+      `}
       <div class="hero-text">
         <h1>${data.name || '姓名'}</h1>
         <p class="subtitle">${data.position || ''}</p>
@@ -2789,6 +3515,7 @@
         </div>
       </div>
     </div>
+    `}
   </section>
   ` : ''}
 
@@ -3557,6 +4284,63 @@
       slider.addEventListener('mouseenter', () => clearInterval(intervalId));
       slider.addEventListener('mouseleave', () => resetInterval());
     });
+
+    // 首页照片轮播（生活照中 1:1）
+    const heroSlider = document.getElementById('heroPhotoSlider');
+    if (heroSlider) {
+      const heroImages = JSON.parse(heroSlider.dataset.images);
+      let heroCurrentIndex = 0;
+      let heroIntervalId = null;
+      const heroSlides = heroSlider.querySelectorAll('.hero-photo-slide');
+      const heroDots = heroSlider.querySelectorAll('.hero-slider-dot');
+
+      function heroUpdateSlider() {
+        heroSlides.forEach(s => s.classList.remove('active'));
+        heroDots.forEach(d => d.classList.remove('active'));
+        if (heroSlides[heroCurrentIndex]) heroSlides[heroCurrentIndex].classList.add('active');
+        if (heroDots[heroCurrentIndex]) heroDots[heroCurrentIndex].classList.add('active');
+      }
+
+      window.heroSliderNext = function() {
+        heroCurrentIndex = (heroCurrentIndex + 1) % heroImages.length;
+        heroUpdateSlider();
+        heroResetInterval();
+      };
+
+      window.heroSliderPrev = function() {
+        heroCurrentIndex = (heroCurrentIndex - 1 + heroImages.length) % heroImages.length;
+        heroUpdateSlider();
+        heroResetInterval();
+      };
+
+      window.heroSliderGoTo = function(index) {
+        heroCurrentIndex = index;
+        heroUpdateSlider();
+        heroResetInterval();
+      };
+
+      function heroResetInterval() {
+        clearInterval(heroIntervalId);
+        heroIntervalId = setInterval(() => {
+          heroCurrentIndex = (heroCurrentIndex + 1) % heroImages.length;
+          heroUpdateSlider();
+        }, 3000);
+      }
+
+      heroResetInterval();
+    }
+
+    // 首页背景轮播（生活照大 2:1）
+    const bgSlider = document.querySelector('.hero-bg-slider');
+    if (bgSlider) {
+      const bgSlides = bgSlider.querySelectorAll('.hero-bg-slide');
+      let bgCurrentIndex = 0;
+      let bgIntervalId = setInterval(() => {
+        bgSlides[bgCurrentIndex].classList.remove('active');
+        bgCurrentIndex = (bgCurrentIndex + 1) % bgSlides.length;
+        bgSlides[bgCurrentIndex].classList.add('active');
+      }, 4000);
+    }
   `;
       html += '</' + 'script></body></html>';
       return html;
@@ -3568,22 +4352,48 @@
         showToast('请填写专属网址', 'error')
         return
       }
-      document.getElementById('paymentModal').classList.add('active')
+      // 调试模式：跳过支付环节，直接生成网页
+      const debugOrderId = 'debug_' + Date.now()
+      createPage(debugOrderId)
     }
 
     function closeModal(modalId) {
       document.getElementById(modalId).classList.remove('active')
+      if (modalId === 'paymentModal') {
+        stopCountdown()
+      }
     }
 
-    function selectPayChannel(channel) {
-      currentPayChannel = channel
-      document.getElementById('payAlipay').style.borderColor = channel === 'alipay' ? '#7B38EB' : '#e2e8f0'
-      document.getElementById('payWechat').style.borderColor = channel === 'wechat' ? '#7B38EB' : '#e2e8f0'
+    function startCountdown() {
+      stopCountdown()
+      countdownSeconds = 600
+      updateCountdownDisplay()
+      countdownInterval = setInterval(() => {
+        countdownSeconds--
+        updateCountdownDisplay()
+        if (countdownSeconds <= 0) {
+          stopCountdown()
+          showToast('支付超时，请重新生成', 'error')
+          closeModal('paymentModal')
+        }
+      }, 1000)
+    }
+
+    function stopCountdown() {
+      if (countdownInterval) {
+        clearInterval(countdownInterval)
+        countdownInterval = null
+      }
+    }
+
+    function updateCountdownDisplay() {
+      const minutes = Math.floor(countdownSeconds / 60)
+      const seconds = countdownSeconds % 60
+      const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+      document.getElementById('countdown').textContent = display
     }
 
     async function startPayment() {
-      document.getElementById('qrCodeArea').style.display = 'block'
-      
       try {
         const token = getToken()
         const response = await fetch(`${API_BASE}/payment?action=create`, {
@@ -3609,7 +4419,7 @@
     async function pollPayment(orderId) {
       const token = getToken()
       let attempts = 0
-      const maxAttempts = 60
+      const maxAttempts = 120
 
       const interval = setInterval(async () => {
         attempts++
@@ -3622,6 +4432,7 @@
 
           if (data.ok && data.order.status === 'paid') {
             clearInterval(interval)
+            stopCountdown()
             createPage(orderId)
             return
           }
@@ -3667,7 +4478,6 @@
         const data = await response.json()
 
         if (data.ok) {
-          closeModal('paymentModal')
           generatedPageUrl = `https://grwy.zzyy99.cn/${subdomain}/${data.page.pageId}`
           document.getElementById('generatedUrl').textContent = generatedPageUrl
           document.getElementById('generatedUrl').href = generatedPageUrl
@@ -3688,6 +4498,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      loadUserInfo()
       loadProfile()
       initModuleChips()
       initButtonChips()

@@ -567,6 +567,167 @@ nav a:hover::after {
     object-fit: cover;
 }
 
+/* 生活照中 - 1:1 照片轮播 */
+.hero-photo-slider {
+    width: 350px;
+    height: 350px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    border: 3px solid transparent;
+    background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+                linear-gradient(135deg, var(--primary-color), var(--accent-color)) border-box;
+    box-shadow: 0 25px 50px -12px var(--btn-shadow);
+    flex-shrink: 0;
+}
+
+.hero-photo-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.hero-photo-slide.active {
+    opacity: 1;
+}
+
+.hero-slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.3s;
+}
+
+.hero-slider-btn:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+.hero-slider-prev {
+    left: 10px;
+}
+
+.hero-slider-next {
+    right: 10px;
+}
+
+.hero-slider-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.hero-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.hero-slider-dot.active {
+    background: white;
+}
+
+/* 生活照大 - 背景轮播 */
+.hero-life-large {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-bg-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.hero-bg-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.hero-bg-slide.active {
+    opacity: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.hero-life-large .hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-text-center {
+    text-align: center;
+    max-width: 700px;
+}
+
+.hero-text-center h1,
+.hero-text-center .subtitle,
+.hero-text-center .intro {
+    color: white;
+    -webkit-text-fill-color: white;
+}
+
+.hero-text-center .subtitle {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-text-center .intro {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.hero-text-center .hero-buttons .btn {
+    color: white;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.hero-text-center .hero-buttons .btn:first-child {
+    background: white;
+    color: #1a1a1a;
+    border: none;
+}
+
 .hero-text {
     flex: 1;
 }

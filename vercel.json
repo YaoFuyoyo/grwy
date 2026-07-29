@@ -39,27 +39,27 @@
     },
     {
       "src": "/",
-      "dest": "/index.html"
+      "dest": "/public/index.html"
     },
     {
       "src": "/editor",
-      "dest": "/editor.html"
+      "dest": "/public/editor.html"
     },
     {
       "src": "/history",
-      "dest": "/history.html"
+      "dest": "/public/history.html"
     },
     {
       "src": "/examples",
-      "dest": "/examples.html"
+      "dest": "/public/examples.html"
     },
     {
       "src": "/css/(.*)",
-      "dest": "/css/$1"
+      "dest": "/public/css/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/public/$1"
     }
   ]
 }

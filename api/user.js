@@ -2,6 +2,52 @@ const { applyCors } = require('./_util/cors')
 const { verifyToken } = require('./_util/auth')
 const { getCollection } = require('./_util/db')
 
+function getDefaultProfile(userId) {
+  return {
+    userId,
+    name: '',
+    avatar: '',
+    slogan: '',
+    position: '',
+    bio: '',
+    hometown: '',
+    education: '',
+    birthday: '',
+    zodiac: '',
+    driving: '',
+    mbti: '',
+    personality: '',
+    hobby: '',
+    phone: '',
+    email: '',
+    wechat: '',
+    wechatQr: '',
+    qq: '',
+    qqQr: '',
+    weibo: '',
+    weiboQr: '',
+    idPhoto: '',
+    lifePhotoMedium: [],
+    lifePhotoLarge: [],
+    resumeUrl: '',
+    resumeFilename: '',
+    advantages: [],
+    portfolioItems: [],
+    skills: [],
+    workExperiences: [],
+    internships: [],
+    projects: [],
+    educations: [],
+    papers: [],
+    patents: [],
+    copyrights: [],
+    trademarks: [],
+    certifications: [],
+    honors: [],
+    updatedAt: new Date()
+  }
+}
+
 module.exports = async (req, res) => {
   if (applyCors(req, res)) return
   
@@ -21,39 +67,7 @@ module.exports = async (req, res) => {
       if (!profile) {
         return res.status(200).json({
           ok: true,
-          profile: {
-            userId,
-            name: '',
-            title: '',
-            bio: '',
-            phone: '',
-            email: '',
-            birthDate: '',
-            educationLevel: '',
-            wechat: '',
-            qq: '',
-            weibo: '',
-            avatar: '',
-            idPhoto: '',
-            lifePhoto: '',
-            wechatQr: '',
-            qqQr: '',
-            weiboQr: '',
-            resumeUrl: '',
-            resumeFilename: '',
-            portfolioUrls: [],
-            strengths: [],
-            skills: [],
-            workExperiences: [],
-            internships: [],
-            projects: [],
-            education: [],
-            papers: [],
-            intellectualProperties: [],
-            certifications: [],
-            awards: [],
-            updatedAt: new Date()
-          }
+          profile: getDefaultProfile(userId)
         })
       }
       
