@@ -1549,6 +1549,7 @@
       position: '',
       bio: '',
       hometown: '',
+      educationLevel: '',
       birthday: '',
       zodiac: '',
       driving: '',
@@ -1569,7 +1570,7 @@
       workExperiences: [],
       internships: [],
       projects: [],
-      educations: [],
+      education: [],
       papers: [],
       patents: [],
       copyrights: [],
@@ -2328,7 +2329,7 @@
       profileData.position = document.getElementById('input-position').value || ''
       profileData.bio = document.getElementById('input-bio').value || ''
       profileData.hometown = document.getElementById('input-hometown').value || ''
-      profileData.education = document.getElementById('input-education').value || ''
+      profileData.educationLevel = document.getElementById('input-education').value || ''
       profileData.birthday = document.getElementById('input-birthday').value || ''
       profileData.zodiac = document.getElementById('input-zodiac').value || ''
       profileData.driving = document.getElementById('input-driving').value || ''
@@ -2400,9 +2401,9 @@
         })
       })
 
-      profileData.educations = []
+      profileData.education = []
       document.querySelectorAll('#education-container .work-group').forEach((group) => {
-        profileData.educations.push({
+        profileData.education.push({
           school: group.querySelector('.edu-school')?.value || '',
           degree: group.querySelector('.edu-degree')?.value || '',
           time: group.querySelector('.edu-time')?.value || '',
@@ -2477,7 +2478,7 @@
       if (data.position !== undefined) document.getElementById('input-position').value = data.position || ''
       if (data.bio !== undefined) document.getElementById('input-bio').value = data.bio || ''
       if (data.hometown !== undefined) document.getElementById('input-hometown').value = data.hometown || ''
-      if (data.education !== undefined) document.getElementById('input-education').value = data.education || ''
+      if (data.educationLevel !== undefined) document.getElementById('input-education').value = data.educationLevel || ''
       if (data.birthday !== undefined) document.getElementById('input-birthday').value = data.birthday || ''
       if (data.zodiac !== undefined) document.getElementById('input-zodiac').value = data.zodiac || ''
       if (data.driving !== undefined) document.getElementById('input-driving').value = data.driving || ''
@@ -2649,8 +2650,8 @@
         })
       }
 
-      if (data.educations && data.educations.length) {
-        data.educations.forEach(edu => {
+      if (data.education && Array.isArray(data.education) && data.education.length) {
+        data.education.forEach(edu => {
           addEducationGroup()
           const groups = document.querySelectorAll('#education-container .work-group')
           const lastGroup = groups[groups.length - 1]
@@ -2774,6 +2775,15 @@
         const data = await response.json()
 
         if (data.ok && data.profile) {
+          // 旧数据兼容：education 字符串(学历) → educationLevel，educations 数组(教育背景) → education
+          if (data.profile.education && typeof data.profile.education === 'string') {
+            if (!data.profile.educationLevel) data.profile.educationLevel = data.profile.education
+            delete data.profile.education
+          }
+          if (data.profile.educations && Array.isArray(data.profile.educations)) {
+            if (!data.profile.education) data.profile.education = data.profile.educations
+            delete data.profile.educations
+          }
           Object.keys(data.profile).forEach(key => {
             if (profileData.hasOwnProperty(key)) {
               profileData[key] = data.profile[key]

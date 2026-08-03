@@ -114,12 +114,12 @@ const themes = {
 }
 
 function renderAbout(data) {
-  const { name, position, bio, birthday, phone, email, wechat, qq, weibo, hometown, education, zodiac, driving, mbti, personality, hobby } = data
+  const { name, position, bio, birthday, phone, email, wechat, qq, weibo, hometown, educationLevel, zodiac, driving, mbti, personality, hobby } = data
   let socialHtml = ''
   if (wechat) socialHtml += `<div class="social-item">微信: ${wechat}</div>`
   if (qq) socialHtml += `<div class="social-item">QQ: ${qq}</div>`
   if (weibo) socialHtml += `<div class="social-item">微博: ${weibo}</div>`
-  
+
   return `
     <section class="section about-section" id="about">
       <h2 class="section-title">关于我</h2>
@@ -131,7 +131,7 @@ function renderAbout(data) {
           ${phone ? `<div class="info-item"><span class="label">电话</span><span class="value">${phone}</span></div>` : ''}
           ${email ? `<div class="info-item"><span class="label">邮箱</span><span class="value">${email}</span></div>` : ''}
           ${hometown ? `<div class="info-item"><span class="label">籍贯</span><span class="value">${hometown}</span></div>` : ''}
-          ${education ? `<div class="info-item"><span class="label">学历</span><span class="value">${education}</span></div>` : ''}
+          ${educationLevel ? `<div class="info-item"><span class="label">学历</span><span class="value">${educationLevel}</span></div>` : ''}
           ${driving ? `<div class="info-item"><span class="label">驾龄</span><span class="value">${driving}</span></div>` : ''}
           ${zodiac ? `<div class="info-item"><span class="label">星座</span><span class="value">${zodiac}</span></div>` : ''}
           ${mbti ? `<div class="info-item"><span class="label">MBTI</span><span class="value">${mbti}</span></div>` : ''}
@@ -252,7 +252,7 @@ function renderProjects(projects) {
 }
 
 function renderEducation(education) {
-  if (!education || education.length === 0) return ''
+  if (!education || !Array.isArray(education) || education.length === 0) return ''
   
   return `
     <section class="section education-section" id="education">
@@ -1699,7 +1699,7 @@ module.exports = async (req, res) => {
     
     return res.status(404).json({ ok: false, error: 'NOT_FOUND', message: '接口不存在' })
   } catch (err) {
-    console.error('Pages API error:', err)
-    return res.status(500).json({ ok: false, error: 'INTERNAL_ERROR', message: '服务器错误' })
+    console.error('Pages API error:', err.message, err.stack)
+    return res.status(500).json({ ok: false, error: 'INTERNAL_ERROR', message: '服务器错误: ' + err.message })
   }
 }

@@ -36,7 +36,10 @@ if (isLocal) {
       { $inc: { seq: 1 } },
       { upsert: true, returnDocument: 'after' }
     )
-    return 'U' + String(counter.value.seq).padStart(6, '0')
+    // MongoDB v4+ returns the document directly; v3 wraps it in { value }
+    const doc = counter && counter.value ? counter.value : counter
+    if (!doc || !doc.seq) throw new Error('生成用户ID失败')
+    return 'U' + String(doc.seq).padStart(6, '0')
   }
 
   async function generatePageId() {
@@ -46,7 +49,9 @@ if (isLocal) {
       { $inc: { seq: 1 } },
       { upsert: true, returnDocument: 'after' }
     )
-    return String(counter.value.seq).padStart(6, '0')
+    const doc = counter && counter.value ? counter.value : counter
+    if (!doc || !doc.seq) throw new Error('生成页面ID失败')
+    return String(doc.seq).padStart(6, '0')
   }
 
   async function generateOrderId() {
@@ -58,7 +63,9 @@ if (isLocal) {
       { $inc: { seq: 1 } },
       { upsert: true, returnDocument: 'after' }
     )
-    return 'O' + dateStr + String(counter.value.seq).padStart(5, '0')
+    const doc = counter && counter.value ? counter.value : counter
+    if (!doc || !doc.seq) throw new Error('生成订单ID失败')
+    return 'O' + dateStr + String(doc.seq).padStart(5, '0')
   }
 
   module.exports = { getDb, getCollection, generateUserId, generatePageId, generateOrderId }

@@ -1609,6 +1609,15 @@
         const data = await response.json()
 
         if (data.ok && data.profile) {
+          // 旧数据兼容：education 字符串(学历) → educationLevel，educations 数组(教育背景) → education
+          if (data.profile.education && typeof data.profile.education === 'string') {
+            if (!data.profile.educationLevel) data.profile.educationLevel = data.profile.education
+            delete data.profile.education
+          }
+          if (data.profile.educations && Array.isArray(data.profile.educations)) {
+            if (!data.profile.education) data.profile.education = data.profile.educations
+            delete data.profile.educations
+          }
           Object.keys(data.profile).forEach(key => {
             if (profileData.hasOwnProperty(key)) {
               profileData[key] = data.profile[key]
@@ -1843,7 +1852,7 @@
     }
 
     function renderEducation() {
-      if (!profileData.education || profileData.education.length === 0) return
+      if (!profileData.education || !Array.isArray(profileData.education) || profileData.education.length === 0) return
       profileData.education.forEach((edu) => {
         addEducationGroup()
         const groups = document.querySelectorAll('#education-container .work-group')
@@ -3534,7 +3543,7 @@
           ${data.phone ? `<div class="info-item"><span class="label">电话</span><span class="value">${data.phone}</span></div>` : ''}
           ${data.email ? `<div class="info-item"><span class="label">邮箱</span><span class="value">${data.email}</span></div>` : ''}
           ${data.hometown ? `<div class="info-item"><span class="label">籍贯</span><span class="value">${data.hometown}</span></div>` : ''}
-          ${data.education ? `<div class="info-item"><span class="label">学历</span><span class="value">${data.education}</span></div>` : ''}
+          ${data.educationLevel ? `<div class="info-item"><span class="label">学历</span><span class="value">${data.educationLevel}</span></div>` : ''}
           ${data.driving ? `<div class="info-item"><span class="label">驾龄</span><span class="value">${data.driving}</span></div>` : ''}
           ${data.zodiac ? `<div class="info-item"><span class="label">星座</span><span class="value">${data.zodiac}</span></div>` : ''}
           ${data.mbti ? `<div class="info-item"><span class="label">MBTI</span><span class="value">${data.mbti}</span></div>` : ''}
@@ -3735,7 +3744,7 @@
         <div class="line"></div>
       </div>
       <div class="education-grid fade-in">
-        ${(data.educations || []).map(edu => {
+        ${(Array.isArray(data.education) ? data.education : []).map(edu => {
           const degreeMap = { '博士': '博士学位', '硕士': '硕士学位', '本科': '本科学位', '大专': '大专文凭' }
           const degreeEnMap = { '博士': 'Doctoral Philosophy', '硕士': "Master's Degree", '本科': "Bachelor's Degree", '大专': 'Associate Degree' }
           return `
