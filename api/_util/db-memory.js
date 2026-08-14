@@ -60,7 +60,7 @@ function createCollectionProxy(collection) {
       return found ? deepClone(found) : null
     },
 
-    async find(query = {}) {
+    find(query = {}) {
       const filtered = collection.filter(doc => {
         for (const key in query) {
           if (doc[key] !== query[key]) return false
@@ -95,7 +95,7 @@ function createCollectionProxy(collection) {
       return { insertedId: newDoc._id }
     },
 
-    async updateOne(query, update) {
+    async updateOne(query, update, options = {}) {
       const doc = await this.findOne(query)
       if (doc) {
         const updateDoc = update.$set || update
@@ -105,8 +105,17 @@ function createCollectionProxy(collection) {
           collection[index] = doc
         }
         saveToFile()
+        return { matchedCount: 1, modifiedCount: 1 }
       }
-      return { matchedCount: doc ? 1 : 0, modifiedCount: doc ? 1 : 0 }
+      if (options.upsert) {
+        const updateDoc = update.$set || update
+        const newDoc = { ...deepClone(query), ...deepClone(updateDoc) }
+        newDoc._id = Math.random().toString(36).substr(2, 9)
+        collection.push(newDoc)
+        saveToFile()
+        return { matchedCount: 0, modifiedCount: 0, upsertedId: newDoc._id }
+      }
+      return { matchedCount: 0, modifiedCount: 0 }
     },
 
     async deleteOne(query) {
@@ -134,8 +143,17 @@ function createCollectionProxy(collection) {
           collection[index] = doc
         }
         saveToFile()
+        return { value: doc }
       }
-      return { value: doc }
+      if (options.upsert) {
+        const updateDoc = update.$set || update
+        const newDoc = { ...deepClone(query), ...deepClone(updateDoc) }
+        newDoc._id = Math.random().toString(36).substr(2, 9)
+        collection.push(newDoc)
+        saveToFile()
+        return { value: newDoc }
+      }
+      return { value: null }
     }
   }
 }

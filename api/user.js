@@ -6,6 +6,7 @@ function getDefaultProfile(userId) {
   return {
     userId,
     name: '',
+    pageTitle: '',
     avatar: '',
     slogan: '',
     position: '',
@@ -20,6 +21,7 @@ function getDefaultProfile(userId) {
     hobby: '',
     phone: '',
     email: '',
+    address: '',
     wechat: '',
     wechatQr: '',
     qq: '',

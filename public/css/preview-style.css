@@ -351,6 +351,10 @@ body.theme-onyx-black .btn-secondary:hover {
     border-color: #FFFFFF;
 }
 
+body.theme-onyx-black .nav-slogan {
+    color: color-mix(in srgb, #FFFFFF 80%, transparent);
+}
+
 body.theme-onyx-black #about,
 body.theme-onyx-black #work,
 body.theme-onyx-black #skills,
@@ -462,7 +466,7 @@ nav {
 
 .nav-slogan {
     font-size: 0.9rem;
-    color: var(--accent-color);
+    color: color-mix(in srgb, var(--primary-color) 80%, transparent);
     letter-spacing: 0.5px;
 }
 
@@ -1327,6 +1331,10 @@ nav a:hover::after {
     transition: all 0.3s ease;
 }
 
+.education-card.edu-full {
+    flex: 0 0 100%;
+}
+
 .education-card:hover {
     transform: translateY(-5px);
     border-color: var(--primary-color);
@@ -1367,6 +1375,25 @@ nav a:hover::after {
 .cert-row .cert-item {
     flex: 1;
     text-align: center;
+}
+
+/* 教育背景图片网格：半行卡片时每行2个图片卡片 */
+.edu-image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* 全宽教育卡片（一行1个）：每行4个图片卡片 */
+.education-card.edu-full .edu-image-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* 文件名换行处理，避免长文件名撑破布局 */
+.edu-image-grid .cert-item p {
+    word-break: break-all;
+    line-height: 1.4;
 }
 
 .edu-section p {
@@ -1445,13 +1472,6 @@ nav a:hover::after {
     color: var(--text-secondary);
     font-size: 0.85rem;
     line-height: 1.6;
-}
-
-.cert-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-top: 1.5rem;
 }
 
 .cert-item {
@@ -1586,12 +1606,43 @@ nav a:hover::after {
 }
 
 .papers-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: 2rem;
+    justify-content: center;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0.5rem 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.papers-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.papers-scroll-container {
+    position: relative;
+    margin-top: 2rem;
+}
+
+.papers-scroll-container.has-many .papers-grid {
+    justify-content: flex-start;
+}
+
+#papers-prev,
+#papers-next {
+    display: none;
+}
+
+.papers-scroll-container.has-many #papers-prev,
+.papers-scroll-container.has-many #papers-next {
+    display: flex;
 }
 
 .paper-card {
+    flex-shrink: 0;
+    width: calc(33.333% - 1.334rem);
+    min-width: 0;
     background: var(--bg-card);
     border-radius: 20px;
     overflow: hidden;
@@ -1607,6 +1658,7 @@ nav a:hover::after {
 }
 
 .paper-image {
+    position: relative;
     width: 100%;
     height: 200px;
     background: var(--paper-bg);
@@ -1625,6 +1677,38 @@ nav a:hover::after {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+.paper-journal-tag {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    max-width: calc(100% - 24px);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--text-primary);
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 0.32rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.paper-journal-tag::before {
+    content: '';
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary-color);
 }
 
 .paper-content {
@@ -1661,28 +1745,73 @@ nav a:hover::after {
 }
 
 .paper-link {
-    color: var(--accent-color);
+    color: var(--primary-color);
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    transition: all 0.3s ease;
+    cursor: pointer;
+    padding: 0;
+    background: transparent;
+    transition: color 0.3s ease;
 }
 
 .paper-link:hover {
-    color: var(--light-color);
+    color: var(--dark-color);
+    background: transparent;
+}
+
+.paper-link.disabled {
+    color: var(--text-muted, #9ca3af);
+    background: transparent;
+    cursor: not-allowed;
+}
+
+.paper-link.disabled:hover {
+    color: var(--text-muted, #9ca3af);
+    background: transparent;
 }
 
 .intellectual-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    justify-content: center;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0.5rem 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.intellectual-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.intellectual-scroll-container {
+    position: relative;
+    margin-top: 2rem;
+}
+
+.intellectual-scroll-container.has-many .intellectual-grid {
+    justify-content: flex-start;
+}
+
+#intellectual-prev,
+#intellectual-next {
+    display: none;
+}
+
+.intellectual-scroll-container.has-many #intellectual-prev,
+.intellectual-scroll-container.has-many #intellectual-next {
+    display: flex;
 }
 
 .intellectual-card {
+    flex-shrink: 0;
+    width: calc(33.333% - 1.334rem);
+    min-width: 0;
     background: var(--bg-card);
     border-radius: 20px;
     padding: 2rem;
@@ -1820,6 +1949,7 @@ nav a:hover::after {
 .awards-scroll-inner {
     display: flex;
     gap: 2rem;
+    justify-content: center;
     overflow-x: auto;
     scroll-behavior: smooth;
     padding: 0.5rem 0;
@@ -1829,6 +1959,21 @@ nav a:hover::after {
 
 .awards-scroll-inner::-webkit-scrollbar {
     display: none;
+}
+
+/* 荣誉卡片多于3张时：启用滚动轮播，改为左对齐并显示翻页按钮 */
+.awards-scroll-container.has-many .awards-scroll-inner {
+    justify-content: flex-start;
+}
+
+#awards-prev,
+#awards-next {
+    display: none;
+}
+
+.awards-scroll-container.has-many #awards-prev,
+.awards-scroll-container.has-many #awards-next {
+    display: flex;
 }
 
 .award-card-scroll {
@@ -1850,19 +1995,41 @@ nav a:hover::after {
 
 .cert-grid {
     display: flex;
-    flex-wrap: wrap;
     gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
     justify-content: center;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0.5rem 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-.cert-grid .cert-card {
-    flex: 0 0 calc(33.33% - 1.33rem);
-    max-width: calc(33.33% - 1.33rem);
+.cert-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.cert-scroll-container {
+    position: relative;
+    margin-top: 2rem;
+}
+
+.cert-scroll-container.has-many .cert-grid {
+    justify-content: flex-start;
+}
+
+#cert-prev,
+#cert-next {
+    display: none;
+}
+
+.cert-scroll-container.has-many #cert-prev,
+.cert-scroll-container.has-many #cert-next {
+    display: flex;
 }
 
 .cert-card {
+    flex-shrink: 0;
+    width: calc(33.33% - 1.33rem);
     background: var(--bg-card);
     border-radius: 20px;
     overflow: hidden;
@@ -2169,8 +2336,11 @@ footer .social a:hover {
         max-width: 400px;
     }
 
-    .papers-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .papers-grid .paper-card,
+    .intellectual-grid .intellectual-card,
+    .cert-grid .cert-card,
+    .award-card-scroll {
+        width: calc(50% - 1rem);
     }
 }
 
@@ -2199,11 +2369,19 @@ footer .social a:hover {
         flex: 0 0 100%;
     }
 
-    .papers-grid {
-        grid-template-columns: 1fr;
+    /* 移动端全宽教育卡片图片网格降为2列，避免4列过挤 */
+    .education-card.edu-full .edu-image-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .awards-grid, .cert-grid {
+    .papers-grid .paper-card,
+    .intellectual-grid .intellectual-card,
+    .cert-grid .cert-card,
+    .award-card-scroll {
+        width: 100%;
+    }
+
+    .awards-grid {
         grid-template-columns: 1fr;
     }
 
@@ -2460,9 +2638,8 @@ footer .social a:hover {
         padding: 0.8rem;
     }
 
-    .cert-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.6rem;
+    .cert-grid .cert-card {
+        width: calc(50% - 0.3rem);
     }
 
     .cert-item h4 {
@@ -2477,8 +2654,10 @@ footer .social a:hover {
         padding: 2rem 0.8rem;
     }
 
-    .papers-grid {
-        grid-template-columns: 1fr;
+    .papers-grid .paper-card,
+    .intellectual-grid .intellectual-card,
+    .award-card-scroll {
+        width: 100%;
     }
 
     .paper-card {

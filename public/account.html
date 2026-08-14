@@ -474,6 +474,45 @@
       border-bottom: 1px solid var(--border-light);
     }
 
+    .field-subsection > .subsection-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .field-subsection > .subsection-header .subsection-title {
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    .field-subsection > .subsection-header .collapse-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      font-size: 30px;
+      line-height: 1;
+      color: var(--text-muted);
+      border-radius: 6px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .field-subsection > .subsection-header:hover .collapse-icon {
+      background: var(--bg-light, #f1f5f9);
+      color: var(--color-primary);
+    }
+
+    .field-subsection.collapsed > .subsection-header .collapse-icon {
+      transform: rotate(-90deg);
+    }
+
     .form-field {
       margin-bottom: 16px;
     }
@@ -489,7 +528,8 @@
     }
 
     .form-row .form-field {
-      flex: 1;
+      flex: 1 1 0;
+      min-width: 0;
       margin-bottom: 0;
     }
 
@@ -511,7 +551,8 @@
     .form-field select,
     .form-field textarea {
       width: 100%;
-      padding: 10px 14px;
+      height: 38px;
+      padding: 0 14px;
       border: 1px solid var(--border-default);
       border-radius: 8px;
       font-size: 13px;
@@ -519,6 +560,27 @@
       color: var(--text-primary);
       background: var(--bg-input);
       transition: all 0.2s;
+      box-sizing: border-box;
+      line-height: 38px;
+    }
+
+    .form-field textarea {
+      height: auto;
+      min-height: 60px;
+      padding: 10px 14px;
+      line-height: 1.4;
+      resize: vertical;
+    }
+
+    .form-field select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 32px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5l3 3 3-3' fill='none' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 12px;
     }
 
     .form-field input:focus,
@@ -541,7 +603,8 @@
 
     .date-picker-wrapper input[type="date"] {
       width: 100%;
-      padding: 10px 40px 10px 14px;
+      height: 38px;
+      padding: 0 40px 0 14px;
       border: 1px solid var(--border-default);
       border-radius: 8px;
       font-size: 13px;
@@ -550,6 +613,8 @@
       background: var(--bg-input);
       cursor: pointer;
       transition: all 0.2s;
+      box-sizing: border-box;
+      line-height: 38px;
     }
 
     .date-picker-wrapper input[type="date"]:hover {
@@ -637,33 +702,64 @@
     }
 
     .upload-box.input-height {
-      padding: 9px 13px;
+      width: 100%;
+      height: 38px;
+      padding: 0 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      border-radius: 8px;
     }
 
     .upload-box.input-height p {
       margin: 0;
+      line-height: 1;
+    }
+
+    /* 上传容器需撑满父容器，让内部 .upload-box 的 width:100% 生效 */
+    [id$="-upload-container"],
+    .skill-icon-upload-container {
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .file-info {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 12px;
+      height: 38px;
+      padding: 0 12px;
       background: var(--bg-input);
-      border-radius: 6px;
+      border-radius: 8px;
       border: 1px solid var(--border-default);
+      box-sizing: border-box;
+    }
+
+    .pdf-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .word-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
     }
 
     .file-info .resume-filename {
       font-size: 12px;
       color: var(--text-primary);
-      max-width: 150px;
+      flex: 1;
+      min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .btn-delete-resume {
+      flex-shrink: 0;
       background: none;
       border: none;
       color: var(--color-danger);
@@ -678,10 +774,178 @@
       background: rgba(239, 68, 68, 0.1);
     }
 
+    /* 文件上传行：左侧上传按钮 + 右侧图片卡片 */
+    .file-upload-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .upload-box.compact {
+      padding: 0;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      flex-shrink: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upload-box.compact p {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upload-box.compact svg {
+      color: var(--text-muted);
+    }
+
+    .file-chips {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .file-chip {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 38px;
+      padding: 0 6px 0 4px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      max-width: 220px;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    .file-chip:hover {
+      border-color: var(--color-primary);
+    }
+
+    .file-chip-thumb {
+      width: 32px;
+      height: 32px;
+      object-fit: cover;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .file-chip-name {
+      font-size: 12px;
+      color: var(--text-primary);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-chip-delete {
+      background: none;
+      border: none;
+      color: var(--color-danger);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .file-chip-delete:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* 技能图标上传后展示样式（与成果展示file-chip一致）
+       宽度与上传按钮一致：撑满 form-field，随页面宽度自适应 */
+    .skill-icon-file-info {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+      height: 38px;
+      padding: 0 6px 0 4px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .skill-icon-file-info:hover {
+      border-color: var(--color-primary);
+    }
+
+    /* 二维码在 flex-row 中，宽度与上传按钮一致（100px） */
+    .flex-row .skill-icon-file-info {
+      flex-shrink: 0;
+      width: 100px;
+    }
+
+    /* 文件名自适应填充剩余空间，过长显示省略号（不撑长卡片） */
+    .skill-icon-file-info .resume-filename {
+      font-size: 12px;
+      color: var(--text-primary);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .flex-row {
       display: flex;
       gap: 8px;
       align-items: center;
+    }
+
+    /* 单张图片预览（头像/证件照上传后展示） */
+    .image-preview-box {
+      position: relative;
+      display: inline-block;
+    }
+
+    .file-chips .image-preview-box {
+      margin-top: 8px;
+      margin-right: 8px;
+    }
+
+    /* 配置项标题行：label左，文字按钮右 */
+    .form-field-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .form-field-header label {
+      margin-bottom: 0;
+    }
+
+    .life-photo-hint {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .text-link-btn {
+      font-size: 13px;
+      color: var(--color-primary);
+      cursor: pointer;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    .text-link-btn:hover {
+      text-decoration: underline;
     }
 
     .flex-row input {
@@ -700,15 +964,26 @@
 
     .upload-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(10, 1fr);
       gap: 8px;
+    }
+
+    /* 生活照网格：5列，覆盖 .upload-grid 的10列；统一1:1比例 */
+    .life-photo-grid {
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 8px;
     }
 
     .portfolio-upload {
       aspect-ratio: 1;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-sizing: border-box;
+      padding: 0;
+      min-width: 0;
+      min-height: 0;
     }
 
     .portfolio-preview-item {
@@ -837,6 +1112,105 @@
       margin-bottom: 16px;
     }
 
+    .ip-sub-group .work-group:last-child {
+      margin-bottom: 0;
+    }
+
+    /* 工作内容合并编辑器 */
+    .wc-editor {
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--bg-input);
+      font-size: 13px;
+      line-height: 1.8;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .wc-editor:focus-within {
+      border-color: var(--border-focus);
+    }
+    .wc-type-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed var(--border-light);
+    }
+    .wc-type-content {
+      flex: 1;
+      font-weight: 700;
+      color: var(--text-primary);
+      outline: none;
+      min-height: 22px;
+      word-break: break-all;
+    }
+    .wc-type-content:empty::before {
+      content: attr(data-placeholder);
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .wc-content-area {
+      display: flex;
+      flex-direction: column;
+    }
+    .wc-content-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      min-height: 22px;
+    }
+    .wc-line-content {
+      flex: 1;
+      outline: none;
+      color: var(--text-primary);
+      min-height: 22px;
+      word-break: break-all;
+    }
+    .wc-line-content:empty::before {
+      content: attr(data-placeholder);
+      color: var(--text-muted);
+    }
+    .wc-marker {
+      color: var(--text-tertiary);
+      user-select: none;
+      flex-shrink: 0;
+      font-weight: 700;
+      line-height: 22px;
+    }
+    .wc-cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .wc-editor {
+      position: relative;
+    }
+    .wc-delete-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 20px;
+      height: 20px;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      z-index: 1;
+      transition: all 0.2s;
+    }
+    .wc-delete-btn:hover {
+      background: #fef2f2;
+      color: var(--color-danger);
+    }
+
     .ip-type-title {
       font-size: 13px;
       font-weight: 500;
@@ -904,6 +1278,44 @@
         max-width: 100%;
       }
     }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #eee;
+      border-top-color: var(--color-primary);
+      border-radius: 50%;
+      animation: spinner 1s linear infinite;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    @keyframes spinner {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -933,7 +1345,7 @@
               账户设置
             </button>
             <button class="user-dropdown-item" onclick="switchSection('profile')">
-              个人信息
+              个人资料
             </button>
             <button class="user-dropdown-item" onclick="switchSection('records')">
               生成记录
@@ -1021,34 +1433,26 @@
         <div class="config-section">
           <div class="field-subsection">
             <h4 class="subsection-title">基础信息</h4>
-            
-            <!-- 姓名--头像--简历 -->
+
+            <!-- 姓名--简历 -->
             <div class="form-row">
               <div class="form-field">
                 <label>姓名 <span class="required">*</span></label>
                 <input type="text" id="input-name" placeholder="请输入姓名">
               </div>
               <div class="form-field">
-                <label>头像</label>
-                <div id="avatar-upload-container">
-                  <div class="upload-box input-height" onclick="document.getElementById('file-avatar').click()">
-                    <p>点击上传头像</p>
-                  </div>
-                </div>
-                <div id="avatar-file-info" class="file-info" style="display:none">
-                  <span class="resume-filename"></span>
-                  <button class="btn-delete-resume" onclick="removeAvatar()">✕</button>
-                </div>
-                <input type="file" id="file-avatar" style="display:none" accept="image/*" onchange="handleAvatarUpload(this)">
-              </div>
-              <div class="form-field">
                 <label>简历</label>
                 <div id="resume-upload-container">
                   <div class="upload-box input-height" onclick="document.getElementById('file-resume').click()">
-                    <p>点击上传简历（PDF）</p>
+                    <p>上传简历（PDF）</p>
                   </div>
                 </div>
                 <div id="resume-file-info" class="file-info" style="display:none">
+                  <svg class="pdf-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                    <path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#EF4444"/>
+                    <path d="M14 2v6h6l-6-6z" fill="#FCA5A5"/>
+                    <text x="12" y="17.5" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff" font-family="Arial, sans-serif">PDF</text>
+                  </svg>
                   <span class="resume-filename"></span>
                   <button class="btn-delete-resume" onclick="removeResume()">✕</button>
                 </div>
@@ -1056,44 +1460,64 @@
               </div>
             </div>
 
-            <!-- 证件照--生活照中--生活照大 -->
+            <!-- 头像--证件照 -->
             <div class="form-row">
               <div class="form-field">
-                <label>证件照</label>
-                <div id="id-photo-upload-container">
-                  <div class="upload-box input-height" onclick="document.getElementById('file-id-photo').click()">
-                    <p>点击上传证件照</p>
+                <label>头像</label>
+                <div id="avatar-upload-container">
+                  <div class="upload-box input-height" onclick="document.getElementById('file-avatar').click()">
+                    <p>上传头像</p>
                   </div>
                 </div>
-                <div id="id-photo-file-info" class="file-info" style="display:none">
+                <div id="avatar-image-preview" class="skill-icon-file-info" style="display:none">
+                  <img class="file-chip-thumb" src="" alt="">
+                  <span class="resume-filename"></span>
+                  <button class="btn-delete-resume" onclick="removeAvatar()">✕</button>
+                </div>
+                <input type="file" id="file-avatar" style="display:none" accept="image/*" onchange="handleAvatarUpload(this)">
+              </div>
+              <div class="form-field">
+                <div class="form-field-header">
+                  <label>证件照</label>
+                  <span class="life-photo-hint">1寸，比例1:1.4</span>
+                </div>
+                <div id="id-photo-upload-container">
+                  <div class="upload-box input-height" onclick="document.getElementById('file-id-photo').click()">
+                    <p>上传证件照</p>
+                  </div>
+                </div>
+                <div id="id-photo-image-preview" class="skill-icon-file-info" style="display:none">
+                  <img class="file-chip-thumb" src="" alt="">
                   <span class="resume-filename"></span>
                   <button class="btn-delete-resume" onclick="removeIdPhoto()">✕</button>
                 </div>
                 <input type="file" id="file-id-photo" style="display:none" accept="image/*" onchange="handleIdPhotoUpload(this)">
               </div>
+            </div>
+
+            <!-- 生活照中--生活照大 -->
+            <div class="form-row">
               <div class="form-field">
-                <label>生活照-中</label>
-                <div id="life-photo-medium-container">
-                  <div class="upload-box input-height" onclick="document.getElementById('file-life-photo-medium').click()">
-                    <p>点击上传生活照-中</p>
-                  </div>
+                <div class="form-field-header">
+                  <label>生活照-中</label>
+                  <span class="life-photo-hint">比例1:1，可上传多张，最多10张</span>
                 </div>
-                <div id="life-photo-medium-file-info" class="file-info" style="display:none">
-                  <span class="resume-filename"></span>
-                  <button class="btn-delete-resume" onclick="removeLifePhotoMedium()">✕</button>
+                <div class="upload-grid life-photo-grid" id="life-photo-medium-grid" data-type="medium">
+                  <div class="upload-box portfolio-upload" onclick="document.getElementById('file-life-photo-medium').click()">
+                    <p>+</p>
+                  </div>
                 </div>
                 <input type="file" id="file-life-photo-medium" style="display:none" accept="image/*" multiple onchange="handleLifePhotoMediumUpload(this)">
               </div>
               <div class="form-field">
-                <label>生活照-大</label>
-                <div id="life-photo-large-container">
-                  <div class="upload-box input-height" onclick="document.getElementById('file-life-photo-large').click()">
-                    <p>点击上传生活照-大</p>
-                  </div>
+                <div class="form-field-header">
+                  <label>生活照-大</label>
+                  <span class="life-photo-hint">比例2:1，可上传多张，最多10张</span>
                 </div>
-                <div id="life-photo-large-file-info" class="file-info" style="display:none">
-                  <span class="resume-filename"></span>
-                  <button class="btn-delete-resume" onclick="removeLifePhotoLarge()">✕</button>
+                <div class="upload-grid life-photo-grid" id="life-photo-large-grid" data-type="large">
+                  <div class="upload-box portfolio-upload" onclick="document.getElementById('file-life-photo-large').click()">
+                    <p>+</p>
+                  </div>
                 </div>
                 <input type="file" id="file-life-photo-large" style="display:none" accept="image/*" multiple onchange="handleLifePhotoLargeUpload(this)">
               </div>
@@ -1174,7 +1598,7 @@
           <div class="field-subsection">
             <h4 class="subsection-title">联系方式</h4>
             
-            <!-- 电话--邮箱 -->
+            <!-- 电话--邮箱--GitHub网址 -->
             <div class="form-row">
               <div class="form-field">
                 <label>电话</label>
@@ -1183,6 +1607,10 @@
               <div class="form-field">
                 <label>邮箱</label>
                 <input type="email" id="input-email" placeholder="请输入邮箱">
+              </div>
+              <div class="form-field">
+                <label>GitHub</label>
+                <input type="text" id="input-github" placeholder="请输入GitHub网址">
               </div>
             </div>
 
@@ -1211,7 +1639,8 @@
                     <p>上传微信二维码</p>
                   </div>
                 </div>
-                <div id="wechat-qr-file-info" class="file-info" style="display:none">
+                <div id="wechat-qr-file-info" class="skill-icon-file-info" style="display:none">
+                  <img class="file-chip-thumb" src="" alt="">
                   <span class="resume-filename"></span>
                   <button class="btn-delete-resume" onclick="removeWechatQr()">✕</button>
                 </div>
@@ -1224,7 +1653,8 @@
                     <p>上传QQ二维码</p>
                   </div>
                 </div>
-                <div id="qq-qr-file-info" class="file-info" style="display:none">
+                <div id="qq-qr-file-info" class="skill-icon-file-info" style="display:none">
+                  <img class="file-chip-thumb" src="" alt="">
                   <span class="resume-filename"></span>
                   <button class="btn-delete-resume" onclick="removeQqQr()">✕</button>
                 </div>
@@ -1237,7 +1667,8 @@
                     <p>上传微博二维码</p>
                   </div>
                 </div>
-                <div id="weibo-qr-file-info" class="file-info" style="display:none">
+                <div id="weibo-qr-file-info" class="skill-icon-file-info" style="display:none">
+                  <img class="file-chip-thumb" src="" alt="">
                   <span class="resume-filename"></span>
                   <button class="btn-delete-resume" onclick="removeWeiboQr()">✕</button>
                 </div>
@@ -1371,7 +1802,7 @@
 
         <div style="display: flex; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-light);">
           <button class="btn-primary" onclick="saveProfile()">保存资料</button>
-          <button class="btn-secondary" onclick="loadProfileData()">重置</button>
+          <button class="btn-secondary" onclick="confirmReset()">重置</button>
         </div>
       </div>
 
@@ -1458,6 +1889,23 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="resetModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">确认重置</h3>
+        <button class="modal-close" onclick="closeModal('resetModal')">×</button>
+      </div>
+      <div style="text-align: center; padding: 24px 0;">
+        <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+        <div style="font-size: 16px; color: #1e293b; margin-bottom: 24px;">确认要清空所有个人资料配置内容吗？<br>此操作仅在当前页面生效，需点击"保存资料"才会保存为空。</div>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn btn-secondary" style="flex: 1;" onclick="closeModal('resetModal')">取消</button>
+          <button class="btn btn-primary" style="flex: 1; background: #ef4444;" onclick="doResetProfile()">确认清空</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <script>
@@ -1466,6 +1914,11 @@
     let deletePageId = ''
     let currentFeedbackType = 'bug'
     let userData = null
+
+    // 禁止浏览器刷新后自动恢复滚动位置，统一由 switchSection 控制滚动到顶部
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
 
     function getToken() {
       return localStorage.getItem('token') || ''
@@ -1479,20 +1932,92 @@
       setTimeout(() => toast.classList.remove('show'), 3000)
     }
 
-    function switchSection(section) {
+    function showLoading() {
+      const el = document.getElementById('pageLoading')
+      if (el) el.style.display = 'flex'
+    }
+
+    function hideLoading() {
+      const el = document.getElementById('pageLoading')
+      if (el) el.style.display = 'none'
+    }
+
+    // 为个人资料页面各模块卡片初始化收起/展开功能
+    function initCollapsibleSections() {
+      document.querySelectorAll('#section-profile .field-subsection').forEach(section => {
+        if (section.dataset.collapsible) return
+        section.dataset.collapsible = 'true'
+
+        // 找到直接子级的标题
+        const title = Array.from(section.children).find(el => el.classList && el.classList.contains('subsection-title'))
+        if (!title) return
+
+        // 构建标题行（左标题 + 右侧收起/展开按钮）
+        const header = document.createElement('div')
+        header.className = 'subsection-header'
+        header.setAttribute('role', 'button')
+        header.setAttribute('tabindex', '0')
+        header.title = '点击收起/展开'
+
+        section.insertBefore(header, title)
+        header.appendChild(title)
+
+        const icon = document.createElement('span')
+        icon.className = 'collapse-icon'
+        icon.textContent = '▾'
+        header.appendChild(icon)
+
+        // 将标题行之后的所有内容包裹进可折叠内容区
+        const body = document.createElement('div')
+        body.className = 'subsection-body'
+        while (section.children.length > 1) {
+          body.appendChild(section.children[1])
+        }
+        section.appendChild(body)
+
+        const toggle = () => toggleSubsection(section)
+        header.addEventListener('click', toggle)
+        header.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            toggle()
+          }
+        })
+      })
+    }
+
+    function toggleSubsection(section) {
+      const collapsed = section.classList.toggle('collapsed')
+      const body = section.querySelector(':scope > .subsection-body')
+      if (body) body.style.display = collapsed ? 'none' : ''
+    }
+
+    async function switchSection(section) {
       document.querySelectorAll('.account-nav-item').forEach(item => {
         item.classList.toggle('active', item.dataset.section === section)
       })
       document.querySelectorAll('.account-section').forEach(s => {
         s.classList.toggle('active', s.id === `section-${section}`)
       })
-      if (section === 'records') loadRecords()
-      if (section === 'profile') loadProfileData()
+      window.scrollTo(0, 0)
+      if (section === 'records') {
+        showLoading()
+        try {
+          await loadRecords()
+        } finally {
+          hideLoading()
+        }
+      }
+      if (section === 'profile') {
+        await loadProfileData()
+      }
     }
 
     async function loadUserData() {
+      showLoading()
       const token = getToken()
       if (!token) {
+        hideLoading()
         window.location.href = '/'
         return
       }
@@ -1514,6 +2039,8 @@
         console.error('Load user error:', err)
         localStorage.removeItem('token')
         window.location.href = '/'
+      } finally {
+        hideLoading()
       }
     }
 
@@ -1544,7 +2071,9 @@
     let profileData = {
       name: '',
       url: '',
+      pageTitle: '',
       avatar: '',
+      avatarFilename: '',
       slogan: '',
       position: '',
       bio: '',
@@ -1558,12 +2087,23 @@
       hobby: '',
       phone: '',
       email: '',
+      github: '',
       wechat: '',
       wechatQr: '',
+      wechatQrName: '',
       qq: '',
       qqQr: '',
+      qqQrName: '',
       weibo: '',
       weiboQr: '',
+      weiboQrName: '',
+      idPhoto: '',
+      photoUrl: '',
+      photoFilename: '',
+      lifePhotoMedium: [],
+      lifePhotoLarge: [],
+      resumeUrl: '',
+      resumeFilename: '',
       advantages: [],
       portfolioItems: [],
       skills: [],
@@ -1586,6 +2126,22 @@
         reader.onerror = reject
         reader.readAsDataURL(file)
       })
+    }
+
+    // 根据文件名扩展名显示对应类型图标（PDF/Word）
+    function showFileTypeIcon(fileInfoEl, filename) {
+      const pdfIcon = fileInfoEl.querySelector('.pdf-icon')
+      const wordIcon = fileInfoEl.querySelector('.word-icon')
+      if (!pdfIcon && !wordIcon) return
+      if (pdfIcon) pdfIcon.style.display = 'none'
+      if (wordIcon) wordIcon.style.display = 'none'
+      if (filename) {
+        const ext = filename.toLowerCase().match(/\.([^.]+)$/)
+        if (ext) {
+          if (ext[1] === 'pdf' && pdfIcon) pdfIcon.style.display = ''
+          else if ((ext[1] === 'doc' || ext[1] === 'docx') && wordIcon) wordIcon.style.display = ''
+        }
+      }
     }
 
     function filterUrlInput(input) {
@@ -1623,66 +2179,91 @@
       if (file) {
         const base64 = await fileToBase64(file)
         profileData.idPhoto = base64
+        profileData.photoUrl = base64
+        profileData.photoFilename = file.name.replace(/\.[^/.]+$/, '')
         document.getElementById('id-photo-upload-container').style.display = 'none'
-        const fileInfo = document.getElementById('id-photo-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = file.name
+        const preview = document.getElementById('id-photo-image-preview')
+        preview.style.display = 'flex'
+        preview.querySelector('.file-chip-thumb').src = base64
+        preview.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
       }
     }
 
     function removeIdPhoto() {
       profileData.idPhoto = ''
+      profileData.photoUrl = ''
+      profileData.photoFilename = ''
       document.getElementById('id-photo-upload-container').style.display = 'block'
-      document.getElementById('id-photo-file-info').style.display = 'none'
+      document.getElementById('id-photo-image-preview').style.display = 'none'
       document.getElementById('file-id-photo').value = ''
+    }
+
+    // 渲染生活照chips
+    function renderLifePhotoChips(type) {
+      const data = type === 'medium' ? (profileData.lifePhotoMedium || []) : (profileData.lifePhotoLarge || [])
+      const grid = document.getElementById(`life-photo-${type}-grid`)
+      if (!grid) return
+      grid.innerHTML = ''
+      const MAX = 10
+
+      data.forEach((item, index) => {
+        const div = document.createElement('div')
+        div.className = 'portfolio-preview-item'
+        div.innerHTML = `
+          <img src="${item.url}" alt="${item.name || ''}">
+          <div class="portfolio-preview-name">${item.name || `照片${index + 1}`}</div>
+          <button class="btn-delete-portfolio" onclick="removeLifePhotoChip('${type}', ${index})">✕</button>
+        `
+        grid.appendChild(div)
+      })
+
+      if (data.length < MAX) {
+        const addDiv = document.createElement('div')
+        addDiv.className = 'upload-box portfolio-upload'
+        addDiv.onclick = () => document.getElementById(`file-life-photo-${type}`).click()
+        addDiv.innerHTML = '<p>+</p>'
+        grid.appendChild(addDiv)
+      }
+    }
+
+    function removeLifePhotoChip(type, index) {
+      const data = type === 'medium' ? (profileData.lifePhotoMedium || []) : (profileData.lifePhotoLarge || [])
+      data.splice(index, 1)
+      renderLifePhotoChips(type)
     }
 
     async function handleLifePhotoMediumUpload(input) {
       if (input.files && input.files.length > 0) {
-        const files = Array.from(input.files)
-        for (const file of files) {
+        if (!profileData.lifePhotoMedium) profileData.lifePhotoMedium = []
+        for (const file of input.files) {
           const base64 = await fileToBase64(file)
-          if (!profileData.lifePhotoMedium) {
-            profileData.lifePhotoMedium = []
-          }
           profileData.lifePhotoMedium.push({ url: base64, name: file.name.replace(/\.[^/.]+$/, '') })
         }
-        document.getElementById('life-photo-medium-container').style.display = 'none'
-        const fileInfo = document.getElementById('life-photo-medium-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = `已上传 ${profileData.lifePhotoMedium.length} 张照片`
+        const MAX = 10
+        if (profileData.lifePhotoMedium.length > MAX) {
+          showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+          profileData.lifePhotoMedium = profileData.lifePhotoMedium.slice(0, MAX)
+        }
+        renderLifePhotoChips('medium')
+        input.value = ''
       }
-    }
-
-    function removeLifePhotoMedium() {
-      profileData.lifePhotoMedium = ''
-      document.getElementById('life-photo-medium-container').style.display = 'block'
-      document.getElementById('life-photo-medium-file-info').style.display = 'none'
-      document.getElementById('file-life-photo-medium').value = ''
     }
 
     async function handleLifePhotoLargeUpload(input) {
       if (input.files && input.files.length > 0) {
-        const files = Array.from(input.files)
-        for (const file of files) {
+        if (!profileData.lifePhotoLarge) profileData.lifePhotoLarge = []
+        for (const file of input.files) {
           const base64 = await fileToBase64(file)
-          if (!profileData.lifePhotoLarge) {
-            profileData.lifePhotoLarge = []
-          }
           profileData.lifePhotoLarge.push({ url: base64, name: file.name.replace(/\.[^/.]+$/, '') })
         }
-        document.getElementById('life-photo-large-container').style.display = 'none'
-        const fileInfo = document.getElementById('life-photo-large-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = `已上传 ${profileData.lifePhotoLarge.length} 张照片`
+        const MAX = 10
+        if (profileData.lifePhotoLarge.length > MAX) {
+          showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+          profileData.lifePhotoLarge = profileData.lifePhotoLarge.slice(0, MAX)
+        }
+        renderLifePhotoChips('large')
+        input.value = ''
       }
-    }
-
-    function removeLifePhotoLarge() {
-      profileData.lifePhotoLarge = ''
-      document.getElementById('life-photo-large-container').style.display = 'block'
-      document.getElementById('life-photo-large-file-info').style.display = 'none'
-      document.getElementById('file-life-photo-large').value = ''
     }
 
     async function handleAvatarUpload(input) {
@@ -1690,17 +2271,20 @@
       if (file) {
         const base64 = await fileToBase64(file)
         profileData.avatar = base64
+        profileData.avatarFilename = file.name.replace(/\.[^/.]+$/, '')
         document.getElementById('avatar-upload-container').style.display = 'none'
-        const fileInfo = document.getElementById('avatar-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = file.name
+        const preview = document.getElementById('avatar-image-preview')
+        preview.style.display = 'flex'
+        preview.querySelector('.file-chip-thumb').src = base64
+        preview.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
       }
     }
 
     function removeAvatar() {
       profileData.avatar = ''
+      profileData.avatarFilename = ''
       document.getElementById('avatar-upload-container').style.display = 'block'
-      document.getElementById('avatar-file-info').style.display = 'none'
+      document.getElementById('avatar-image-preview').style.display = 'none'
       document.getElementById('file-avatar').value = ''
     }
 
@@ -1709,15 +2293,18 @@
       if (file) {
         const base64 = await fileToBase64(file)
         profileData[field] = base64
+        profileData[field + 'Name'] = file.name.replace(/\.[^/.]+$/, '')
         document.getElementById(`${prefix}-upload-container`).style.display = 'none'
         const fileInfo = document.getElementById(`${prefix}-file-info`)
         fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = file.name
+        fileInfo.querySelector('.file-chip-thumb').src = base64
+        fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
       }
     }
 
     function removeWechatQr() {
       profileData.wechatQr = ''
+      profileData.wechatQrName = ''
       document.getElementById('wechat-qr-upload-container').style.display = 'block'
       document.getElementById('wechat-qr-file-info').style.display = 'none'
       document.getElementById('file-wechat-qr').value = ''
@@ -1725,6 +2312,7 @@
 
     function removeQqQr() {
       profileData.qqQr = ''
+      profileData.qqQrName = ''
       document.getElementById('qq-qr-upload-container').style.display = 'block'
       document.getElementById('qq-qr-file-info').style.display = 'none'
       document.getElementById('file-qq-qr').value = ''
@@ -1732,6 +2320,7 @@
 
     function removeWeiboQr() {
       profileData.weiboQr = ''
+      profileData.weiboQrName = ''
       document.getElementById('weibo-qr-upload-container').style.display = 'block'
       document.getElementById('weibo-qr-file-info').style.display = 'none'
       document.getElementById('file-weibo-qr').value = ''
@@ -1739,20 +2328,37 @@
 
     async function handlePortfolioUpload(input) {
       if (input.files && input.files.length > 0) {
+        const MAX = 20
         const files = Array.from(input.files)
-        for (const file of files) {
+        const remaining = MAX - profileData.portfolioItems.length
+        if (remaining <= 0) {
+          input.value = ''
+          return
+        }
+        const toAdd = files.slice(0, remaining)
+        const truncated = files.length > remaining
+        for (const file of toAdd) {
           const base64 = await fileToBase64(file)
           const filename = file.name.replace(/\.[^/.]+$/, '')
           profileData.portfolioItems.push({ url: base64, name: filename })
         }
         renderPortfolioGrid()
+        if (truncated) {
+          showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+        }
+        input.value = ''
       }
     }
 
     function renderPortfolioGrid() {
       const grid = document.getElementById('portfolio-grid')
       grid.innerHTML = ''
-      
+      const MAX = 20
+
+      if (profileData.portfolioItems.length > MAX) {
+        profileData.portfolioItems = profileData.portfolioItems.slice(0, MAX)
+      }
+
       profileData.portfolioItems.forEach((item, index) => {
         const div = document.createElement('div')
         div.className = 'portfolio-preview-item'
@@ -1763,12 +2369,14 @@
         `
         grid.appendChild(div)
       })
-      
-      const addDiv = document.createElement('div')
-      addDiv.className = 'upload-box portfolio-upload'
-      addDiv.onclick = () => document.getElementById('file-portfolio').click()
-      addDiv.innerHTML = '<p>+</p>'
-      grid.appendChild(addDiv)
+
+      if (profileData.portfolioItems.length < MAX) {
+        const addDiv = document.createElement('div')
+        addDiv.className = 'upload-box portfolio-upload'
+        addDiv.onclick = () => document.getElementById('file-portfolio').click()
+        addDiv.innerHTML = '<p>+</p>'
+        grid.appendChild(addDiv)
+      }
     }
 
     function removePortfolio(index) {
@@ -1808,31 +2416,34 @@
       const group = document.createElement('div')
       group.className = 'skill-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>技能名称</label>
-          <input type="text" class="skill-name" placeholder="如：Figma">
-        </div>
-        <div class="form-field">
-          <label>熟练程度</label>
-          <select class="skill-level">
-            <option>精通</option>
-            <option>熟练</option>
-            <option>掌握</option>
-            <option selected>了解</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>技能图标</label>
-          <div class="skill-icon-upload-container">
-            <div class="upload-box input-height" onclick="document.getElementById('file-skill-icon-${count}').click()">
-              <p>上传图标</p>
+        <div class="form-row">
+          <div class="form-field" style="flex: 1;">
+            <label>技能名称</label>
+            <input type="text" class="skill-name" placeholder="如：Figma">
+          </div>
+          <div class="form-field" style="flex: 1;">
+            <label>熟练程度</label>
+            <select class="skill-level">
+              <option>精通</option>
+              <option>熟练</option>
+              <option>掌握</option>
+              <option selected>了解</option>
+            </select>
+          </div>
+          <div class="form-field" style="flex: 1;">
+            <label>技能图标</label>
+            <div class="skill-icon-upload-container">
+              <div class="upload-box input-height" onclick="document.getElementById('file-skill-icon-${count}').click()">
+                <p>上传图标</p>
+              </div>
             </div>
+            <div class="skill-icon-file-info" style="display:none">
+              <img class="file-chip-thumb" src="" alt="">
+              <span class="resume-filename file-chip-name"></span>
+              <button class="btn-delete-resume file-chip-delete" onclick="removeSkillIcon(this)">✕</button>
+            </div>
+            <input type="file" id="file-skill-icon-${count}" style="display:none" accept="image/*" onchange="handleSkillIconUpload(this)">
           </div>
-          <div class="skill-icon-file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removeSkillIcon(this)">✕</button>
-          </div>
-          <input type="file" id="file-skill-icon-${count}" style="display:none" accept="image/*" onchange="handleSkillIconUpload(this)">
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
@@ -1848,9 +2459,11 @@
         const fileInfo = group.querySelector('.skill-icon-file-info')
         
         group.iconBase64 = base64
+        group.iconName = file.name.replace(/\.[^/.]+$/, '')
         uploadContainer.style.display = 'none'
         fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = file.name
+        fileInfo.querySelector('.file-chip-thumb').src = base64
+        fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
       }
     }
 
@@ -1861,6 +2474,7 @@
       const fileInput = group.querySelector('input[type="file"]')
       
       group.iconBase64 = ''
+      group.iconName = ''
       uploadContainer.style.display = 'block'
       fileInfo.style.display = 'none'
       fileInput.value = ''
@@ -1872,90 +2486,378 @@
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>公司名称</label>
-          <input type="text" class="work-company" placeholder="请输入公司名称">
-        </div>
-        <div class="form-field">
-          <label>所属行业</label>
-          <input type="text" class="work-industry" placeholder="请输入行业">
-        </div>
-        <div class="form-field">
-          <label>任职时间</label>
-          <input type="text" class="work-time" placeholder="如：2022.06 - 至今">
-        </div>
-        <div class="form-field">
-          <label>岗位名称</label>
-          <input type="text" class="work-position" placeholder="请输入岗位">
-        </div>
-        <div id="work-tasks-${count + 1}">
+        <div class="form-row">
           <div class="form-field">
-            <label>工作类型</label>
-            <input type="text" class="work-task-type" placeholder="如：产品设计">
+            <label>公司名称</label>
+            <input type="text" class="work-company" placeholder="请输入公司名称">
           </div>
           <div class="form-field">
-            <label>工作内容</label>
-            <textarea class="work-task-desc" rows="2" placeholder="描述工作内容"></textarea>
+            <label>任职时间</label>
+            <input type="text" class="work-time" placeholder="如：2022.06 - 至今">
           </div>
         </div>
-        <button class="btn-small-add" onclick="addWorkTask(this.parentElement)">+ 添加工作类型</button>
+        <div class="form-row">
+          <div class="form-field">
+            <label>岗位名称</label>
+            <input type="text" class="work-position" placeholder="请输入岗位">
+          </div>
+          <div class="form-field">
+            <label>所属行业</label>
+            <input type="text" class="work-industry" placeholder="请输入行业">
+          </div>
+        </div>
+        <div class="form-field">
+          <label>工作内容</label>
+          <div class="wc-cards-container">
+            <div class="wc-editor">
+              <button class="wc-delete-btn" onclick="removeWorkContentCard(this)">✕</button>
+              <div class="wc-type-line">
+                <span class="wc-marker">#</span>
+                <div class="wc-type-content" contenteditable="true" data-placeholder="如：产品的日常开发与管理"></div>
+              </div>
+              <div class="wc-content-area">
+                <div class="wc-content-line">
+                  <span class="wc-marker">-</span>
+                  <div class="wc-line-content" contenteditable="true" data-placeholder="请描述具体工作内容"></div>
+                </div>
+                <div class="wc-content-line">
+                  <span class="wc-marker">-</span>
+                  <div class="wc-line-content" contenteditable="true"></div>
+                </div>
+                <div class="wc-content-line">
+                  <span class="wc-marker">-</span>
+                  <div class="wc-line-content" contenteditable="true"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-small-add" onclick="addWorkContentCard(this)">+ 添加工作内容</button>
+        </div>
         <div class="form-field">
           <label>业绩成果</label>
           <textarea class="work-result" rows="2" placeholder="请输入业绩成果"></textarea>
         </div>
         <div class="form-field">
           <label>成果展示</label>
-          <div id="work-result-upload-${count}">
-            <div class="upload-box input-height" onclick="document.getElementById('file-work-result-${count}').click()">
-              <p>上传成果展示图片（最多10张）</p>
-            </div>
+          <div class="upload-box input-height upload-empty" onclick="document.getElementById('file-work-result-${count}').click()">
+            <p>上传成果展示图片（最多10张）</p>
           </div>
-          <div id="work-result-file-info-${count}" class="file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removeWorkResult(this)">✕</button>
+          <div class="file-upload-row" style="display:none">
+            <div class="upload-box input-height compact" onclick="document.getElementById('file-work-result-${count}').click()">
+              <p><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></p>
+            </div>
+            <div class="file-chips" id="work-result-chips-${count}"></div>
           </div>
           <input type="file" id="file-work-result-${count}" style="display:none" accept="image/*" multiple onchange="handleWorkResultUpload(this)">
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
       container.appendChild(group)
+      group.querySelectorAll('.wc-editor').forEach(ed => setupWorkContentEditor(ed))
+      bulletizeTextarea(group.querySelector('.work-result'), '请输入业绩成果')
     }
 
-    function addWorkTask(parent) {
-      const container = parent.querySelector('[id^="work-tasks-"]')
-      const task = document.createElement('div')
-      task.className = 'work-task'
-      task.innerHTML = `
-        <div class="form-field">
-          <label>工作类型</label>
-          <input type="text" class="work-task-type" placeholder="如：产品设计">
+    // 创建一个工作内容卡片 DOM 元素
+    function createWcEditorCard() {
+      const card = document.createElement('div')
+      card.className = 'wc-editor'
+      card.innerHTML = `
+        <button class="wc-delete-btn" onclick="removeWorkContentCard(this)">✕</button>
+        <div class="wc-type-line">
+          <span class="wc-marker">#</span>
+          <div class="wc-type-content" contenteditable="true" data-placeholder="如：产品的日常开发与管理"></div>
         </div>
-        <div class="form-field">
-          <label>工作内容</label>
-          <textarea class="work-task-desc" rows="2" placeholder="描述工作内容"></textarea>
+        <div class="wc-content-area">
+          <div class="wc-content-line">
+            <span class="wc-marker">-</span>
+            <div class="wc-line-content" contenteditable="true" data-placeholder="请描述具体工作内容"></div>
+          </div>
+          <div class="wc-content-line">
+            <span class="wc-marker">-</span>
+            <div class="wc-line-content" contenteditable="true"></div>
+          </div>
+          <div class="wc-content-line">
+            <span class="wc-marker">-</span>
+            <div class="wc-line-content" contenteditable="true"></div>
+          </div>
         </div>
       `
-      container.appendChild(task)
+      return card
     }
 
-    const handleWorkResultUpload = createDynamicUploadHandler('work-result-upload-', 'work-result-file-info-')
-    const removeWorkResult = createDynamicRemoveHandler('work-result-upload-', 'work-result-file-info-')
-    const handleEduDesignUpload = createDynamicUploadHandler('edu-design-upload-', 'edu-design-file-info-')
-    const removeEduDesign = createDynamicRemoveHandler('edu-design-upload-', 'edu-design-file-info-')
-    const handleEduDiplomaUpload = createDynamicUploadHandler('edu-diploma-upload-', 'edu-diploma-file-info-')
-    const removeEduDiploma = createDynamicRemoveHandler('edu-diploma-upload-', 'edu-diploma-file-info-')
-    const handlePaperCoverUpload = createDynamicUploadHandler('paper-cover-upload-', 'paper-cover-file-info-')
-    const removePaperCover = createDynamicRemoveHandler('paper-cover-upload-', 'paper-cover-file-info-')
-    const handlePaperAttachUpload = createDynamicUploadHandler('paper-attach-upload-', 'paper-attach-file-info-')
-    const removePaperAttach = createDynamicRemoveHandler('paper-attach-upload-', 'paper-attach-file-info-')
-    const handleTrademarkLogoUpload = createDynamicUploadHandler('trademark-logo-upload-', 'trademark-logo-file-info-')
-    const removeTrademarkLogo = createDynamicRemoveHandler('trademark-logo-upload-', 'trademark-logo-file-info-')
-    const handleCertUpload = createDynamicUploadHandler('cert-upload-', 'cert-file-info-')
-    const removeCert = createDynamicRemoveHandler('cert-upload-', 'cert-file-info-')
-    const handleHonorUpload = createDynamicUploadHandler('honor-upload-', 'honor-file-info-')
-    const removeHonor = createDynamicRemoveHandler('honor-upload-', 'honor-file-info-')
+    // 添加工作内容卡片
+    function addWorkContentCard(btn) {
+      const formField = btn.closest('.form-field')
+      const container = formField.querySelector('.wc-cards-container')
+      const card = createWcEditorCard()
+      container.appendChild(card)
+      setupWorkContentEditor(card)
+    }
 
-    function createDynamicUploadHandler(uploadIdPrefix, fileInfoIdPrefix) {
+    // 删除工作内容卡片
+    function removeWorkContentCard(btn) {
+      const card = btn.closest('.wc-editor')
+      const container = card.parentElement
+      // 至少保留一张卡片
+      if (container.children.length > 1) {
+        card.remove()
+      }
+    }
+
+    // 创建一条工作内容行（带项目符号）
+    function createWcContentLine(text, placeholder) {
+      const line = document.createElement('div')
+      line.className = 'wc-content-line'
+      const marker = document.createElement('span')
+      marker.className = 'wc-marker'
+      marker.textContent = '-'
+      const content = document.createElement('div')
+      content.className = 'wc-line-content'
+      content.contentEditable = 'true'
+      if (placeholder) content.dataset.placeholder = placeholder
+      if (text) content.textContent = text
+      line.appendChild(marker)
+      line.appendChild(content)
+      return line
+    }
+
+    // 为工作内容编辑器绑定交互逻辑
+    function setupWorkContentEditor(editor) {
+      const typeContent = editor.querySelector('.wc-type-content')
+      const contentArea = editor.querySelector('.wc-content-area')
+      if (!typeContent || !contentArea) return
+
+      // 工作类型行：Enter 跳转到第一条工作内容
+      typeContent.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          const firstLine = contentArea.querySelector('.wc-content-line .wc-line-content')
+          if (firstLine) {
+            firstLine.focus()
+            // 将光标移到末尾
+            placeCaretAtEnd(firstLine)
+          }
+        }
+      })
+
+      // 工作内容行：Enter 新建行 / Backspace 删除空行
+      contentArea.addEventListener('keydown', function (e) {
+        const lineContent = e.target
+        if (!lineContent.classList.contains('wc-line-content')) return
+
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          const currentLine = lineContent.closest('.wc-content-line')
+          const newLine = createWcContentLine('', '')
+          currentLine.after(newLine)
+          newLine.querySelector('.wc-line-content').focus()
+        }
+
+        if (e.key === 'Backspace') {
+          // 行为空且不是唯一行时，删除当前行
+          if (lineContent.textContent === '' && contentArea.children.length > 1) {
+            e.preventDefault()
+            const currentLine = lineContent.closest('.wc-content-line')
+            const prevLine = currentLine.previousElementSibling
+            currentLine.remove()
+            if (prevLine) {
+              const prevContent = prevLine.querySelector('.wc-line-content')
+              prevContent.focus()
+              placeCaretAtEnd(prevContent)
+            } else {
+              // 没有上一行了，聚焦到工作类型
+              typeContent.focus()
+              placeCaretAtEnd(typeContent)
+            }
+          }
+        }
+      })
+    }
+
+    // 将光标放置到元素末尾
+    function placeCaretAtEnd(el) {
+      const range = document.createRange()
+      const sel = window.getSelection()
+      range.selectNodeContents(el)
+      range.collapse(false)
+      sel.removeAllRanges()
+      sel.addRange(range)
+    }
+
+    // ===== 项目符号文本域（将 textarea 转为带"-"项目符号的 contenteditable 编辑器）=====
+
+    function bulletizeTextarea(textarea, placeholder) {
+      if (!textarea || textarea.dataset.bulletized === 'true') return
+      const editor = document.createElement('div')
+      editor.className = 'wc-editor'
+      editor.dataset.placeholder = placeholder
+      const contentArea = document.createElement('div')
+      contentArea.className = 'wc-content-area'
+      editor.appendChild(contentArea)
+      populateBulletEditor(contentArea, textarea.value, placeholder)
+      textarea.style.display = 'none'
+      textarea.dataset.bulletized = 'true'
+      textarea.parentNode.insertBefore(editor, textarea.nextSibling)
+      setupBulletInteractions(editor, contentArea)
+      // 失焦时同步内容到隐藏的 textarea
+      editor.addEventListener('blur', function () {
+        syncBulletToTextarea(editor, textarea)
+      }, true)
+    }
+
+    function populateBulletEditor(contentArea, value, placeholder) {
+      contentArea.innerHTML = ''
+      const lines = value ? value.split('\n') : []
+      if (lines.length === 0 || (lines.length === 1 && !lines[0].trim())) {
+        contentArea.appendChild(createWcContentLine('', placeholder))
+        contentArea.appendChild(createWcContentLine('', ''))
+        contentArea.appendChild(createWcContentLine('', ''))
+      } else {
+        lines.forEach((line, idx) => {
+          contentArea.appendChild(createWcContentLine(line, idx === 0 ? placeholder : ''))
+        })
+      }
+    }
+
+    function syncBulletToTextarea(editor, textarea) {
+      const contentArea = editor.querySelector('.wc-content-area')
+      const lines = []
+      contentArea.querySelectorAll('.wc-line-content').forEach(el => {
+        if (el.textContent.trim()) lines.push(el.textContent)
+      })
+      textarea.value = lines.join('\n')
+    }
+
+    function setupBulletInteractions(editor, contentArea) {
+      contentArea.addEventListener('keydown', function (e) {
+        const lineContent = e.target
+        if (!lineContent.classList.contains('wc-line-content')) return
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          const currentLine = lineContent.closest('.wc-content-line')
+          const newLine = createWcContentLine('', '')
+          currentLine.after(newLine)
+          newLine.querySelector('.wc-line-content').focus()
+        }
+        if (e.key === 'Backspace') {
+          if (lineContent.textContent === '' && contentArea.children.length > 1) {
+            e.preventDefault()
+            const currentLine = lineContent.closest('.wc-content-line')
+            const prevLine = currentLine.previousElementSibling
+            currentLine.remove()
+            if (prevLine) placeCaretAtEnd(prevLine.querySelector('.wc-line-content'))
+          }
+        }
+      })
+    }
+
+    // 数据加载后，用 textarea 的值刷新已创建的 bullet 编辑器
+    function updateAllBulletEditors(group) {
+      group.querySelectorAll('textarea[data-bulletized="true"]').forEach(textarea => {
+        const editor = textarea.nextElementSibling
+        if (editor && editor.classList.contains('wc-editor')) {
+          populateBulletEditor(editor.querySelector('.wc-content-area'), textarea.value, editor.dataset.placeholder || '')
+        }
+      })
+    }
+
+    const handleWorkResultUpload = createMultiFileUploadHandler('work-result-chips-', '_resultFiles', '_resultFileNames')
+    const handlePaperCoverUpload = createDynamicUploadHandler('paper-cover-upload-', 'paper-cover-file-info-', 'coverFile', 'coverFileName')
+    const removePaperCover = createDynamicRemoveHandler('paper-cover-upload-', 'paper-cover-file-info-', 'coverFile', 'coverFileName')
+    const handlePaperAttachUpload = createDynamicUploadHandler('paper-attach-upload-', 'paper-attach-file-info-', 'attachFile', 'attachFileName')
+    const removePaperAttach = createDynamicRemoveHandler('paper-attach-upload-', 'paper-attach-file-info-', 'attachFile', 'attachFileName')
+    const handleTrademarkLogoUpload = createDynamicUploadHandler('trademark-logo-upload-', 'trademark-logo-file-info-', 'logoFile', 'logoFileName')
+    const removeTrademarkLogo = createDynamicRemoveHandler('trademark-logo-upload-', 'trademark-logo-file-info-', 'logoFile', 'logoFileName')
+    const handleCertUpload = createMultiFileUploadHandler('cert-chips-', '_certFiles', '_certFileNames')
+    const handleHonorUpload = createMultiFileUploadHandler('honor-chips-', '_honorFiles', '_honorFileNames')
+
+    // 渲染文件chips（显示在上传按钮右侧）
+    function renderFileChips(chipsEl, group, dataKey, fileNameKey) {
+      if (!chipsEl || !group) return
+      const files = group[dataKey] || []
+      const names = group[fileNameKey] || []
+      chipsEl.innerHTML = ''
+      // 切换空状态/有文件状态：空状态显示整行上传按钮，有文件显示紧凑按钮+chips
+      const row = chipsEl.closest('.file-upload-row')
+      const formField = chipsEl.closest('.form-field')
+      const emptyBox = formField ? formField.querySelector('.upload-empty') : null
+      if (files.length > 0) {
+        if (emptyBox) emptyBox.style.display = 'none'
+        if (row) row.style.display = 'flex'
+        files.forEach((data, index) => {
+          const chip = document.createElement('div')
+          chip.className = 'file-chip'
+          chip.innerHTML = `
+            <img class="file-chip-thumb" src="${data}" alt="">
+            <span class="file-chip-name" title="${names[index] || ''}">${(names[index] || '未命名').replace(/\.[^/.]+$/, '')}</span>
+            <button class="file-chip-delete" onclick="removeFileChip(this, ${index}, '${dataKey}', '${fileNameKey}')">✕</button>
+          `
+          chipsEl.appendChild(chip)
+        })
+      } else {
+        if (emptyBox) emptyBox.style.display = ''
+        if (row) row.style.display = 'none'
+      }
+    }
+
+    // 删除单个文件chip（全局函数，供chip删除按钮调用）
+    function removeFileChip(btn, index, dataKey, fileNameKey) {
+      const chip = btn.closest('.file-chip')
+      if (!chip) return
+      const chipsEl = chip.parentElement
+      const group = chipsEl.closest('.work-group')
+      if (!group) return
+      const files = (group[dataKey] || []).slice()
+      const names = (group[fileNameKey] || []).slice()
+      files.splice(index, 1)
+      names.splice(index, 1)
+      group[dataKey] = files
+      group[fileNameKey] = names
+      renderFileChips(chipsEl, group, dataKey, fileNameKey)
+    }
+
+    // 多文件上传处理（教育模块毕业设计/毕业证书，支持多张图片追加上传）
+    function createMultiFileUploadHandler(chipsIdPrefix, dataKey, fileNameKey) {
+      return async function(input) {
+        const files = input.files
+        if (files && files.length > 0) {
+          const base64List = []
+          const nameList = []
+          for (const file of files) {
+            base64List.push(await fileToBase64(file))
+            nameList.push(file.name)
+          }
+          const countSuffix = (input.id.match(/\d+$/) || [''])[0]
+          const chipsId = chipsIdPrefix + countSuffix
+          const chipsEl = document.getElementById(chipsId)
+          const group = input.closest('.work-group')
+          // 追加到已有数组（支持多次上传累积，而非替换）
+          const existing = (group && Array.isArray(group[dataKey])) ? group[dataKey] : []
+          const existingNames = (group && Array.isArray(group[fileNameKey])) ? group[fileNameKey] : []
+          let merged = existing.concat(base64List)
+          let mergedNames = existingNames.concat(nameList)
+          // 限制最多10张
+          const MAX = 10
+          if (merged.length > MAX) {
+            showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+            merged = merged.slice(0, MAX)
+            mergedNames = mergedNames.slice(0, MAX)
+          }
+          if (group) {
+            group[dataKey] = merged
+            group[fileNameKey] = mergedNames
+          }
+          renderFileChips(chipsEl, group, dataKey, fileNameKey)
+        }
+        input.value = '' // 重置input，以便能再次触发change事件追加上传
+      }
+    }
+
+    // 教育模块使用多文件上传（毕业设计/毕业证书支持多张图片）
+    const handleEduDesignUpload = createMultiFileUploadHandler('edu-design-chips-', '_designFiles', '_designFileNames')
+    const handleEduDiplomaUpload = createMultiFileUploadHandler('edu-diploma-chips-', '_diplomaFiles', '_diplomaFileNames')
+
+    function createDynamicUploadHandler(uploadIdPrefix, fileInfoIdPrefix, dataKey, fileNameKey) {
       return async function(input) {
         const files = input.files
         if (files && files.length > 0) {
@@ -1963,27 +2865,53 @@
           const file = files[0]
           const base64 = await fileToBase64(file)
           const filename = count > 1 ? `${count}个文件` : file.name
-          const uploadId = input.id.replace('file-', uploadIdPrefix)
-          const fileInfoId = input.id.replace('file-', fileInfoIdPrefix)
-          document.getElementById(uploadId).style.display = 'none'
+          // 从 input.id 中提取数字后缀，避免 replace 导致双重前缀
+          const countSuffix = (input.id.match(/\d+$/) || [''])[0]
+          const uploadId = uploadIdPrefix + countSuffix
+          const fileInfoId = fileInfoIdPrefix + countSuffix
+          const uploadEl = document.getElementById(uploadId)
+          if (uploadEl) uploadEl.style.display = 'none'
           const fileInfo = document.getElementById(fileInfoId)
-          fileInfo.style.display = 'flex'
-          fileInfo.querySelector('.resume-filename').textContent = filename
+          if (fileInfo) {
+            fileInfo.style.display = 'flex'
+            // 图片类上传（含缩略图元素）才设置 src，论文附件为 PDF/DOC 无缩略图
+            const thumb = fileInfo.querySelector('.file-chip-thumb')
+            if (thumb) thumb.src = base64
+            const fn = fileInfo.querySelector('.resume-filename')
+            if (fn) fn.textContent = filename.replace(/\.[^/.]+$/, '')
+            // 论文附件：根据扩展名显示 PDF/Word 图标
+            showFileTypeIcon(fileInfo, filename)
+          }
+          // 存储到最近 .work-group 的 DOM 属性上，供 collectProfileData 读取
+          const group = input.closest('.work-group')
+          if (group && dataKey) {
+            group['_' + dataKey] = base64
+            group['_' + fileNameKey] = filename
+          }
         }
       }
     }
 
-    function createDynamicRemoveHandler(uploadIdPrefix, fileInfoIdPrefix) {
+    function createDynamicRemoveHandler(uploadIdPrefix, fileInfoIdPrefix, dataKey, fileNameKey) {
       return function(btn) {
         const fileInfo = btn.parentElement
         const formField = fileInfo.parentElement
         const input = formField.querySelector('input[type="file"]')
         if (input) {
-          const uploadId = input.id.replace('file-', uploadIdPrefix)
-          const fileInfoId = input.id.replace('file-', fileInfoIdPrefix)
-          document.getElementById(uploadId).style.display = 'block'
-          document.getElementById(fileInfoId).style.display = 'none'
+          const countSuffix = (input.id.match(/\d+$/) || [''])[0]
+          const uploadId = uploadIdPrefix + countSuffix
+          const fileInfoId = fileInfoIdPrefix + countSuffix
+          const uploadEl = document.getElementById(uploadId)
+          if (uploadEl) uploadEl.style.display = 'block'
+          const fileInfoEl = document.getElementById(fileInfoId)
+          if (fileInfoEl) fileInfoEl.style.display = 'none'
           input.value = ''
+          // 清除 group 的 DOM 属性
+          const group = input.closest('.work-group')
+          if (group && dataKey) {
+            group['_' + dataKey] = ''
+            group['_' + fileNameKey] = ''
+          }
         }
       }
     }
@@ -1993,17 +2921,19 @@
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>公司名称</label>
-          <input type="text" class="intern-company" placeholder="请输入公司名称">
-        </div>
-        <div class="form-field">
-          <label>实习时间</label>
-          <input type="text" class="intern-time" placeholder="如：2021.03 - 2021.09">
-        </div>
-        <div class="form-field">
-          <label>岗位名称</label>
-          <input type="text" class="intern-position" placeholder="请输入岗位">
+        <div class="form-row">
+          <div class="form-field">
+            <label>公司名称</label>
+            <input type="text" class="intern-company" placeholder="请输入公司名称">
+          </div>
+          <div class="form-field">
+            <label>实习时间</label>
+            <input type="text" class="intern-time" placeholder="如：2021.03 - 2021.09">
+          </div>
+          <div class="form-field">
+            <label>岗位名称</label>
+            <input type="text" class="intern-position" placeholder="请输入岗位">
+          </div>
         </div>
         <div class="form-field">
           <label>工作内容</label>
@@ -2012,6 +2942,7 @@
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
       container.appendChild(group)
+      bulletizeTextarea(group.querySelector('.intern-desc'), '描述工作内容')
     }
 
     function addProjectGroup() {
@@ -2019,17 +2950,19 @@
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>项目名称</label>
-          <input type="text" class="proj-name" placeholder="请输入项目名称">
-        </div>
-        <div class="form-field">
-          <label>项目时间</label>
-          <input type="text" class="proj-time" placeholder="如：2023.01 - 2023.06">
-        </div>
-        <div class="form-field">
-          <label>岗位名称</label>
-          <input type="text" class="proj-position" placeholder="请输入岗位">
+        <div class="form-row">
+          <div class="form-field">
+            <label>项目名称</label>
+            <input type="text" class="proj-name" placeholder="请输入项目名称">
+          </div>
+          <div class="form-field">
+            <label>项目时间</label>
+            <input type="text" class="proj-time" placeholder="如：2023.01 - 2023.06">
+          </div>
+          <div class="form-field">
+            <label>岗位名称</label>
+            <input type="text" class="proj-position" placeholder="请输入岗位">
+          </div>
         </div>
         <div class="form-field">
           <label>项目描述</label>
@@ -2042,34 +2975,43 @@
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
       container.appendChild(group)
+      bulletizeTextarea(group.querySelector('.proj-content'), '描述具体工作内容')
     }
 
     function addEducationGroup() {
       const container = document.getElementById('education-container')
       const count = container.children.length
+      if (count >= 4) {
+        showToast('最多添加4个教育背景')
+        return
+      }
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>学校</label>
-          <input type="text" class="edu-school" placeholder="请输入学校名称">
+        <div class="form-row">
+          <div class="form-field">
+            <label>学校</label>
+            <input type="text" class="edu-school" placeholder="请输入学校名称">
+          </div>
+          <div class="form-field">
+            <label>时间</label>
+            <input type="text" class="edu-time" placeholder="如：2020.09 - 2023.06">
+          </div>
         </div>
-        <div class="form-field">
-          <label>学历</label>
-          <select class="edu-degree">
-            <option>本科</option>
-            <option selected>硕士</option>
-            <option>博士</option>
-            <option>大专</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>时间</label>
-          <input type="text" class="edu-time" placeholder="如：2020.09 - 2023.06">
-        </div>
-        <div class="form-field">
-          <label>专业</label>
-          <input type="text" class="edu-major" placeholder="请输入专业">
+        <div class="form-row">
+          <div class="form-field">
+            <label>专业</label>
+            <input type="text" class="edu-major" placeholder="请输入专业">
+          </div>
+          <div class="form-field">
+            <label>学历</label>
+            <select class="edu-degree">
+              <option>本科</option>
+              <option selected>硕士</option>
+              <option>博士</option>
+              <option>大专</option>
+            </select>
+          </div>
         </div>
         <div class="form-field">
           <label>专业成绩</label>
@@ -2089,33 +3031,34 @@
         </div>
         <div class="form-field">
           <label>毕业设计</label>
-          <div id="edu-design-upload-${count}">
-            <div class="upload-box input-height" onclick="document.getElementById('file-edu-design-${count}').click()">
-              <p>上传毕业设计图片（最多10张）</p>
-            </div>
+          <div class="upload-box input-height upload-empty" onclick="document.getElementById('file-edu-design-${count}').click()">
+            <p>上传毕业设计（最多10张）</p>
           </div>
-          <div id="edu-design-file-info-${count}" class="file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removeEduDesign(this)">✕</button>
+          <div class="file-upload-row" style="display:none">
+            <div class="upload-box input-height compact" onclick="document.getElementById('file-edu-design-${count}').click()">
+              <p><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></p>
+            </div>
+            <div class="file-chips" id="edu-design-chips-${count}"></div>
           </div>
           <input type="file" id="file-edu-design-${count}" style="display:none" accept="image/*" multiple onchange="handleEduDesignUpload(this)">
         </div>
         <div class="form-field">
           <label>毕业证书</label>
-          <div id="edu-diploma-upload-${count}">
-            <div class="upload-box input-height" onclick="document.getElementById('file-edu-diploma-${count}').click()">
-              <p>上传毕业证书图片（最多10张）</p>
-            </div>
+          <div class="upload-box input-height upload-empty" onclick="document.getElementById('file-edu-diploma-${count}').click()">
+            <p>上传毕业证书（最多10张）</p>
           </div>
-          <div id="edu-diploma-file-info-${count}" class="file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removeEduDiploma(this)">✕</button>
+          <div class="file-upload-row" style="display:none">
+            <div class="upload-box input-height compact" onclick="document.getElementById('file-edu-diploma-${count}').click()">
+              <p><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></p>
+            </div>
+            <div class="file-chips" id="edu-diploma-chips-${count}"></div>
           </div>
           <input type="file" id="file-edu-diploma-${count}" style="display:none" accept="image/*" multiple onchange="handleEduDiplomaUpload(this)">
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
       container.appendChild(group)
+      bulletizeTextarea(group.querySelector('.edu-experience'), '请输入在校经历')
     }
 
     function addPaperGroup() {
@@ -2128,43 +3071,58 @@
           <label>论文名称</label>
           <input type="text" class="paper-name" placeholder="请输入论文名称">
         </div>
-        <div class="form-field">
-          <label>论文类型</label>
-          <select class="paper-type">
-            <option>会议论文</option>
-            <option selected>期刊论文</option>
-            <option>学位论文</option>
-          </select>
+        <div class="form-row">
+          <div class="form-field">
+            <label>论文类型</label>
+            <select class="paper-type">
+              <option>会议论文</option>
+              <option selected>期刊论文</option>
+              <option>学位论文</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>发表期刊/会议</label>
+            <input type="text" class="paper-journal" placeholder="请输入期刊或会议名">
+          </div>
         </div>
-        <div class="form-field">
-          <label>发表期刊/会议</label>
-          <input type="text" class="paper-journal" placeholder="请输入期刊或会议名">
-        </div>
-        <div class="form-field">
-          <label>论文首页</label>
-          <div id="paper-cover-upload-${count}">
-            <div class="upload-box input-height" onclick="document.getElementById('file-paper-cover-${count}').click()">
-              <p>上传论文首页图片（仅一张）</p>
+        <div class="form-row">
+          <div class="form-field">
+            <label>论文首页</label>
+            <div id="paper-cover-upload-${count}">
+              <div class="upload-box input-height" onclick="document.getElementById('file-paper-cover-${count}').click()">
+                <p>上传论文首页图片（仅一张）</p>
+              </div>
             </div>
-          </div>
-          <div id="paper-cover-file-info-${count}" class="file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removePaperCover(this)">✕</button>
-          </div>
-          <input type="file" id="file-paper-cover-${count}" style="display:none" accept="image/*" onchange="handlePaperCoverUpload(this)">
-        </div>
-        <div class="form-field">
-          <label>论文附件</label>
-          <div id="paper-attach-upload-${count}">
-            <div class="upload-box input-height" onclick="document.getElementById('file-paper-attach-${count}').click()">
-              <p>上传文件（仅支持PDF、Word）</p>
+            <div id="paper-cover-file-info-${count}" class="skill-icon-file-info" style="display:none">
+              <img class="file-chip-thumb" src="" alt="">
+              <span class="resume-filename"></span>
+              <button class="btn-delete-resume" onclick="removePaperCover(this)">✕</button>
             </div>
+            <input type="file" id="file-paper-cover-${count}" style="display:none" accept="image/*" onchange="handlePaperCoverUpload(this)">
           </div>
-          <div id="paper-attach-file-info-${count}" class="file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removePaperAttach(this)">✕</button>
+          <div class="form-field">
+            <label>论文附件</label>
+            <div id="paper-attach-upload-${count}">
+              <div class="upload-box input-height" onclick="document.getElementById('file-paper-attach-${count}').click()">
+                <p>上传文件（仅支持PDF、Word）</p>
+              </div>
+            </div>
+            <div id="paper-attach-file-info-${count}" class="file-info" style="display:none">
+              <svg class="pdf-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="display:none">
+                <path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#EF4444"/>
+                <path d="M14 2v6h6l-6-6z" fill="#FCA5A5"/>
+                <text x="12" y="17.5" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff" font-family="Arial, sans-serif">PDF</text>
+              </svg>
+              <svg class="word-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="display:none">
+                <path d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#2563EB"/>
+                <path d="M14 2v6h6l-6-6z" fill="#93C5FD"/>
+                <text x="12" y="17.5" text-anchor="middle" font-size="6" font-weight="700" fill="#fff" font-family="Arial, sans-serif">DOC</text>
+              </svg>
+              <span class="resume-filename"></span>
+              <button class="btn-delete-resume" onclick="removePaperAttach(this)">✕</button>
+            </div>
+            <input type="file" id="file-paper-attach-${count}" style="display:none" accept=".pdf,.doc,.docx" onchange="handlePaperAttachUpload(this)">
           </div>
-          <input type="file" id="file-paper-attach-${count}" style="display:none" accept=".pdf,.doc,.docx" onchange="handlePaperAttachUpload(this)">
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
@@ -2172,87 +3130,94 @@
     }
 
     function addPatentGroup() {
-      const container = document.getElementById('ip-patents')
+      const container = document.getElementById('patents-container')
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>专利名称</label>
-          <input type="text" class="patent-name" placeholder="请输入专利名称">
-        </div>
-        <div class="form-field">
-          <label>专利类型</label>
-          <select class="patent-type">
-            <option>发明专利</option>
-            <option>实用新型</option>
-            <option selected>外观设计</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>授权公告号</label>
-          <input type="text" class="patent-number" placeholder="如：CN123456789A">
+        <div class="form-row">
+          <div class="form-field">
+            <label>专利名称</label>
+            <input type="text" class="patent-name" placeholder="请输入专利名称">
+          </div>
+          <div class="form-field">
+            <label>专利类型</label>
+            <select class="patent-type">
+              <option>发明专利</option>
+              <option>实用新型</option>
+              <option selected>外观设计</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>授权公告号</label>
+            <input type="text" class="patent-number" placeholder="如：CN123456789A">
+          </div>
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
-      container.insertBefore(group, container.querySelector('.btn-small-add'))
+      container.appendChild(group)
     }
 
     function addCopyrightGroup() {
-      const container = document.getElementById('ip-copyrights')
+      const container = document.getElementById('copyrights-container')
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>著作名称</label>
-          <input type="text" class="copyright-name" placeholder="请输入著作名称">
-        </div>
-        <div class="form-field">
-          <label>著作类别</label>
-          <select class="copyright-type">
-            <option>文字作品</option>
-            <option selected>图形作品</option>
-            <option>软件著作</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>登记号</label>
-          <input type="text" class="copyright-number" placeholder="请输入登记号">
+        <div class="form-row">
+          <div class="form-field">
+            <label>著作名称</label>
+            <input type="text" class="copyright-name" placeholder="请输入著作名称">
+          </div>
+          <div class="form-field">
+            <label>著作类别</label>
+            <select class="copyright-type">
+              <option>文字作品</option>
+              <option selected>图形作品</option>
+              <option>软件著作</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>登记号</label>
+            <input type="text" class="copyright-number" placeholder="请输入登记号">
+          </div>
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
-      container.insertBefore(group, container.querySelector('.btn-small-add'))
+      container.appendChild(group)
     }
 
     function addTrademarkGroup() {
-      const container = document.getElementById('ip-trademarks')
+      const container = document.getElementById('trademarks-container')
       const count = container.querySelectorAll('.work-group').length
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>商标名称</label>
-          <input type="text" class="trademark-name" placeholder="请输入商标名称">
-        </div>
-        <div class="form-field">
-          <label>商标图案</label>
-          <div id="trademark-logo-upload-${count}">
-            <div class="upload-box input-height" onclick="document.getElementById('file-trademark-logo-${count}').click()">
-              <p>上传商标图案（仅一张）</p>
+        <div class="form-row">
+          <div class="form-field">
+            <label>商标名称</label>
+            <input type="text" class="trademark-name" placeholder="请输入商标名称">
+          </div>
+          <div class="form-field">
+            <label>商标图案</label>
+            <div id="trademark-logo-upload-${count}">
+              <div class="upload-box input-height" onclick="document.getElementById('file-trademark-logo-${count}').click()">
+                <p>上传商标图案（仅一张）</p>
+              </div>
             </div>
+            <div id="trademark-logo-file-info-${count}" class="skill-icon-file-info" style="display:none">
+              <img class="file-chip-thumb" src="" alt="">
+              <span class="resume-filename"></span>
+              <button class="btn-delete-resume" onclick="removeTrademarkLogo(this)">✕</button>
+            </div>
+            <input type="file" id="file-trademark-logo-${count}" style="display:none" accept="image/*" onchange="handleTrademarkLogoUpload(this)">
           </div>
-          <div id="trademark-logo-file-info-${count}" class="file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removeTrademarkLogo(this)">✕</button>
+          <div class="form-field">
+            <label>申请/注册号</label>
+            <input type="text" class="trademark-number" placeholder="请输入注册号">
           </div>
-          <input type="file" id="file-trademark-logo-${count}" style="display:none" accept="image/*" onchange="handleTrademarkLogoUpload(this)">
-        </div>
-        <div class="form-field">
-          <label>申请/注册号</label>
-          <input type="text" class="trademark-number" placeholder="请输入注册号">
         </div>
         <button class="btn-remove-group" onclick="removeGroup(this)">✕</button>
       `
-      container.insertBefore(group, container.querySelector('.btn-small-add'))
+      container.appendChild(group)
     }
 
     function addCertificationGroup() {
@@ -2261,24 +3226,26 @@
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>证书名称</label>
-          <input type="text" class="cert-name" placeholder="请输入证书名称">
-        </div>
-        <div class="form-field">
-          <label>获得时间</label>
-          <input type="text" class="cert-time" placeholder="如：2022.05">
+        <div class="form-row">
+          <div class="form-field">
+            <label>证书名称</label>
+            <input type="text" class="cert-name" placeholder="请输入证书名称">
+          </div>
+          <div class="form-field">
+            <label>获得时间</label>
+            <input type="text" class="cert-time" placeholder="如：2022.05">
+          </div>
         </div>
         <div class="form-field">
           <label>证书附件</label>
-          <div id="cert-upload-${count}">
-            <div class="upload-box input-height" onclick="document.getElementById('file-cert-${count}').click()">
-              <p>上传证书图片（最多10张）</p>
-            </div>
+          <div class="upload-box input-height upload-empty" onclick="document.getElementById('file-cert-${count}').click()">
+            <p>上传证书图片（最多10张）</p>
           </div>
-          <div id="cert-file-info-${count}" class="file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removeCert(this)">✕</button>
+          <div class="file-upload-row" style="display:none">
+            <div class="upload-box input-height compact" onclick="document.getElementById('file-cert-${count}').click()">
+              <p><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></p>
+            </div>
+            <div class="file-chips" id="cert-chips-${count}"></div>
           </div>
           <input type="file" id="file-cert-${count}" style="display:none" accept="image/*" multiple onchange="handleCertUpload(this)">
         </div>
@@ -2293,13 +3260,15 @@
       const group = document.createElement('div')
       group.className = 'work-group'
       group.innerHTML = `
-        <div class="form-field">
-          <label>奖项名称</label>
-          <input type="text" class="honor-name" placeholder="请输入奖项名称">
-        </div>
-        <div class="form-field">
-          <label>获得时间</label>
-          <input type="text" class="honor-time" placeholder="如：2023.03">
+        <div class="form-row">
+          <div class="form-field">
+            <label>奖项名称</label>
+            <input type="text" class="honor-name" placeholder="请输入奖项名称">
+          </div>
+          <div class="form-field">
+            <label>获得时间</label>
+            <input type="text" class="honor-time" placeholder="如：2023.03">
+          </div>
         </div>
         <div class="form-field">
           <label>奖项说明</label>
@@ -2307,14 +3276,14 @@
         </div>
         <div class="form-field">
           <label>奖项附件</label>
-          <div id="honor-upload-${count}">
-            <div class="upload-box input-height" onclick="document.getElementById('file-honor-${count}').click()">
-              <p>上传奖项证明图片（最多10张）</p>
-            </div>
+          <div class="upload-box input-height upload-empty" onclick="document.getElementById('file-honor-${count}').click()">
+            <p>上传奖项证明图片（最多10张）</p>
           </div>
-          <div id="honor-file-info-${count}" class="file-info" style="display:none">
-            <span class="resume-filename"></span>
-            <button class="btn-delete-resume" onclick="removeHonor(this)">✕</button>
+          <div class="file-upload-row" style="display:none">
+            <div class="upload-box input-height compact" onclick="document.getElementById('file-honor-${count}').click()">
+              <p><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></p>
+            </div>
+            <div class="file-chips" id="honor-chips-${count}"></div>
           </div>
           <input type="file" id="file-honor-${count}" style="display:none" accept="image/*" multiple onchange="handleHonorUpload(this)">
         </div>
@@ -2325,6 +3294,7 @@
 
     function collectProfileData() {
       profileData.name = document.getElementById('input-name').value || ''
+      profileData.pageTitle = document.getElementById('input-page-title') ? document.getElementById('input-page-title').value : ''
       profileData.slogan = document.getElementById('input-slogan').value || ''
       profileData.position = document.getElementById('input-position').value || ''
       profileData.bio = document.getElementById('input-bio').value || ''
@@ -2338,6 +3308,7 @@
       profileData.hobby = document.getElementById('input-hobby').value || ''
       profileData.phone = document.getElementById('input-phone').value || ''
       profileData.email = document.getElementById('input-email').value || ''
+      profileData.github = document.getElementById('input-github').value || ''
       profileData.wechat = document.getElementById('input-wechat').value || ''
       profileData.qq = document.getElementById('input-qq').value || ''
       profileData.weibo = document.getElementById('input-weibo').value || ''
@@ -2355,20 +3326,27 @@
         profileData.skills.push({
           name: group.querySelector('.skill-name')?.value || '',
           level: group.querySelector('.skill-level')?.value || '',
-          icon: group.iconBase64 || ''
+          icon: group.iconBase64 || '',
+          iconName: group.iconName || ''
         })
       })
 
       profileData.workExperiences = []
       document.querySelectorAll('#work-container .work-group').forEach((group) => {
         const tasks = []
-        group.querySelectorAll('.work-task').forEach((taskEl) => {
-          const typeEl = taskEl.querySelector('.work-task-type')
-          const descEl = taskEl.querySelector('.work-task-desc')
-          tasks.push({
-            type: typeEl?.value || '',
-            desc: descEl?.value || ''
+        group.querySelectorAll('.wc-cards-container .wc-editor').forEach(wcEditor => {
+          const typeText = wcEditor.querySelector('.wc-type-content')?.textContent || ''
+          const contentLines = []
+          wcEditor.querySelectorAll('.wc-content-line .wc-line-content').forEach(el => {
+            const text = el.textContent
+            if (text.trim()) contentLines.push(text)
           })
+          if (typeText || contentLines.length) {
+            tasks.push({
+              type: typeText,
+              desc: contentLines.join('\n')
+            })
+          }
         })
         profileData.workExperiences.push({
           company: group.querySelector('.work-company')?.value || '',
@@ -2376,7 +3354,9 @@
           time: group.querySelector('.work-time')?.value || '',
           position: group.querySelector('.work-position')?.value || '',
           tasks: tasks,
-          result: group.querySelector('.work-result')?.value || ''
+          result: group.querySelector('.work-result')?.value || '',
+          resultFiles: Array.isArray(group._resultFiles) ? group._resultFiles : [],
+          resultFileNames: Array.isArray(group._resultFileNames) ? group._resultFileNames : []
         })
       })
 
@@ -2411,7 +3391,11 @@
           score: group.querySelector('.edu-score')?.value || '',
           courses: group.querySelector('.edu-courses')?.value || '',
           experience: group.querySelector('.edu-experience')?.value || '',
-          thesis: group.querySelector('.edu-thesis')?.value || ''
+          thesis: group.querySelector('.edu-thesis')?.value || '',
+          designFiles: Array.isArray(group._designFiles) ? group._designFiles : [],
+          designFileNames: Array.isArray(group._designFileNames) ? group._designFileNames : [],
+          diplomaFiles: Array.isArray(group._diplomaFiles) ? group._diplomaFiles : [],
+          diplomaFileNames: Array.isArray(group._diplomaFileNames) ? group._diplomaFileNames : []
         })
       })
 
@@ -2420,7 +3404,11 @@
         profileData.papers.push({
           name: group.querySelector('.paper-name')?.value || '',
           type: group.querySelector('.paper-type')?.value || '',
-          journal: group.querySelector('.paper-journal')?.value || ''
+          journal: group.querySelector('.paper-journal')?.value || '',
+          coverFile: group._coverFile || '',
+          coverFileName: group._coverFileName || '',
+          attachFile: group._attachFile || '',
+          attachFileName: group._attachFileName || ''
         })
       })
 
@@ -2446,7 +3434,9 @@
       document.querySelectorAll('#trademarks-container .work-group').forEach((group) => {
         profileData.trademarks.push({
           name: group.querySelector('.trademark-name')?.value || '',
-          number: group.querySelector('.trademark-number')?.value || ''
+          number: group.querySelector('.trademark-number')?.value || '',
+          logoFile: group._logoFile || '',
+          logoFileName: group._logoFileName || ''
         })
       })
 
@@ -2454,7 +3444,9 @@
       document.querySelectorAll('#certifications-container .work-group').forEach((group) => {
         profileData.certifications.push({
           name: group.querySelector('.cert-name')?.value || '',
-          time: group.querySelector('.cert-time')?.value || ''
+          time: group.querySelector('.cert-time')?.value || '',
+          certFiles: Array.isArray(group._certFiles) ? group._certFiles : [],
+          certFileNames: Array.isArray(group._certFileNames) ? group._certFileNames : []
         })
       })
 
@@ -2463,17 +3455,58 @@
         profileData.honors.push({
           name: group.querySelector('.honor-name')?.value || '',
           time: group.querySelector('.honor-time')?.value || '',
-          desc: group.querySelector('.honor-desc')?.value || ''
+          desc: group.querySelector('.honor-desc')?.value || '',
+          honorFiles: Array.isArray(group._honorFiles) ? group._honorFiles : [],
+          honorFileNames: Array.isArray(group._honorFileNames) ? group._honorFileNames : []
         })
       })
 
       return profileData
     }
 
+    // 回显动态文件上传状态：将文件数据存到 group DOM 属性，并切换上传按钮/文件信息 UI
+    function applyDynamicFileState(group, uploadIdPrefix, fileInfoIdPrefix, dataKey, fileNameKey, fileData, fileName, defaultName) {
+      if (!group) return
+      const uploadEl = group.querySelector(`[id^="${uploadIdPrefix}"]`)
+      const fileInfoEl = group.querySelector(`[id^="${fileInfoIdPrefix}"]`)
+      if (fileData) {
+        group[dataKey] = fileData
+        group[fileNameKey] = fileName || defaultName || '已上传文件'
+        if (uploadEl) uploadEl.style.display = 'none'
+        if (fileInfoEl) {
+          fileInfoEl.style.display = 'flex'
+          // 图片类上传（含缩略图元素）才设置 src，论文附件为 PDF/DOC 无缩略图
+          const thumb = fileInfoEl.querySelector('.file-chip-thumb')
+          if (thumb) thumb.src = fileData
+          const fn = fileInfoEl.querySelector('.resume-filename')
+          if (fn) fn.textContent = (fileName || defaultName || '已上传文件').replace(/\.[^/.]+$/, '')
+          // 论文附件：根据扩展名显示 PDF/Word 图标
+          showFileTypeIcon(fileInfoEl, fileName || defaultName)
+        }
+      } else {
+        group[dataKey] = ''
+        group[fileNameKey] = ''
+        if (uploadEl) uploadEl.style.display = ''
+        if (fileInfoEl) fileInfoEl.style.display = 'none'
+      }
+    }
+
+    // 多文件状态回填（教育模块毕业设计/毕业证书，成果展示，证书，奖项）
+    function applyMultiFileState(group, chipsIdPrefix, dataKey, fileNameKey, filesArr, namesArr) {
+      if (!group) return
+      group[dataKey] = Array.isArray(filesArr) ? filesArr : []
+      group[fileNameKey] = Array.isArray(namesArr) ? namesArr : []
+      if (group[dataKey].length > 0) {
+        const chipsEl = group.querySelector(`[id^="${chipsIdPrefix}"]`)
+        renderFileChips(chipsEl, group, dataKey, fileNameKey)
+      }
+    }
+
     function loadProfileToForm(data) {
       if (!data) return
 
       if (data.name !== undefined) document.getElementById('input-name').value = data.name || ''
+      if (data.pageTitle !== undefined && document.getElementById('input-page-title')) document.getElementById('input-page-title').value = data.pageTitle || ''
       if (data.slogan !== undefined) document.getElementById('input-slogan').value = data.slogan || ''
       if (data.position !== undefined) document.getElementById('input-position').value = data.position || ''
       if (data.bio !== undefined) document.getElementById('input-bio').value = data.bio || ''
@@ -2487,6 +3520,7 @@
       if (data.hobby !== undefined) document.getElementById('input-hobby').value = data.hobby || ''
       if (data.phone !== undefined) document.getElementById('input-phone').value = data.phone || ''
       if (data.email !== undefined) document.getElementById('input-email').value = data.email || ''
+      if (data.github !== undefined) document.getElementById('input-github').value = data.github || ''
       if (data.wechat !== undefined) document.getElementById('input-wechat').value = data.wechat || ''
       if (data.qq !== undefined) document.getElementById('input-qq').value = data.qq || ''
       if (data.weibo !== undefined) document.getElementById('input-weibo').value = data.weibo || ''
@@ -2502,34 +3536,31 @@
 
       if (data.idPhoto) {
         profileData.idPhoto = data.idPhoto
+        profileData.photoUrl = data.photoUrl || data.idPhoto
         document.getElementById('id-photo-upload-container').style.display = 'none'
-        const fileInfo = document.getElementById('id-photo-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = '已有证件照'
+        const preview = document.getElementById('id-photo-image-preview')
+        preview.style.display = 'flex'
+        preview.querySelector('.file-chip-thumb').src = data.idPhoto
+        preview.querySelector('.resume-filename').textContent = data.photoFilename || '已有证件照'
       }
 
       if (data.lifePhotoMedium && data.lifePhotoMedium.length) {
         profileData.lifePhotoMedium = data.lifePhotoMedium
-        document.getElementById('life-photo-medium-container').style.display = 'none'
-        const fileInfo = document.getElementById('life-photo-medium-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = `已有 ${data.lifePhotoMedium.length} 张生活照-中`
       }
+      renderLifePhotoChips('medium')
 
       if (data.lifePhotoLarge && data.lifePhotoLarge.length) {
         profileData.lifePhotoLarge = data.lifePhotoLarge
-        document.getElementById('life-photo-large-container').style.display = 'none'
-        const fileInfo = document.getElementById('life-photo-large-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = `已有 ${data.lifePhotoLarge.length} 张生活照-大`
       }
+      renderLifePhotoChips('large')
 
       if (data.avatar) {
         profileData.avatar = data.avatar
         document.getElementById('avatar-upload-container').style.display = 'none'
-        const fileInfo = document.getElementById('avatar-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = '已有头像'
+        const preview = document.getElementById('avatar-image-preview')
+        preview.style.display = 'flex'
+        preview.querySelector('.file-chip-thumb').src = data.avatar
+        preview.querySelector('.resume-filename').textContent = data.avatarFilename || '已有头像'
       }
 
       if (data.wechatQr) {
@@ -2537,7 +3568,8 @@
         document.getElementById('wechat-qr-upload-container').style.display = 'none'
         const fileInfo = document.getElementById('wechat-qr-file-info')
         fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = '已有二维码'
+        fileInfo.querySelector('.file-chip-thumb').src = data.wechatQr
+        fileInfo.querySelector('.resume-filename').textContent = data.wechatQrName || '已有二维码'
       }
 
       if (data.qqQr) {
@@ -2545,7 +3577,8 @@
         document.getElementById('qq-qr-upload-container').style.display = 'none'
         const fileInfo = document.getElementById('qq-qr-file-info')
         fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = '已有二维码'
+        fileInfo.querySelector('.file-chip-thumb').src = data.qqQr
+        fileInfo.querySelector('.resume-filename').textContent = data.qqQrName || '已有二维码'
       }
 
       if (data.weiboQr) {
@@ -2553,7 +3586,8 @@
         document.getElementById('weibo-qr-upload-container').style.display = 'none'
         const fileInfo = document.getElementById('weibo-qr-file-info')
         fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = '已有二维码'
+        fileInfo.querySelector('.file-chip-thumb').src = data.weiboQr
+        fileInfo.querySelector('.resume-filename').textContent = data.weiboQrName || '已有二维码'
       }
 
       if (data.advantages && data.advantages.length) {
@@ -2569,7 +3603,7 @@
       }
 
       if (data.portfolioItems && data.portfolioItems.length) {
-        profileData.portfolioItems = data.portfolioItems
+        profileData.portfolioItems = data.portfolioItems.slice(0, 20)
         renderPortfolioGrid()
       }
 
@@ -2583,10 +3617,12 @@
             lastGroup.querySelector('.skill-level').value = skill.level || '了解'
             if (skill.icon) {
               lastGroup.iconBase64 = skill.icon
+              lastGroup.iconName = skill.iconName || ''
               lastGroup.querySelector('.skill-icon-upload-container').style.display = 'none'
               const fileInfo = lastGroup.querySelector('.skill-icon-file-info')
               fileInfo.style.display = 'flex'
-              fileInfo.querySelector('.resume-filename').textContent = '已有图标'
+              fileInfo.querySelector('.file-chip-thumb').src = skill.icon
+              fileInfo.querySelector('.resume-filename').textContent = skill.iconName ? skill.iconName.replace(/\.[^/.]+$/, '') : '已有图标'
             }
           }
         })
@@ -2603,20 +3639,35 @@
             lastGroup.querySelector('.work-time').value = work.time || ''
             lastGroup.querySelector('.work-position').value = work.position || ''
             lastGroup.querySelector('.work-result').value = work.result || ''
-            
+
             if (work.tasks && work.tasks.length) {
-              work.tasks.forEach((task, idx) => {
-                if (idx === 0) {
-                  lastGroup.querySelectorAll('.work-task-type')[0].value = task.type || ''
-                  lastGroup.querySelectorAll('.work-task-desc')[0].value = task.desc || ''
-                } else {
-                  addWorkTask(lastGroup)
-                  const taskEls = lastGroup.querySelectorAll('.work-task')
-                  taskEls[idx].querySelector('.work-task-type').value = task.type || ''
-                  taskEls[idx].querySelector('.work-task-desc').value = task.desc || ''
-                }
-              })
+              const cardsContainer = lastGroup.querySelector('.wc-cards-container')
+              if (cardsContainer) {
+                // 移除默认卡片，为每个 task 创建独立卡片
+                cardsContainer.innerHTML = ''
+                work.tasks.forEach(task => {
+                  const card = createWcEditorCard()
+                  card.querySelector('.wc-type-content').textContent = task.type || ''
+                  const contentArea = card.querySelector('.wc-content-area')
+                  contentArea.innerHTML = ''
+                  const descLines = task.desc ? task.desc.split('\n') : []
+                  if (descLines.length === 0) {
+                    contentArea.appendChild(createWcContentLine('', '请描述具体工作内容'))
+                    contentArea.appendChild(createWcContentLine('', ''))
+                    contentArea.appendChild(createWcContentLine('', ''))
+                  } else {
+                    descLines.forEach((line, idx) => {
+                      contentArea.appendChild(createWcContentLine(line, idx === 0 ? '请描述具体工作内容' : ''))
+                    })
+                  }
+                  cardsContainer.appendChild(card)
+                  setupWorkContentEditor(card)
+                })
+              }
             }
+
+            applyMultiFileState(lastGroup, 'work-result-chips-', '_resultFiles', '_resultFileNames', work.resultFiles, work.resultFileNames)
+            updateAllBulletEditors(lastGroup)
           }
         })
       }
@@ -2631,6 +3682,7 @@
             lastGroup.querySelector('.intern-time').value = intern.time || ''
             lastGroup.querySelector('.intern-position').value = intern.position || ''
             lastGroup.querySelector('.intern-desc').value = intern.desc || ''
+            updateAllBulletEditors(lastGroup)
           }
         })
       }
@@ -2646,6 +3698,7 @@
             lastGroup.querySelector('.proj-position').value = project.position || ''
             lastGroup.querySelector('.proj-desc').value = project.desc || ''
             lastGroup.querySelector('.proj-content').value = project.content || ''
+            updateAllBulletEditors(lastGroup)
           }
         })
       }
@@ -2664,6 +3717,9 @@
             lastGroup.querySelector('.edu-courses').value = edu.courses || ''
             lastGroup.querySelector('.edu-experience').value = edu.experience || ''
             lastGroup.querySelector('.edu-thesis').value = edu.thesis || ''
+            applyMultiFileState(lastGroup, 'edu-design-chips-', '_designFiles', '_designFileNames', edu.designFiles, edu.designFileNames)
+            applyMultiFileState(lastGroup, 'edu-diploma-chips-', '_diplomaFiles', '_diplomaFileNames', edu.diplomaFiles, edu.diplomaFileNames)
+            updateAllBulletEditors(lastGroup)
           }
         })
       }
@@ -2677,6 +3733,8 @@
             lastGroup.querySelector('.paper-name').value = paper.name || ''
             lastGroup.querySelector('.paper-type').value = paper.type || '期刊论文'
             lastGroup.querySelector('.paper-journal').value = paper.journal || ''
+            applyDynamicFileState(lastGroup, 'paper-cover-upload-', 'paper-cover-file-info-', '_coverFile', '_coverFileName', paper.coverFile, paper.coverFileName, '已上传论文首页')
+            applyDynamicFileState(lastGroup, 'paper-attach-upload-', 'paper-attach-file-info-', '_attachFile', '_attachFileName', paper.attachFile, paper.attachFileName, '已上传论文附件')
           }
         })
       }
@@ -2715,6 +3773,7 @@
           if (lastGroup) {
             lastGroup.querySelector('.trademark-name').value = trademark.name || ''
             lastGroup.querySelector('.trademark-number').value = trademark.number || ''
+            applyDynamicFileState(lastGroup, 'trademark-logo-upload-', 'trademark-logo-file-info-', '_logoFile', '_logoFileName', trademark.logoFile, trademark.logoFileName, '已上传商标图案')
           }
         })
       }
@@ -2727,6 +3786,7 @@
           if (lastGroup) {
             lastGroup.querySelector('.cert-name').value = cert.name || ''
             lastGroup.querySelector('.cert-time').value = cert.time || ''
+            applyMultiFileState(lastGroup, 'cert-chips-', '_certFiles', '_certFileNames', cert.certFiles, cert.certFileNames)
           }
         })
       }
@@ -2740,6 +3800,7 @@
             lastGroup.querySelector('.honor-name').value = honor.name || ''
             lastGroup.querySelector('.honor-time').value = honor.time || ''
             lastGroup.querySelector('.honor-desc').value = honor.desc || ''
+            applyMultiFileState(lastGroup, 'honor-chips-', '_honorFiles', '_honorFileNames', honor.honorFiles, honor.honorFileNames)
           }
         })
       }
@@ -2762,9 +3823,66 @@
       renderPortfolioGrid()
     }
 
+    function confirmReset() {
+      document.getElementById('resetModal').classList.add('active')
+    }
+
+    function doResetProfile() {
+      document.getElementById('resetModal').classList.remove('active')
+      resetProfileForm()
+    }
+
+    function resetProfileForm() {
+      // 清空 profileData 所有字段
+      Object.keys(profileData).forEach(key => {
+        if (Array.isArray(profileData[key])) profileData[key] = []
+        else profileData[key] = ''
+      })
+      profileData.portfolioItems = []
+
+      // 清空所有文本/输入/选择字段
+      const section = document.getElementById('section-profile')
+      section.querySelectorAll('input, select, textarea').forEach(el => {
+        if (el.type === 'file') return
+        el.value = ''
+      })
+
+      // 清空动态组容器
+      initProfileForms()
+
+      // 重置文件上传区域为初始状态（显示上传按钮，隐藏已上传信息）
+      ;[
+        ['resume', 'file-info'],
+        ['avatar', 'image-preview'],
+        ['id-photo', 'image-preview'],
+        ['wechat-qr', 'file-info'],
+        ['qq-qr', 'file-info'],
+        ['weibo-qr', 'file-info']
+      ].forEach(([prefix, suffix]) => {
+        const upload = document.getElementById(`${prefix}-upload-container`)
+        const info = document.getElementById(`${prefix}-${suffix}`)
+        if (upload) upload.style.display = ''
+        if (info) info.style.display = 'none'
+      })
+
+      // 重置生活照和作品集
+      renderLifePhotoChips('medium')
+      renderLifePhotoChips('large')
+      renderPortfolioGrid()
+
+      showToast('已清空所有配置')
+    }
+
     async function loadProfileData() {
+      showLoading()
       const token = getToken()
-      if (!token) return
+      if (!token) {
+        hideLoading()
+        return
+      }
+
+      // 先让出主线程让浏览器渲染loading，再执行表单初始化
+      await new Promise(resolve => setTimeout(resolve, 50))
 
       initProfileForms()
 
@@ -2775,15 +3893,6 @@
         const data = await response.json()
 
         if (data.ok && data.profile) {
-          // 旧数据兼容：education 字符串(学历) → educationLevel，educations 数组(教育背景) → education
-          if (data.profile.education && typeof data.profile.education === 'string') {
-            if (!data.profile.educationLevel) data.profile.educationLevel = data.profile.education
-            delete data.profile.education
-          }
-          if (data.profile.educations && Array.isArray(data.profile.educations)) {
-            if (!data.profile.education) data.profile.education = data.profile.educations
-            delete data.profile.educations
-          }
           Object.keys(data.profile).forEach(key => {
             if (profileData.hasOwnProperty(key)) {
               profileData[key] = data.profile[key]
@@ -2793,12 +3902,21 @@
         }
       } catch (err) {
         console.error('Load profile error:', err)
+      } finally {
+        hideLoading()
       }
     }
 
     async function saveProfile() {
+      showLoading()
       const token = getToken()
-      if (!token) return
+      if (!token) {
+        hideLoading()
+        return
+      }
+
+      // 先让出主线程让浏览器渲染loading，再执行耗时的数据收集
+      await new Promise(resolve => setTimeout(resolve, 50))
 
       const data = collectProfileData()
 
@@ -2821,6 +3939,8 @@
         }
       } catch (err) {
         showToast('保存失败', 'error')
+      } finally {
+        hideLoading()
       }
     }
 
@@ -2872,12 +3992,12 @@
           </div>
           ${pages.map(page => `
             <div class="record-table-row">
-              <div class="record-name">${page.name || '未命名'}</div>
-              <div><a href="/${page.subdomain}/${page.pageId}" target="_blank" class="record-url">grwy.zzyy99.cn/${page.subdomain}/${page.pageId}</a></div>
+              <div class="record-name">${page.pageTitle || page.name || '未命名'}</div>
+              <div><a href="/${page.subdomain}/${page.ownerId}" target="_blank" class="record-url">grwy.zzyy99.cn/${page.subdomain}/${page.ownerId}</a></div>
               <div class="record-time">${formatDate(page.createdAt)}</div>
               <div><span class="record-status">已生成</span></div>
               <div class="record-actions">
-                <a href="/${page.subdomain}/${page.pageId}" target="_blank" class="action-btn action-btn-primary">预览</a>
+                <a href="/${page.subdomain}/${page.ownerId}" target="_blank" class="action-btn action-btn-primary">预览</a>
                 <a href="editor.html?edit=${page.pageId}" class="action-btn action-btn-secondary">修改</a>
                 <button class="action-btn action-btn-danger" onclick="openDeleteModal('${page.pageId}')">删除</button>
               </div>
@@ -2973,13 +4093,17 @@
       window.location.href = '/'
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadUserData()
-      
+    document.addEventListener('DOMContentLoaded', async () => {
+      initCollapsibleSections()
+
+      await loadUserData()
+
       const urlParams = new URLSearchParams(window.location.search)
       const section = urlParams.get('section')
       if (section && ['settings', 'profile', 'records', 'feedback'].includes(section)) {
-        switchSection(section)
+        await switchSection(section)
+      } else {
+        window.scrollTo(0, 0)
       }
     })
 
@@ -2989,5 +4113,12 @@
       }
     })
   </script>
+
+  <div class="loading-overlay" id="pageLoading" style="display:none">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <div class="loading-text">加载中...</div>
+    </div>
+  </div>
 </body>
 </html>
