@@ -198,7 +198,14 @@ function renderPage(pageData) {
         <div class="line"></div>
       </div>
       ${data.skills && data.skills.length > 0 ? `
-      <div class="skills-grid fade-in">
+      <div class="skills-scroll-container fade-in" id="skills-scroll-container">
+        <button class="scroll-btn scroll-prev" id="skills-prev">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="skills-scroll-track">
+          <div class="skills-grid">
         ${data.skills.map(skill => `
         <div class="skill-card">
           <div class="icon">
@@ -208,6 +215,13 @@ function renderPage(pageData) {
           <p>${skill.level || '熟练程度'}</p>
         </div>
         `).join('')}
+          </div>
+        </div>
+        <button class="scroll-btn scroll-next" id="skills-next">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
       </div>
       ` : ''}
     </div>
@@ -623,11 +637,16 @@ function renderPage(pageData) {
   ` : ''}
 
   <div class="mobile-nav">
-    <a href="#home" onclick="scrollToSection(event, 'home')">首页</a>
-    <a href="#portfolio" onclick="scrollToSection(event, 'portfolio')">作品</a>
-    <a href="#work" onclick="scrollToSection(event, 'work')">工作</a>
-    <a href="#education" onclick="scrollToSection(event, 'education')">学历</a>
-    <a href="#awards" onclick="scrollToSection(event, 'awards')">奖项</a>
+    ${modules.includes('portfolio') ? '<a href="#portfolio" onclick="scrollToSection(event, \'portfolio\')">作品</a>' : ''}
+    ${modules.includes('skills') ? '<a href="#skills" onclick="scrollToSection(event, \'skills\')">技能</a>' : ''}
+    ${modules.includes('work') ? '<a href="#work" onclick="scrollToSection(event, \'work\')">工作</a>' : ''}
+    ${modules.includes('internship') ? '<a href="#internship" onclick="scrollToSection(event, \'internship\')">实习</a>' : ''}
+    ${modules.includes('project') ? '<a href="#projects" onclick="scrollToSection(event, \'projects\')">项目</a>' : ''}
+    ${modules.includes('education') ? '<a href="#education" onclick="scrollToSection(event, \'education\')">教育</a>' : ''}
+    ${modules.includes('papers') ? '<a href="#papers" onclick="scrollToSection(event, \'papers\')">论文</a>' : ''}
+    ${modules.includes('ip') ? '<a href="#intellectual" onclick="scrollToSection(event, \'intellectual\')">知产</a>' : ''}
+    ${modules.includes('certifications') ? '<a href="#certifications" onclick="scrollToSection(event, \'certifications\')">证书</a>' : ''}
+    ${modules.includes('honors') ? '<a href="#awards" onclick="scrollToSection(event, \'awards\')">奖项</a>' : ''}
   </div>
 
   <footer id="footer">
@@ -722,40 +741,24 @@ function renderPage(pageData) {
       portfolioPrev.addEventListener('click', () => {
         const items = portfolioImages.querySelectorAll('.portfolio-image-item');
         if (items.length === 0) return;
-        
-        const itemWidth = items[0].offsetWidth + 24;
-        
-        if (portfolioImages.scrollLeft < itemWidth) {
-          portfolioImages.scrollTo({
-            left: portfolioImages.scrollWidth - portfolioImages.clientWidth,
-            behavior: 'smooth'
-          });
-        } else {
-          portfolioImages.scrollBy({
-            left: -itemWidth,
-            behavior: 'smooth'
-          });
-        }
+
+        const gap = parseFloat(getComputedStyle(portfolioImages).columnGap) || 0;
+        const itemWidth = items[0].offsetWidth + gap;
+        // 向左滚动一页，边界处停住，能到第一张图片最左侧，不回跳
+        const target = Math.max(portfolioImages.scrollLeft - itemWidth, 0);
+        portfolioImages.scrollTo({ left: target, behavior: 'smooth' });
       });
 
       portfolioNext.addEventListener('click', () => {
         const items = portfolioImages.querySelectorAll('.portfolio-image-item');
         if (items.length === 0) return;
-        
-        const itemWidth = items[0].offsetWidth + 24;
+
+        const gap = parseFloat(getComputedStyle(portfolioImages).columnGap) || 0;
+        const itemWidth = items[0].offsetWidth + gap;
         const maxScroll = portfolioImages.scrollWidth - portfolioImages.clientWidth;
-        
-        if (portfolioImages.scrollLeft >= maxScroll - 10) {
-          portfolioImages.scrollTo({
-            left: 0,
-            behavior: 'smooth'
-          });
-        } else {
-          portfolioImages.scrollBy({
-            left: itemWidth,
-            behavior: 'smooth'
-          });
-        }
+        // 向右滚动一页，边界处停住，能到最后一张图片最右侧，不回跳
+        const target = Math.min(portfolioImages.scrollLeft + itemWidth, maxScroll);
+        portfolioImages.scrollTo({ left: target, behavior: 'smooth' });
       });
 
       function startAutoScroll() {
@@ -764,19 +767,15 @@ function renderPage(pageData) {
             isScrolling = true;
             const items = portfolioImages.querySelectorAll('.portfolio-image-item');
             if (items.length > 0) {
-              const itemWidth = items[0].offsetWidth + 24;
+              const gap = parseFloat(getComputedStyle(portfolioImages).columnGap) || 0;
+              const itemWidth = items[0].offsetWidth + gap;
               const maxScroll = portfolioImages.scrollWidth - portfolioImages.clientWidth;
-              
-              if (portfolioImages.scrollLeft >= maxScroll - 10) {
-                portfolioImages.scrollTo({
-                  left: 0,
-                  behavior: 'smooth'
-                });
+              // 到达末尾后回到第一张图片重新自动滚动；否则向前滚动一页
+              if (portfolioImages.scrollLeft >= maxScroll - 1) {
+                portfolioImages.scrollTo({ left: 0, behavior: 'smooth' });
               } else {
-                portfolioImages.scrollBy({
-                  left: itemWidth,
-                  behavior: 'smooth'
-                });
+                const target = Math.min(portfolioImages.scrollLeft + itemWidth, maxScroll);
+                portfolioImages.scrollTo({ left: target, behavior: 'smooth' });
               }
             }
             setTimeout(() => {
@@ -808,169 +807,180 @@ function renderPage(pageData) {
     const awardsNext = document.getElementById('awards-next');
 
     if (awardsScroll && awardsPrev && awardsNext) {
-      const cards = awardsScroll.querySelectorAll('.award-card-scroll');
-      // 荣誉卡片多于3张时才启用滚动轮播（翻页按钮、自动滚动），否则居中展示且不显示按钮
-      if (cards.length > 3) {
-        const awardsContainer = awardsScroll.closest('.awards-scroll-container');
+      const awardsContainer = awardsScroll.closest('.awards-scroll-container');
+      let awardsScrollInterval;
+      let awardsIsScrolling = false;
+      let awardsIsSetup = false;
+
+      const getAwardWidth = () => {
+        const cards = awardsScroll.querySelectorAll('.award-card-scroll');
+        if (cards.length > 0) {
+          const gap = parseFloat(getComputedStyle(awardsScroll).columnGap) || 0;
+          return cards[0].offsetWidth + gap;
+        }
+        return 400;
+      };
+
+      function awardsStartAutoScroll() {
+        if (awardsScrollInterval) return;
+        awardsScrollInterval = setInterval(() => {
+          if (!awardsIsScrolling) {
+            awardsIsScrolling = true;
+            const itemWidth = getAwardWidth();
+            const maxScroll = awardsScroll.scrollWidth - awardsScroll.clientWidth;
+            // 到达末尾后回到第一张卡片重新自动滚动；否则向前滚动一页
+            if (awardsScroll.scrollLeft >= maxScroll - 1) {
+              awardsScroll.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+              const target = Math.min(awardsScroll.scrollLeft + itemWidth, maxScroll);
+              awardsScroll.scrollTo({ left: target, behavior: 'smooth' });
+            }
+            setTimeout(() => {
+              awardsIsScrolling = false;
+            }, 800);
+          }
+        }, 2000);
+      }
+
+      function awardsStopAutoScroll() {
+        if (awardsScrollInterval) {
+          clearInterval(awardsScrollInterval);
+          awardsScrollInterval = null;
+        }
+      }
+
+      function awardsDetect() {
+        const cards = awardsScroll.querySelectorAll('.award-card-scroll');
+        // 内容溢出时启用滚动（卡片过多或页面宽度不足以显示完整一行），否则居中展示且不显示按钮
+        const hasOverflow = cards.length > 0 && awardsScroll.scrollWidth > awardsScroll.clientWidth + 1;
         if (awardsContainer) {
-          awardsContainer.classList.add('has-many');
+          awardsContainer.classList.toggle('has-many', hasOverflow);
         }
 
-        let awardsScrollInterval;
-        let awardsIsScrolling = false;
-
-        const getAwardWidth = () => {
-          if (cards.length > 0) {
-            return cards[0].offsetWidth + 32;
-          }
-          return 400;
-        };
-
-        awardsPrev.addEventListener('click', () => {
-          const itemWidth = getAwardWidth();
-          if (awardsScroll.scrollLeft < itemWidth) {
-            awardsScroll.scrollTo({
-              left: awardsScroll.scrollWidth - awardsScroll.clientWidth,
-              behavior: 'smooth'
+        if (hasOverflow) {
+          if (!awardsIsSetup) {
+            awardsIsSetup = true;
+            awardsPrev.addEventListener('click', () => {
+              const itemWidth = getAwardWidth();
+              // 向左滚动一页，边界处停住，能到第一张卡片最左侧，不回跳
+              const target = Math.max(awardsScroll.scrollLeft - itemWidth, 0);
+              awardsScroll.scrollTo({ left: target, behavior: 'smooth' });
             });
-          } else {
-            awardsScroll.scrollBy({
-              left: -itemWidth,
-              behavior: 'smooth'
-            });
-          }
-        });
 
-        awardsNext.addEventListener('click', () => {
-          const itemWidth = getAwardWidth();
-          const maxScroll = awardsScroll.scrollWidth - awardsScroll.clientWidth;
-          if (awardsScroll.scrollLeft >= maxScroll - 10) {
-            awardsScroll.scrollTo({
-              left: 0,
-              behavior: 'smooth'
-            });
-          } else {
-            awardsScroll.scrollBy({
-              left: itemWidth,
-              behavior: 'smooth'
-            });
-          }
-        });
-
-        function awardsStartAutoScroll() {
-          awardsScrollInterval = setInterval(() => {
-            if (!awardsIsScrolling) {
-              awardsIsScrolling = true;
+            awardsNext.addEventListener('click', () => {
               const itemWidth = getAwardWidth();
               const maxScroll = awardsScroll.scrollWidth - awardsScroll.clientWidth;
-              if (awardsScroll.scrollLeft >= maxScroll - 10) {
-                awardsScroll.scrollTo({
-                  left: 0,
-                  behavior: 'smooth'
-                });
-              } else {
-                awardsScroll.scrollBy({
-                  left: itemWidth,
-                  behavior: 'smooth'
-                });
-              }
-              setTimeout(() => {
-                awardsIsScrolling = false;
-              }, 800);
-            }
-          }, 2000);
-        }
+              // 向右滚动一页，边界处停住，能到最后一张卡片最右侧，不回跳
+              const target = Math.min(awardsScroll.scrollLeft + itemWidth, maxScroll);
+              awardsScroll.scrollTo({ left: target, behavior: 'smooth' });
+            });
 
-        function awardsStopAutoScroll() {
-          if (awardsScrollInterval) {
-            clearInterval(awardsScrollInterval);
-            awardsScrollInterval = null;
+            awardsScroll.addEventListener('mouseenter', awardsStopAutoScroll);
+            awardsScroll.addEventListener('mouseleave', awardsStartAutoScroll);
+            awardsPrev.addEventListener('mouseenter', awardsStopAutoScroll);
+            awardsNext.addEventListener('mouseenter', awardsStopAutoScroll);
+            awardsPrev.addEventListener('mouseleave', awardsStartAutoScroll);
+            awardsNext.addEventListener('mouseleave', awardsStartAutoScroll);
           }
+          awardsStartAutoScroll();
+        } else {
+          awardsStopAutoScroll();
         }
-
-        awardsStartAutoScroll();
-
-        awardsScroll.addEventListener('mouseenter', awardsStopAutoScroll);
-        awardsScroll.addEventListener('mouseleave', awardsStartAutoScroll);
-        awardsPrev.addEventListener('mouseenter', awardsStopAutoScroll);
-        awardsNext.addEventListener('mouseenter', awardsStopAutoScroll);
-        awardsPrev.addEventListener('mouseleave', awardsStartAutoScroll);
-        awardsNext.addEventListener('mouseleave', awardsStartAutoScroll);
       }
+
+      setTimeout(awardsDetect, 100);
+      window.addEventListener('resize', awardsDetect);
     }
 
-    // 通用卡片滚动：papers / intellectual / certs 复用
+    // 通用卡片滚动：papers / intellectual / certs / skills 复用
     function initCardScroll(gridSelector, prevSelector, nextSelector, containerSelector, cardSelector) {
       const scrollGrid = document.querySelector(gridSelector);
       const prevBtn = document.getElementById(prevSelector);
       const nextBtn = document.getElementById(nextSelector);
       if (!scrollGrid || !prevBtn || !nextBtn) return;
+      const container = scrollGrid.closest(containerSelector);
 
-      const cards = scrollGrid.querySelectorAll(cardSelector);
-      if (cards.length > 3) {
-        const container = scrollGrid.closest(containerSelector);
-        if (container) container.classList.add('has-many');
+      let scrollInterval;
+      let isScrolling = false;
+      let isSetup = false;
 
-        let scrollInterval;
-        let isScrolling = false;
+      const getItemWidth = () => {
+        const cards = scrollGrid.querySelectorAll(cardSelector);
+        if (cards.length > 0) {
+          const gap = parseFloat(getComputedStyle(scrollGrid).columnGap) || 0;
+          return cards[0].offsetWidth + gap;
+        }
+        return 400;
+      };
 
-        const getItemWidth = () => {
-          if (cards.length > 0) return cards[0].offsetWidth + 32;
-          return 400;
-        };
-
-        prevBtn.addEventListener('click', () => {
-          const itemWidth = getItemWidth();
-          if (scrollGrid.scrollLeft < itemWidth) {
-            scrollGrid.scrollTo({ left: scrollGrid.scrollWidth - scrollGrid.clientWidth, behavior: 'smooth' });
-          } else {
-            scrollGrid.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+      function startAutoScroll() {
+        if (scrollInterval) return;
+        scrollInterval = setInterval(() => {
+          if (!isScrolling) {
+            isScrolling = true;
+            const itemWidth = getItemWidth();
+            const maxScroll = scrollGrid.scrollWidth - scrollGrid.clientWidth;
+            // 到达末尾后回到第一张卡片重新自动滚动；否则向前滚动一页
+            if (scrollGrid.scrollLeft >= maxScroll - 1) {
+              scrollGrid.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+              const target = Math.min(scrollGrid.scrollLeft + itemWidth, maxScroll);
+              scrollGrid.scrollTo({ left: target, behavior: 'smooth' });
+            }
+            setTimeout(() => { isScrolling = false; }, 800);
           }
-        });
+        }, 2000);
+      }
 
-        nextBtn.addEventListener('click', () => {
-          const itemWidth = getItemWidth();
-          const maxScroll = scrollGrid.scrollWidth - scrollGrid.clientWidth;
-          if (scrollGrid.scrollLeft >= maxScroll - 10) {
-            scrollGrid.scrollTo({ left: 0, behavior: 'smooth' });
-          } else {
-            scrollGrid.scrollBy({ left: itemWidth, behavior: 'smooth' });
-          }
-        });
+      function stopAutoScroll() {
+        if (scrollInterval) { clearInterval(scrollInterval); scrollInterval = null; }
+      }
 
-        function startAutoScroll() {
-          scrollInterval = setInterval(() => {
-            if (!isScrolling) {
-              isScrolling = true;
+      function detect() {
+        // 内容溢出时启用滚动（卡片过多或页面宽度不足以显示完整一行），否则居中展示且不显示按钮
+        const hasOverflow = scrollGrid.scrollWidth > scrollGrid.clientWidth + 1;
+        if (container) container.classList.toggle('has-many', hasOverflow);
+
+        if (hasOverflow) {
+          if (!isSetup) {
+            isSetup = true;
+            prevBtn.addEventListener('click', () => {
+              const itemWidth = getItemWidth();
+              // 向左滚动一页，边界处停住，能到第一张卡片最左侧，不回跳
+              const target = Math.max(scrollGrid.scrollLeft - itemWidth, 0);
+              scrollGrid.scrollTo({ left: target, behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
               const itemWidth = getItemWidth();
               const maxScroll = scrollGrid.scrollWidth - scrollGrid.clientWidth;
-              if (scrollGrid.scrollLeft >= maxScroll - 10) {
-                scrollGrid.scrollTo({ left: 0, behavior: 'smooth' });
-              } else {
-                scrollGrid.scrollBy({ left: itemWidth, behavior: 'smooth' });
-              }
-              setTimeout(() => { isScrolling = false; }, 800);
-            }
-          }, 2000);
-        }
+              // 向右滚动一页，边界处停住，能到最后一张卡片最右侧，不回跳
+              const target = Math.min(scrollGrid.scrollLeft + itemWidth, maxScroll);
+              scrollGrid.scrollTo({ left: target, behavior: 'smooth' });
+            });
 
-        function stopAutoScroll() {
-          if (scrollInterval) { clearInterval(scrollInterval); scrollInterval = null; }
+            scrollGrid.addEventListener('mouseenter', stopAutoScroll);
+            scrollGrid.addEventListener('mouseleave', startAutoScroll);
+            prevBtn.addEventListener('mouseenter', stopAutoScroll);
+            nextBtn.addEventListener('mouseenter', stopAutoScroll);
+            prevBtn.addEventListener('mouseleave', startAutoScroll);
+            nextBtn.addEventListener('mouseleave', startAutoScroll);
+          }
+          startAutoScroll();
+        } else {
+          stopAutoScroll();
         }
-
-        startAutoScroll();
-        scrollGrid.addEventListener('mouseenter', stopAutoScroll);
-        scrollGrid.addEventListener('mouseleave', startAutoScroll);
-        prevBtn.addEventListener('mouseenter', stopAutoScroll);
-        nextBtn.addEventListener('mouseenter', stopAutoScroll);
-        prevBtn.addEventListener('mouseleave', startAutoScroll);
-        nextBtn.addEventListener('mouseleave', startAutoScroll);
       }
+
+      // 延时确保容器尺寸已计算完成；resize 时重新检测（如切换到移动端预览）
+      setTimeout(detect, 100);
+      window.addEventListener('resize', detect);
     }
 
     initCardScroll('.papers-grid', 'papers-prev', 'papers-next', '.papers-scroll-container', '.paper-card');
     initCardScroll('.intellectual-grid', 'intellectual-prev', 'intellectual-next', '.intellectual-scroll-container', '.intellectual-card');
     initCardScroll('.cert-grid', 'cert-prev', 'cert-next', '.cert-scroll-container', '.cert-card');
+    initCardScroll('.skills-grid', 'skills-prev', 'skills-next', '.skills-scroll-container', '.skill-card');
 
     document.querySelectorAll('.intellectual-link').forEach(link => {
       link.addEventListener('click', (e) => {

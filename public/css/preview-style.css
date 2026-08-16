@@ -1258,13 +1258,44 @@ nav a:hover::after {
     margin-bottom: 0;
 }
 
+.skills-scroll-container {
+    position: relative;
+    max-width: 1080px;
+    margin: 2rem auto 0;
+}
+
+.skills-scroll-track {
+    overflow: hidden;
+    width: 100%;
+}
+
 .skills-grid {
     display: flex;
-    flex-wrap: wrap;
     gap: 1.5rem;
     justify-content: center;
-    max-width: 960px;
-    margin: 0 auto;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0.5rem 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.skills-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.skills-scroll-container.has-many .skills-grid {
+    justify-content: flex-start;
+}
+
+#skills-prev,
+#skills-next {
+    display: none;
+}
+
+.skills-scroll-container.has-many #skills-prev,
+.skills-scroll-container.has-many #skills-next {
+    display: flex;
 }
 
 .skill-card {
@@ -1275,11 +1306,11 @@ nav a:hover::after {
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
-    aspect-ratio: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 140px;
+    width: 160px;
+    height: 160px;
     flex-shrink: 0;
     box-sizing: border-box;
 }
@@ -1291,8 +1322,8 @@ nav a:hover::after {
 }
 
 .skill-card .icon {
-    width: 50px;
-    height: 50px;
+    width: 64px;
+    height: 64px;
     margin: 0 auto 0.8rem;
     border-radius: 10px;
     overflow: hidden;
@@ -1301,7 +1332,7 @@ nav a:hover::after {
 .skill-card .icon img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .skill-card h3 {
@@ -1641,7 +1672,7 @@ nav a:hover::after {
 
 .paper-card {
     flex-shrink: 0;
-    width: calc(33.333% - 1.334rem);
+    width: 350px;
     min-width: 0;
     background: var(--bg-card);
     border-radius: 20px;
@@ -1810,7 +1841,7 @@ nav a:hover::after {
 
 .intellectual-card {
     flex-shrink: 0;
-    width: calc(33.333% - 1.334rem);
+    width: 350px;
     min-width: 0;
     background: var(--bg-card);
     border-radius: 20px;
@@ -1978,7 +2009,7 @@ nav a:hover::after {
 
 .award-card-scroll {
     flex-shrink: 0;
-    width: calc(33.33% - 1.33rem);
+    width: 350px;
     background: var(--bg-card);
     border-radius: 20px;
     overflow: hidden;
@@ -2029,7 +2060,7 @@ nav a:hover::after {
 
 .cert-card {
     flex-shrink: 0;
-    width: calc(33.33% - 1.33rem);
+    width: 350px;
     background: var(--bg-card);
     border-radius: 20px;
     overflow: hidden;
@@ -2331,17 +2362,6 @@ footer .social a:hover {
     .about-content {
         grid-template-columns: 1fr;
     }
-
-    .skills-grid {
-        max-width: 400px;
-    }
-
-    .papers-grid .paper-card,
-    .intellectual-grid .intellectual-card,
-    .cert-grid .cert-card,
-    .award-card-scroll {
-        width: calc(50% - 1rem);
-    }
 }
 
 @media (max-width: 768px) {
@@ -2374,19 +2394,8 @@ footer .social a:hover {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .papers-grid .paper-card,
-    .intellectual-grid .intellectual-card,
-    .cert-grid .cert-card,
-    .award-card-scroll {
-        width: 100%;
-    }
-
     .awards-grid {
         grid-template-columns: 1fr;
-    }
-
-    .skills-grid {
-        max-width: 300px;
     }
 
     .timeline-body {
@@ -2549,20 +2558,96 @@ footer .social a:hover {
         padding: 2rem 0.8rem;
     }
 
+    .skills-scroll-container {
+        max-width: 784px;
+    }
+
     .skills-grid {
         gap: 0.8rem;
-        max-width: 260px;
     }
 
     .skill-card {
         padding: 0.8rem;
         font-size: 0.8rem;
-        width: 100px;
+        width: 120px;
+        height: 120px;
     }
 
     .skill-card img {
-        width: 32px;
-        height: 32px;
+        width: 48px;
+        height: 48px;
+    }
+
+    /* 移动端：专业技能、作品集、学术论文、知识产权、资格证书、荣誉奖项不再横向滚动，
+       改为像教育背景一样向下依次展示 */
+    .skills-scroll-track,
+    .portfolio-scroll-track,
+    .awards-scroll-track {
+        overflow: visible;
+    }
+
+    .skills-scroll-container {
+        max-width: 100%;
+    }
+
+    .skills-grid,
+    .portfolio-images,
+    .papers-grid,
+    .intellectual-grid,
+    .awards-scroll-inner,
+    .cert-grid {
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow-x: visible;
+    }
+
+    /* 覆盖 has-many 的左对齐，移动端始终居中 */
+    .skills-scroll-container.has-many .skills-grid,
+    .papers-scroll-container.has-many .papers-grid,
+    .intellectual-scroll-container.has-many .intellectual-grid,
+    .awards-scroll-container.has-many .awards-scroll-inner,
+    .cert-scroll-container.has-many .cert-grid {
+        justify-content: center;
+    }
+
+    /* 专业技能卡片：一行2个，保持正方形 */
+    .skills-grid .skill-card {
+        flex: 0 0 calc(50% - 0.4rem);
+        width: auto;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+
+    /* 其余卡片：一行1个，宽度与教育背景卡片一致（铺满） */
+    .portfolio-image-item,
+    .paper-card,
+    .intellectual-card,
+    .award-card-scroll,
+    .cert-card {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+
+    .portfolio-image-item {
+        height: auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    .portfolio-image-item img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    /* 移动端隐藏上一页/下一页按钮 */
+    #skills-prev, #skills-next,
+    #portfolio-prev, #portfolio-next,
+    #papers-prev, #papers-next,
+    #intellectual-prev, #intellectual-next,
+    #awards-prev, #awards-next,
+    #cert-prev, #cert-next {
+        display: none !important;
     }
 
     .skill-card h3 {
@@ -2638,10 +2723,6 @@ footer .social a:hover {
         padding: 0.8rem;
     }
 
-    .cert-grid .cert-card {
-        width: calc(50% - 0.3rem);
-    }
-
     .cert-item h4 {
         font-size: 0.8rem;
     }
@@ -2652,12 +2733,6 @@ footer .social a:hover {
 
     #papers {
         padding: 2rem 0.8rem;
-    }
-
-    .papers-grid .paper-card,
-    .intellectual-grid .intellectual-card,
-    .award-card-scroll {
-        width: 100%;
     }
 
     .paper-card {
@@ -2736,12 +2811,18 @@ footer .social a:hover {
     }
 
     .footer-qrcodes {
-        gap: 1rem;
+        width: 100%;
+        justify-content: center;
+        gap: 0.8rem;
+    }
+
+    .qrcode-item {
+        flex: 0 0 auto;
     }
 
     .qrcode-item img {
-        width: 120px;
-        height: 120px;
+        width: 96px;
+        height: 96px;
     }
 
     .qrcode-item span {

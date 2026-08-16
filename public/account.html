@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/images/logo.svg">
   <title>账户中心 - 志在瑶远</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
@@ -277,7 +278,7 @@
 
     .record-table-header {
       display: grid;
-      grid-template-columns: 1.2fr 1.5fr 1fr 0.6fr 1fr;
+      grid-template-columns: 1.2fr 1.5fr 1fr 0.6fr 140px;
       gap: 16px;
       padding: 14px 20px;
       background: #f8fafc;
@@ -287,9 +288,28 @@
       border-bottom: 1px solid #e2e8f0;
     }
 
+    .record-table-header > div:nth-child(1),
+    .record-table-row > div:nth-child(1) {
+      text-align: left;
+    }
+
+    .record-table-header > div:nth-child(2),
+    .record-table-row > div:nth-child(2),
+    .record-table-header > div:nth-child(3),
+    .record-table-row > div:nth-child(3),
+    .record-table-header > div:nth-child(4),
+    .record-table-row > div:nth-child(4) {
+      text-align: center;
+    }
+
+    .record-table-header > div:nth-child(5),
+    .record-table-row > div:nth-child(5) {
+      text-align: right;
+    }
+
     .record-table-row {
       display: grid;
-      grid-template-columns: 1.2fr 1.5fr 1fr 0.6fr 1fr;
+      grid-template-columns: 1.2fr 1.5fr 1fr 0.6fr 140px;
       gap: 16px;
       padding: 16px 20px;
       border-bottom: 1px solid #f1f5f9;
@@ -340,6 +360,8 @@
     .record-actions {
       display: flex;
       gap: 8px;
+      justify-content: flex-end;
+      white-space: nowrap;
     }
 
     .action-btn {
@@ -3997,7 +4019,6 @@
               <div class="record-time">${formatDate(page.createdAt)}</div>
               <div><span class="record-status">已生成</span></div>
               <div class="record-actions">
-                <a href="/${page.subdomain}/${page.ownerId}" target="_blank" class="action-btn action-btn-primary">预览</a>
                 <a href="editor.html?edit=${page.pageId}" class="action-btn action-btn-secondary">修改</a>
                 <button class="action-btn action-btn-danger" onclick="openDeleteModal('${page.pageId}')">删除</button>
               </div>

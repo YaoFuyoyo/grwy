@@ -11,6 +11,6 @@
     { "source": "/editor", "destination": "/editor.html" },
     { "source": "/examples", "destination": "/examples.html" },
     { "source": "/account", "destination": "/account.html" },
-    { "source": "/:subdomain/:pageId", "destination": "/api/pages?action=get" }
+    { "source": "/:subdomain/:userId", "destination": "/api/pages?action=get" }
   ]
 }
