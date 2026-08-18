@@ -2170,6 +2170,18 @@
       input.value = input.value.replace(/[^a-zA-Z0-9]/g, '')
     }
 
+    async function uploadToServer(file) {
+      const base64 = await fileToBase64(file)
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileData: base64, filename: file.name, fileType: file.type })
+      })
+      const data = await res.json()
+      if (!data.ok) throw new Error(data.message || '上传失败')
+      return data.url
+    }
+
     async function handleResumeUpload(input) {
       const file = input.files[0]
       if (file) {
@@ -2178,13 +2190,20 @@
           input.value = ''
           return
         }
-        const base64 = await fileToBase64(file)
-        profileData.resumeUrl = base64
-        profileData.resumeFilename = file.name
-        document.getElementById('resume-upload-container').style.display = 'none'
-        const fileInfo = document.getElementById('resume-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.resume-filename').textContent = file.name
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          profileData.resumeUrl = url
+          profileData.resumeFilename = file.name
+          document.getElementById('resume-upload-container').style.display = 'none'
+          const fileInfo = document.getElementById('resume-file-info')
+          fileInfo.style.display = 'flex'
+          fileInfo.querySelector('.resume-filename').textContent = file.name
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -2199,15 +2218,22 @@
     async function handleIdPhotoUpload(input) {
       const file = input.files[0]
       if (file) {
-        const base64 = await fileToBase64(file)
-        profileData.idPhoto = base64
-        profileData.photoUrl = base64
-        profileData.photoFilename = file.name.replace(/\.[^/.]+$/, '')
-        document.getElementById('id-photo-upload-container').style.display = 'none'
-        const preview = document.getElementById('id-photo-image-preview')
-        preview.style.display = 'flex'
-        preview.querySelector('.file-chip-thumb').src = base64
-        preview.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          profileData.idPhoto = url
+          profileData.photoUrl = url
+          profileData.photoFilename = file.name.replace(/\.[^/.]+$/, '')
+          document.getElementById('id-photo-upload-container').style.display = 'none'
+          const preview = document.getElementById('id-photo-image-preview')
+          preview.style.display = 'flex'
+          preview.querySelector('.file-chip-thumb').src = url
+          preview.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -2256,49 +2282,70 @@
 
     async function handleLifePhotoMediumUpload(input) {
       if (input.files && input.files.length > 0) {
-        if (!profileData.lifePhotoMedium) profileData.lifePhotoMedium = []
-        for (const file of input.files) {
-          const base64 = await fileToBase64(file)
-          profileData.lifePhotoMedium.push({ url: base64, name: file.name.replace(/\.[^/.]+$/, '') })
+        showLoading('上传中...')
+        try {
+          if (!profileData.lifePhotoMedium) profileData.lifePhotoMedium = []
+          for (const file of input.files) {
+            const url = await uploadToServer(file)
+            profileData.lifePhotoMedium.push({ url, name: file.name.replace(/\.[^/.]+$/, '') })
+          }
+          const MAX = 10
+          if (profileData.lifePhotoMedium.length > MAX) {
+            showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+            profileData.lifePhotoMedium = profileData.lifePhotoMedium.slice(0, MAX)
+          }
+          renderLifePhotoChips('medium')
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+          input.value = ''
         }
-        const MAX = 10
-        if (profileData.lifePhotoMedium.length > MAX) {
-          showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
-          profileData.lifePhotoMedium = profileData.lifePhotoMedium.slice(0, MAX)
-        }
-        renderLifePhotoChips('medium')
-        input.value = ''
       }
     }
 
     async function handleLifePhotoLargeUpload(input) {
       if (input.files && input.files.length > 0) {
-        if (!profileData.lifePhotoLarge) profileData.lifePhotoLarge = []
-        for (const file of input.files) {
-          const base64 = await fileToBase64(file)
-          profileData.lifePhotoLarge.push({ url: base64, name: file.name.replace(/\.[^/.]+$/, '') })
+        showLoading('上传中...')
+        try {
+          if (!profileData.lifePhotoLarge) profileData.lifePhotoLarge = []
+          for (const file of input.files) {
+            const url = await uploadToServer(file)
+            profileData.lifePhotoLarge.push({ url, name: file.name.replace(/\.[^/.]+$/, '') })
+          }
+          const MAX = 10
+          if (profileData.lifePhotoLarge.length > MAX) {
+            showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+            profileData.lifePhotoLarge = profileData.lifePhotoLarge.slice(0, MAX)
+          }
+          renderLifePhotoChips('large')
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+          input.value = ''
         }
-        const MAX = 10
-        if (profileData.lifePhotoLarge.length > MAX) {
-          showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
-          profileData.lifePhotoLarge = profileData.lifePhotoLarge.slice(0, MAX)
-        }
-        renderLifePhotoChips('large')
-        input.value = ''
       }
     }
 
     async function handleAvatarUpload(input) {
       const file = input.files[0]
       if (file) {
-        const base64 = await fileToBase64(file)
-        profileData.avatar = base64
-        profileData.avatarFilename = file.name.replace(/\.[^/.]+$/, '')
-        document.getElementById('avatar-upload-container').style.display = 'none'
-        const preview = document.getElementById('avatar-image-preview')
-        preview.style.display = 'flex'
-        preview.querySelector('.file-chip-thumb').src = base64
-        preview.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          profileData.avatar = url
+          profileData.avatarFilename = file.name.replace(/\.[^/.]+$/, '')
+          document.getElementById('avatar-upload-container').style.display = 'none'
+          const preview = document.getElementById('avatar-image-preview')
+          preview.style.display = 'flex'
+          preview.querySelector('.file-chip-thumb').src = url
+          preview.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -2313,14 +2360,28 @@
     async function handleFileUpload(input, field, prefix) {
       const file = input.files[0]
       if (file) {
-        const base64 = await fileToBase64(file)
-        profileData[field] = base64
-        profileData[field + 'Name'] = file.name.replace(/\.[^/.]+$/, '')
-        document.getElementById(`${prefix}-upload-container`).style.display = 'none'
-        const fileInfo = document.getElementById(`${prefix}-file-info`)
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.file-chip-thumb').src = base64
-        fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+        showLoading('上传中...')
+        try {
+          const base64 = await fileToBase64(file)
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fileData: base64, filename: file.name, fileType: file.type })
+          })
+          const data = await res.json()
+          if (!data.ok) throw new Error(data.message || '上传失败')
+          profileData[field] = data.url
+          profileData[field + 'Name'] = file.name.replace(/\.[^/.]+$/, '')
+          document.getElementById(`${prefix}-upload-container`).style.display = 'none'
+          const fileInfo = document.getElementById(`${prefix}-file-info`)
+          fileInfo.style.display = 'flex'
+          fileInfo.querySelector('.file-chip-thumb').src = data.url
+          fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -2350,25 +2411,32 @@
 
     async function handlePortfolioUpload(input) {
       if (input.files && input.files.length > 0) {
-        const MAX = 20
-        const files = Array.from(input.files)
-        const remaining = MAX - profileData.portfolioItems.length
-        if (remaining <= 0) {
+        showLoading('上传中...')
+        try {
+          const MAX = 20
+          const files = Array.from(input.files)
+          const remaining = MAX - profileData.portfolioItems.length
+          if (remaining <= 0) {
+            input.value = ''
+            return
+          }
+          const toAdd = files.slice(0, remaining)
+          const truncated = files.length > remaining
+          for (const file of toAdd) {
+            const url = await uploadToServer(file)
+            const filename = file.name.replace(/\.[^/.]+$/, '')
+            profileData.portfolioItems.push({ url, name: filename })
+          }
+          renderPortfolioGrid()
+          if (truncated) {
+            showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+          }
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
           input.value = ''
-          return
         }
-        const toAdd = files.slice(0, remaining)
-        const truncated = files.length > remaining
-        for (const file of toAdd) {
-          const base64 = await fileToBase64(file)
-          const filename = file.name.replace(/\.[^/.]+$/, '')
-          profileData.portfolioItems.push({ url: base64, name: filename })
-        }
-        renderPortfolioGrid()
-        if (truncated) {
-          showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
-        }
-        input.value = ''
       }
     }
 
@@ -2475,17 +2543,24 @@
     async function handleSkillIconUpload(input) {
       const file = input.files[0]
       if (file) {
-        const base64 = await fileToBase64(file)
-        const group = input.closest('.skill-group')
-        const uploadContainer = group.querySelector('.skill-icon-upload-container')
-        const fileInfo = group.querySelector('.skill-icon-file-info')
-        
-        group.iconBase64 = base64
-        group.iconName = file.name.replace(/\.[^/.]+$/, '')
-        uploadContainer.style.display = 'none'
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.file-chip-thumb').src = base64
-        fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          const group = input.closest('.skill-group')
+          const uploadContainer = group.querySelector('.skill-icon-upload-container')
+          const fileInfo = group.querySelector('.skill-icon-file-info')
+
+          group.iconBase64 = url
+          group.iconName = file.name.replace(/\.[^/.]+$/, '')
+          uploadContainer.style.display = 'none'
+          fileInfo.style.display = 'flex'
+          fileInfo.querySelector('.file-chip-thumb').src = url
+          fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -2843,35 +2918,42 @@
       return async function(input) {
         const files = input.files
         if (files && files.length > 0) {
-          const base64List = []
-          const nameList = []
-          for (const file of files) {
-            base64List.push(await fileToBase64(file))
-            nameList.push(file.name)
+          showLoading('上传中...')
+          try {
+            const urlList = []
+            const nameList = []
+            for (const file of files) {
+              urlList.push(await uploadToServer(file))
+              nameList.push(file.name)
+            }
+            const countSuffix = (input.id.match(/\d+$/) || [''])[0]
+            const chipsId = chipsIdPrefix + countSuffix
+            const chipsEl = document.getElementById(chipsId)
+            const group = input.closest('.work-group')
+            // 追加到已有数组（支持多次上传累积，而非替换）
+            const existing = (group && Array.isArray(group[dataKey])) ? group[dataKey] : []
+            const existingNames = (group && Array.isArray(group[fileNameKey])) ? group[fileNameKey] : []
+            let merged = existing.concat(urlList)
+            let mergedNames = existingNames.concat(nameList)
+            // 限制最多10张
+            const MAX = 10
+            if (merged.length > MAX) {
+              showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+              merged = merged.slice(0, MAX)
+              mergedNames = mergedNames.slice(0, MAX)
+            }
+            if (group) {
+              group[dataKey] = merged
+              group[fileNameKey] = mergedNames
+            }
+            renderFileChips(chipsEl, group, dataKey, fileNameKey)
+          } catch (err) {
+            showToast('上传失败：' + err.message)
+          } finally {
+            hideLoading()
+            input.value = '' // 重置input，以便能再次触发change事件追加上传
           }
-          const countSuffix = (input.id.match(/\d+$/) || [''])[0]
-          const chipsId = chipsIdPrefix + countSuffix
-          const chipsEl = document.getElementById(chipsId)
-          const group = input.closest('.work-group')
-          // 追加到已有数组（支持多次上传累积，而非替换）
-          const existing = (group && Array.isArray(group[dataKey])) ? group[dataKey] : []
-          const existingNames = (group && Array.isArray(group[fileNameKey])) ? group[fileNameKey] : []
-          let merged = existing.concat(base64List)
-          let mergedNames = existingNames.concat(nameList)
-          // 限制最多10张
-          const MAX = 10
-          if (merged.length > MAX) {
-            showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
-            merged = merged.slice(0, MAX)
-            mergedNames = mergedNames.slice(0, MAX)
-          }
-          if (group) {
-            group[dataKey] = merged
-            group[fileNameKey] = mergedNames
-          }
-          renderFileChips(chipsEl, group, dataKey, fileNameKey)
         }
-        input.value = '' // 重置input，以便能再次触发change事件追加上传
       }
     }
 
@@ -2883,32 +2965,39 @@
       return async function(input) {
         const files = input.files
         if (files && files.length > 0) {
-          const count = files.length
-          const file = files[0]
-          const base64 = await fileToBase64(file)
-          const filename = count > 1 ? `${count}个文件` : file.name
-          // 从 input.id 中提取数字后缀，避免 replace 导致双重前缀
-          const countSuffix = (input.id.match(/\d+$/) || [''])[0]
-          const uploadId = uploadIdPrefix + countSuffix
-          const fileInfoId = fileInfoIdPrefix + countSuffix
-          const uploadEl = document.getElementById(uploadId)
-          if (uploadEl) uploadEl.style.display = 'none'
-          const fileInfo = document.getElementById(fileInfoId)
-          if (fileInfo) {
-            fileInfo.style.display = 'flex'
-            // 图片类上传（含缩略图元素）才设置 src，论文附件为 PDF/DOC 无缩略图
-            const thumb = fileInfo.querySelector('.file-chip-thumb')
-            if (thumb) thumb.src = base64
-            const fn = fileInfo.querySelector('.resume-filename')
-            if (fn) fn.textContent = filename.replace(/\.[^/.]+$/, '')
-            // 论文附件：根据扩展名显示 PDF/Word 图标
-            showFileTypeIcon(fileInfo, filename)
-          }
-          // 存储到最近 .work-group 的 DOM 属性上，供 collectProfileData 读取
-          const group = input.closest('.work-group')
-          if (group && dataKey) {
-            group['_' + dataKey] = base64
-            group['_' + fileNameKey] = filename
+          showLoading('上传中...')
+          try {
+            const count = files.length
+            const file = files[0]
+            const url = await uploadToServer(file)
+            const filename = count > 1 ? `${count}个文件` : file.name
+            // 从 input.id 中提取数字后缀，避免 replace 导致双重前缀
+            const countSuffix = (input.id.match(/\d+$/) || [''])[0]
+            const uploadId = uploadIdPrefix + countSuffix
+            const fileInfoId = fileInfoIdPrefix + countSuffix
+            const uploadEl = document.getElementById(uploadId)
+            if (uploadEl) uploadEl.style.display = 'none'
+            const fileInfo = document.getElementById(fileInfoId)
+            if (fileInfo) {
+              fileInfo.style.display = 'flex'
+              // 图片类上传（含缩略图元素）才设置 src，论文附件为 PDF/DOC 无缩略图
+              const thumb = fileInfo.querySelector('.file-chip-thumb')
+              if (thumb) thumb.src = url
+              const fn = fileInfo.querySelector('.resume-filename')
+              if (fn) fn.textContent = filename.replace(/\.[^/.]+$/, '')
+              // 论文附件：根据扩展名显示 PDF/Word 图标
+              showFileTypeIcon(fileInfo, filename)
+            }
+            // 存储到最近 .work-group 的 DOM 属性上，供 collectProfileData 读取
+            const group = input.closest('.work-group')
+            if (group && dataKey) {
+              group['_' + dataKey] = url
+              group['_' + fileNameKey] = filename
+            }
+          } catch (err) {
+            showToast('上传失败：' + err.message)
+          } finally {
+            hideLoading()
           }
         }
       }

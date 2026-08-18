@@ -1352,6 +1352,44 @@
     textarea::placeholder {
       color: var(--text-muted);
     }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #eee;
+      border-top-color: var(--color-primary);
+      border-radius: 50%;
+      animation: spinner 1s linear infinite;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    @keyframes spinner {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -1954,6 +1992,20 @@
 
     function getToken() {
       return localStorage.getItem('token') || ''
+    }
+
+    function showLoading(text = '加载中...') {
+      const el = document.getElementById('pageLoading')
+      if (el) {
+        const msg = el.querySelector('.loading-text')
+        if (msg) msg.textContent = text
+        el.style.display = 'flex'
+      }
+    }
+
+    function hideLoading() {
+      const el = document.getElementById('pageLoading')
+      if (el) el.style.display = 'none'
     }
 
     function showToast(message, type = 'success') {
@@ -2917,59 +2969,85 @@
       }
     }
 
+    async function uploadToServer(file) {
+      const base64 = await fileToBase64(file)
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileData: base64, filename: file.name, fileType: file.type })
+      })
+      const data = await res.json()
+      if (!data.ok) throw new Error(data.message || '上传失败')
+      return data.url
+    }
+
     async function handleImageUpload(input, field) {
       if (input.files && input.files[0]) {
         const file = input.files[0]
-        const base64 = await fileToBase64(file)
-        profileData[field] = base64
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          profileData[field] = url
 
-        if (field === 'avatar') {
-          // 切换上传按钮与文件信息显示状态（不再使用不存在的 avatar-preview 元素）
-          const avatarUploadContainer = document.getElementById('avatar-upload-container')
-          const avatarFileInfo = document.getElementById('avatar-file-info')
-          if (avatarUploadContainer) avatarUploadContainer.style.display = 'none'
-          if (avatarFileInfo) {
-            avatarFileInfo.style.display = 'flex'
-            const fn = avatarFileInfo.querySelector('.resume-filename')
-            if (fn) fn.textContent = file.name || '已上传头像'
+          if (field === 'avatar') {
+            // 切换上传按钮与文件信息显示状态（不再使用不存在的 avatar-preview 元素）
+            const avatarUploadContainer = document.getElementById('avatar-upload-container')
+            const avatarFileInfo = document.getElementById('avatar-file-info')
+            if (avatarUploadContainer) avatarUploadContainer.style.display = 'none'
+            if (avatarFileInfo) {
+              avatarFileInfo.style.display = 'flex'
+              const fn = avatarFileInfo.querySelector('.resume-filename')
+              if (fn) fn.textContent = file.name || '已上传头像'
+            }
           }
-        }
 
-        refreshPreview()
+          refreshPreview()
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
     async function handlePortfolioUpload(input) {
       if (input.files && input.files.length > 0) {
-        const MAX = 20
-        const files = Array.from(input.files)
-        const remaining = MAX - profileData.portfolioItems.length
-        if (remaining <= 0) {
-          input.value = ''
-          return
-        }
-        const toAdd = files.slice(0, remaining)
-        const truncated = files.length > remaining
-        for (const file of toAdd) {
-          const base64 = await fileToBase64(file)
-          const filename = file.name.replace(/\.[^/.]+$/, '')
-          profileData.portfolioItems.push({ url: base64, name: filename })
-        }
-        renderPortfolioGrid()
-        const fakeEvent = {
-          target: {
-            id: 'file-portfolio',
-            getAttribute: function(attr) {
-              if (attr === 'data-module') return 'portfolio'
-              return null
+        showLoading('上传中...')
+        try {
+          const MAX = 20
+          const files = Array.from(input.files)
+          const remaining = MAX - profileData.portfolioItems.length
+          if (remaining <= 0) {
+            input.value = ''
+            return
+          }
+          const toAdd = files.slice(0, remaining)
+          const truncated = files.length > remaining
+          for (const file of toAdd) {
+            const url = await uploadToServer(file)
+            const filename = file.name.replace(/\.[^/.]+$/, '')
+            profileData.portfolioItems.push({ url, name: filename })
+          }
+          renderPortfolioGrid()
+          const fakeEvent = {
+            target: {
+              id: 'file-portfolio',
+              getAttribute: function(attr) {
+                if (attr === 'data-module') return 'portfolio'
+                return null
+              }
             }
           }
+          refreshPreview(fakeEvent)
+          if (truncated) {
+            showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+          }
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+          input.value = ''
         }
-        refreshPreview(fakeEvent)
-        if (truncated) {
-          showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
-        }
-        input.value = ''
       }
     }
 
@@ -3029,11 +3107,18 @@
           showToast('仅支持PDF格式')
           return
         }
-        const base64 = await fileToBase64(file)
-        profileData.resumeUrl = base64
-        profileData.resumeFilename = file.name
-        showResumeFile(file.name)
-        refreshPreview()
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          profileData.resumeUrl = url
+          profileData.resumeFilename = file.name
+          showResumeFile(file.name)
+          refreshPreview()
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -3060,22 +3145,29 @@
           showToast('仅支持图片格式')
           return
         }
-        const base64 = await fileToBase64(file)
-        if (homeDisplay === 'id-photo') {
-          profileData.idPhoto = base64
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          if (homeDisplay === 'id-photo') {
+            profileData.idPhoto = url
+          }
+          profileData.photoUrl = url
+          profileData.photoFilename = file.name.replace(/\.[^/.]+$/, '')
+          showPhotoFile(file.name.replace(/\.[^/.]+$/, ''), url)
+          refreshPreview()
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
         }
-        profileData.photoUrl = base64
-        profileData.photoFilename = file.name.replace(/\.[^/.]+$/, '')
-        showPhotoFile(file.name.replace(/\.[^/.]+$/, ''), base64)
-        refreshPreview()
       }
     }
 
-    function showPhotoFile(filename, base64) {
+    function showPhotoFile(filename, url) {
       document.getElementById('photo-upload-container').style.display = 'none'
       const fileInfo = document.getElementById('photo-file-info')
       fileInfo.style.display = 'flex'
-      if (base64) fileInfo.querySelector('.file-chip-thumb').src = base64
+      if (url) fileInfo.querySelector('.file-chip-thumb').src = url
       fileInfo.querySelector('.resume-filename').textContent = filename
     }
 
@@ -3094,18 +3186,25 @@
     async function handleSkillIconUpload(input) {
       const file = input.files[0]
       if (file) {
-        const base64 = await fileToBase64(file)
-        const group = input.closest('.skill-group')
-        const uploadContainer = group.querySelector('.skill-icon-upload-container')
-        const fileInfo = group.querySelector('.skill-icon-file-info')
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          const group = input.closest('.skill-group')
+          const uploadContainer = group.querySelector('.skill-icon-upload-container')
+          const fileInfo = group.querySelector('.skill-icon-file-info')
 
-        group.iconBase64 = base64
-        group.iconName = file.name.replace(/\.[^/.]+$/, '')
-        uploadContainer.style.display = 'none'
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.file-chip-thumb').src = base64
-        fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
-        refreshPreview()
+          group.iconBase64 = url
+          group.iconName = file.name.replace(/\.[^/.]+$/, '')
+          uploadContainer.style.display = 'none'
+          fileInfo.style.display = 'flex'
+          fileInfo.querySelector('.file-chip-thumb').src = url
+          fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+          refreshPreview()
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -3126,15 +3225,22 @@
     async function handleAvatarUpload(input) {
       const file = input.files[0]
       if (file) {
-        const base64 = await fileToBase64(file)
-        profileData.avatar = base64
-        profileData.avatarFilename = file.name.replace(/\.[^/.]+$/, '')
-        document.getElementById('avatar-upload-container').style.display = 'none'
-        const fileInfo = document.getElementById('avatar-file-info')
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.file-chip-thumb').src = base64
-        fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
-        refreshPreview()
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          profileData.avatar = url
+          profileData.avatarFilename = file.name.replace(/\.[^/.]+$/, '')
+          document.getElementById('avatar-upload-container').style.display = 'none'
+          const fileInfo = document.getElementById('avatar-file-info')
+          fileInfo.style.display = 'flex'
+          fileInfo.querySelector('.file-chip-thumb').src = url
+          fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+          refreshPreview()
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -3149,15 +3255,22 @@
     async function handleFileUpload(input, field, prefix) {
       const file = input.files[0]
       if (file) {
-        const base64 = await fileToBase64(file)
-        profileData[field] = base64
-        profileData[field + 'Name'] = file.name.replace(/\.[^/.]+$/, '')
-        document.getElementById(`${prefix}-upload-container`).style.display = 'none'
-        const fileInfo = document.getElementById(`${prefix}-file-info`)
-        fileInfo.style.display = 'flex'
-        fileInfo.querySelector('.file-chip-thumb').src = base64
-        fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
-        refreshPreview()
+        showLoading('上传中...')
+        try {
+          const url = await uploadToServer(file)
+          profileData[field] = url
+          profileData[field + 'Name'] = file.name.replace(/\.[^/.]+$/, '')
+          document.getElementById(`${prefix}-upload-container`).style.display = 'none'
+          const fileInfo = document.getElementById(`${prefix}-file-info`)
+          fileInfo.style.display = 'flex'
+          fileInfo.querySelector('.file-chip-thumb').src = url
+          fileInfo.querySelector('.resume-filename').textContent = file.name.replace(/\.[^/.]+$/, '')
+          refreshPreview()
+        } catch (err) {
+          showToast('上传失败：' + err.message)
+        } finally {
+          hideLoading()
+        }
       }
     }
 
@@ -3192,33 +3305,40 @@
       return async function(input) {
         const files = input.files
         if (files && files.length > 0) {
-          const count = files.length
-          const file = files[0]
-          const base64 = await fileToBase64(file)
-          const filename = count > 1 ? `${count}个文件` : file.name
-          // 从 input.id 中提取数字后缀，避免 replace 导致双重前缀
-          const countSuffix = (input.id.match(/\d+$/) || [''])[0]
-          const uploadId = uploadIdPrefix + countSuffix
-          const fileInfoId = fileInfoIdPrefix + countSuffix
-          const uploadEl = document.getElementById(uploadId)
-          if (uploadEl) uploadEl.style.display = 'none'
-          const fileInfo = document.getElementById(fileInfoId)
-          if (fileInfo) {
-            fileInfo.style.display = 'flex'
-            // 图片类上传（含缩略图元素）才设置 src，论文附件为 PDF/DOC 无缩略图
-            const thumb = fileInfo.querySelector('.file-chip-thumb')
-            if (thumb) thumb.src = base64
-            const fn = fileInfo.querySelector('.resume-filename')
-            if (fn) fn.textContent = filename.replace(/\.[^/.]+$/, '')
-            // 论文附件：根据扩展名显示 PDF/Word 图标
-            showFileTypeIcon(fileInfo, filename)
+          showLoading('上传中...')
+          try {
+            const count = files.length
+            const file = files[0]
+            const url = await uploadToServer(file)
+            const filename = count > 1 ? `${count}个文件` : file.name
+            // 从 input.id 中提取数字后缀，避免 replace 导致双重前缀
+            const countSuffix = (input.id.match(/\d+$/) || [''])[0]
+            const uploadId = uploadIdPrefix + countSuffix
+            const fileInfoId = fileInfoIdPrefix + countSuffix
+            const uploadEl = document.getElementById(uploadId)
+            if (uploadEl) uploadEl.style.display = 'none'
+            const fileInfo = document.getElementById(fileInfoId)
+            if (fileInfo) {
+              fileInfo.style.display = 'flex'
+              // 图片类上传（含缩略图元素）才设置 src，论文附件为 PDF/DOC 无缩略图
+              const thumb = fileInfo.querySelector('.file-chip-thumb')
+              if (thumb) thumb.src = url
+              const fn = fileInfo.querySelector('.resume-filename')
+              if (fn) fn.textContent = filename.replace(/\.[^/.]+$/, '')
+              // 论文附件：根据扩展名显示 PDF/Word 图标
+              showFileTypeIcon(fileInfo, filename)
+            }
+            const group = input.closest('.work-group') || input.closest('.skill-group')
+            if (group && dataPropName) {
+              group[dataPropName] = url
+              group[dataPropName + 'Name'] = filename
+            }
+            refreshPreview()
+          } catch (err) {
+            showToast('上传失败：' + err.message)
+          } finally {
+            hideLoading()
           }
-          const group = input.closest('.work-group') || input.closest('.skill-group')
-          if (group && dataPropName) {
-            group[dataPropName] = base64
-            group[dataPropName + 'Name'] = filename
-          }
-          refreshPreview()
         }
       }
     }
@@ -3300,36 +3420,43 @@
       return async function(input) {
         const files = input.files
         if (files && files.length > 0) {
-          const base64List = []
-          const nameList = []
-          for (const file of files) {
-            base64List.push(await fileToBase64(file))
-            nameList.push(file.name)
+          showLoading('上传中...')
+          try {
+            const urlList = []
+            const nameList = []
+            for (const file of files) {
+              urlList.push(await uploadToServer(file))
+              nameList.push(file.name)
+            }
+            const countSuffix = (input.id.match(/\d+$/) || [''])[0]
+            const chipsId = chipsIdPrefix + countSuffix
+            const chipsEl = document.getElementById(chipsId)
+            const group = input.closest('.work-group')
+            // 追加到已有数组（支持多次上传累积，而非替换）
+            const existing = (group && Array.isArray(group[dataKey])) ? group[dataKey] : []
+            const existingNames = (group && Array.isArray(group[fileNameKey])) ? group[fileNameKey] : []
+            let merged = existing.concat(urlList)
+            let mergedNames = existingNames.concat(nameList)
+            // 限制最多10张
+            const MAX = 10
+            if (merged.length > MAX) {
+              showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
+              merged = merged.slice(0, MAX)
+              mergedNames = mergedNames.slice(0, MAX)
+            }
+            if (group) {
+              group[dataKey] = merged
+              group[fileNameKey] = mergedNames
+            }
+            renderFileChips(chipsEl, group, dataKey, fileNameKey)
+            refreshPreview()
+          } catch (err) {
+            showToast('上传失败：' + err.message)
+          } finally {
+            hideLoading()
+            input.value = '' // 重置input，以便能再次触发change事件追加上传
           }
-          const countSuffix = (input.id.match(/\d+$/) || [''])[0]
-          const chipsId = chipsIdPrefix + countSuffix
-          const chipsEl = document.getElementById(chipsId)
-          const group = input.closest('.work-group')
-          // 追加到已有数组（支持多次上传累积，而非替换）
-          const existing = (group && Array.isArray(group[dataKey])) ? group[dataKey] : []
-          const existingNames = (group && Array.isArray(group[fileNameKey])) ? group[fileNameKey] : []
-          let merged = existing.concat(base64List)
-          let mergedNames = existingNames.concat(nameList)
-          // 限制最多10张
-          const MAX = 10
-          if (merged.length > MAX) {
-            showToast(`最多上传${MAX}张图片，已保留前${MAX}张`)
-            merged = merged.slice(0, MAX)
-            mergedNames = mergedNames.slice(0, MAX)
-          }
-          if (group) {
-            group[dataKey] = merged
-            group[fileNameKey] = mergedNames
-          }
-          renderFileChips(chipsEl, group, dataKey, fileNameKey)
-          refreshPreview()
         }
-        input.value = '' // 重置input，以便能再次触发change事件追加上传
       }
     }
 
@@ -5661,5 +5788,11 @@
       }
     })
   </script>
+  <div class="loading-overlay" id="pageLoading" style="display:none">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <div class="loading-text">加载中...</div>
+    </div>
+  </div>
 </body>
 </html>
