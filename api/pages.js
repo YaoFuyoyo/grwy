@@ -166,7 +166,7 @@ function renderPage(pageData) {
           ${data.birthday ? `<div class="info-item"><span class="label">出生日期</span><span class="value">${data.birthday}</span></div>` : ''}
           ${data.phone ? `<div class="info-item"><span class="label">电话</span><span class="value">${data.phone}</span></div>` : ''}
           ${data.email ? `<div class="info-item"><span class="label">邮箱</span><span class="value">${data.email}</span></div>` : ''}
-          ${data.github ? `<div class="info-item"><span class="label">GitHub</span><span class="value"><a href="${data.github.startsWith('http') ? data.github : 'https://github.com/' + data.github}" target="_blank" rel="noopener">${data.github}</a></span></div>` : ''}
+          ${data.github ? `<div class="info-item"><span class="label">GitHub</span><span class="value"><a href="${data.github.startsWith('http') ? data.github : 'https://' + data.github}" target="_blank" rel="noopener">${data.github}</a></span></div>` : ''}
           ${data.hometown ? `<div class="info-item"><span class="label">籍贯</span><span class="value">${data.hometown}</span></div>` : ''}
           ${data.educationLevel ? `<div class="info-item"><span class="label">学历</span><span class="value">${data.educationLevel}</span></div>` : ''}
           ${data.driving ? `<div class="info-item"><span class="label">驾龄</span><span class="value">${data.driving}</span></div>` : ''}
