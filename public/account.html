@@ -421,51 +421,33 @@
     }
 
     /* 反馈表单 */
-    .feedback-card {
+    /* 公众号反馈样式 */
+    .feedback-qrcode-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 24px;
       background: #faf5ff;
       border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
     }
 
-    .feedback-card h4 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 8px;
+    .feedback-qrcode-wrap img {
+      width: 200px;
+      height: 200px;
+      border-radius: 8px;
+      margin-bottom: 20px;
     }
 
-    .feedback-card p {
-      font-size: 13px;
+    .feedback-qrcode-wrap p {
+      font-size: 14px;
       color: var(--text-secondary);
-      margin-bottom: 16px;
+      line-height: 1.6;
+      text-align: center;
     }
 
-    .feedback-types {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .feedback-type {
-      padding: 8px 16px;
-      border: 1px solid var(--border-default);
-      border-radius: 20px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .feedback-type:hover {
-      border-color: var(--color-primary);
-    }
-
-    .feedback-type.active {
-      background: rgba(123, 56, 235, 0.08);
-      border-color: var(--color-primary);
+    .feedback-qrcode-wrap .feedback-tip {
       color: var(--color-primary);
+      font-weight: 500;
     }
 
     /* 表单子区域样式 */
@@ -1373,7 +1355,7 @@
               生成记录
             </button>
             <button class="user-dropdown-item" onclick="switchSection('feedback')">
-              问题反馈
+              建议反馈
             </button>
             <div class="user-dropdown-divider"></div>
             <button class="user-dropdown-item logout" onclick="logout()">
@@ -1398,7 +1380,7 @@
         <span class="account-nav-icon">📋</span> 生成记录
       </div>
       <div class="account-nav-item" data-section="feedback" onclick="switchSection('feedback')">
-        <span class="account-nav-icon">💬</span> 问题反馈
+        <span class="account-nav-icon">💬</span> 建议反馈
       </div>
     </aside>
 
@@ -1845,33 +1827,15 @@
         </div>
       </div>
 
-      <!-- 问题反馈 -->
+      <!-- 建议反馈 -->
       <div class="account-section" id="section-feedback">
-        <h2 class="section-title">问题反馈</h2>
-        <div class="section-subtitle">您的反馈将帮助我们改进产品</div>
+        <h2 class="section-title">建议反馈</h2>
+        <div class="section-subtitle">扫描二维码，在公众号留言反馈</div>
 
-        <div class="feedback-card">
-          <h4>选择反馈类型</h4>
-          <p>请选择最符合您反馈的类型</p>
-          <div class="feedback-types" id="feedbackTypes">
-            <div class="feedback-type active" data-type="bug" onclick="selectFeedbackType(this)">功能异常</div>
-            <div class="feedback-type" data-type="suggestion" onclick="selectFeedbackType(this)">建议优化</div>
-            <div class="feedback-type" data-type="feature" onclick="selectFeedbackType(this)">新功能需求</div>
-            <div class="feedback-type" data-type="other" onclick="selectFeedbackType(this)">其他</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>反馈标题</label>
-          <input type="text" id="feedbackTitle" placeholder="请简要描述您的问题或建议">
-        </div>
-        <div class="form-group">
-          <label>详细描述</label>
-          <textarea id="feedbackContent" placeholder="请详细描述问题的复现步骤或您的建议内容..."></textarea>
-        </div>
-        <div style="display: flex; gap: 12px;">
-          <button class="btn-primary" onclick="submitFeedback()">提交反馈</button>
-          <button class="btn-secondary" onclick="clearFeedback()">清空</button>
+        <div class="feedback-qrcode-wrap">
+          <img src="/images/official-qrcode.jpg" alt="公众号二维码">
+          <p>请关注 <span class="feedback-tip">「志在瑶远」</span> 公众号</p>
+          <p>有问题或建议请在公众号留言，后台小伙伴会及时与您联系并跟进处理。</p>
         </div>
       </div>
     </main>
@@ -1934,7 +1898,6 @@
     const API_BASE = window.location.hostname === 'localhost' ? `${window.location.protocol}//${window.location.host}/api` : '/api'
     
     let deletePageId = ''
-    let currentFeedbackType = 'bug'
     let userData = null
 
     // 禁止浏览器刷新后自动恢复滚动位置，统一由 switchSection 控制滚动到顶部
@@ -4156,33 +4119,6 @@
       } catch (err) {
         showToast('删除失败', 'error')
       }
-    }
-
-    function selectFeedbackType(el) {
-      document.querySelectorAll('.feedback-type').forEach(t => t.classList.remove('active'))
-      el.classList.add('active')
-      currentFeedbackType = el.dataset.type
-    }
-
-    function clearFeedback() {
-      document.getElementById('feedbackTitle').value = ''
-      document.getElementById('feedbackContent').value = ''
-      document.querySelectorAll('.feedback-type').forEach(t => t.classList.remove('active'))
-      document.querySelector('.feedback-type[data-type="bug"]').classList.add('active')
-      currentFeedbackType = 'bug'
-    }
-
-    function submitFeedback() {
-      const title = document.getElementById('feedbackTitle').value.trim()
-      const content = document.getElementById('feedbackContent').value.trim()
-
-      if (!title) {
-        showToast('请输入反馈标题', 'error')
-        return
-      }
-
-      showToast('反馈提交成功，感谢您的建议！')
-      clearFeedback()
     }
 
     function confirmLogout() {

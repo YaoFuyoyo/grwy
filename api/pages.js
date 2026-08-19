@@ -56,6 +56,7 @@ function renderPage(pageData) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${data.pageTitle || data.name || '个人主页'}</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/preview-style.css">
 </head>
@@ -165,7 +166,7 @@ function renderPage(pageData) {
           ${data.birthday ? `<div class="info-item"><span class="label">出生日期</span><span class="value">${data.birthday}</span></div>` : ''}
           ${data.phone ? `<div class="info-item"><span class="label">电话</span><span class="value">${data.phone}</span></div>` : ''}
           ${data.email ? `<div class="info-item"><span class="label">邮箱</span><span class="value">${data.email}</span></div>` : ''}
-          ${data.github ? `<div class="info-item"><span class="label">GitHub网址</span><span class="value">${data.github}</span></div>` : ''}
+          ${data.github ? `<div class="info-item"><span class="label">GitHub</span><span class="value"><a href="${data.github.startsWith('http') ? data.github : 'https://github.com/' + data.github}" target="_blank" rel="noopener">${data.github}</a></span></div>` : ''}
           ${data.hometown ? `<div class="info-item"><span class="label">籍贯</span><span class="value">${data.hometown}</span></div>` : ''}
           ${data.educationLevel ? `<div class="info-item"><span class="label">学历</span><span class="value">${data.educationLevel}</span></div>` : ''}
           ${data.driving ? `<div class="info-item"><span class="label">驾龄</span><span class="value">${data.driving}</span></div>` : ''}
@@ -245,8 +246,8 @@ function renderPage(pageData) {
         <div class="portfolio-scroll-track" id="portfolio-track">
           <div class="portfolio-images" id="portfolio-images-scroll">
             ${(data.portfolioItems || []).map((item, index) => `
-            <div class="portfolio-image-item">
-              <img src="${item.url}" alt="${item.name}">
+            <div class="portfolio-image-item" data-lightbox-group="portfolio" data-lightbox-images='${JSON.stringify((data.portfolioItems || []).map(item => item.url))}' data-lightbox-index="${index}">
+              <img src="${item.url}" alt="${item.name}" style="cursor: pointer;">
               <div class="portfolio-name-overlay"><p>${item.name}</p></div>
             </div>
             `).join('')}
@@ -300,8 +301,8 @@ function renderPage(pageData) {
                   <span class="portfolio-title-left">${work.industry || ''}</span>
                   <span class="portfolio-title-right">成果展示</span>
                 </div>
-                <div class="portfolio-slider" data-images='${JSON.stringify(resultImgs)}' data-labels='${JSON.stringify(resultLabels)}'>
-                  <img class="portfolio-slider-img" src="${resultImgs[0]}" alt="成果展示">
+                <div class="portfolio-slider" data-images='${JSON.stringify(resultImgs)}' data-labels='${JSON.stringify(resultLabels)}' data-lightbox-group="result-${work.time || ''}-${work.company || ''}">
+                  <img class="portfolio-slider-img" src="${resultImgs[0]}" alt="成果展示" style="cursor: pointer;">
                   <div class="portfolio-slider-overlay"><p>${resultLabels[0]}</p></div>
                 </div>
                 <div class="portfolio-slider-dots"></div>
@@ -434,15 +435,15 @@ function renderPage(pageData) {
               ` : ''}
             </div>
             ${hasEduImages ? `
-            <div class="edu-image-grid">
+            <div class="edu-image-grid" data-lightbox-group="edu-${edu.school || ''}-${idx}">
               ${designFiles.map((f, i) => `
-              <div class="cert-item">
-                <img src="${f}" alt="毕业设计">
+              <div class="cert-item" data-lightbox-type="design" data-lightbox-index="${i}">
+                <img src="${f}" alt="毕业设计" style="cursor: pointer;">
                 <p>${(designFileNames[i] || '毕业设计').replace(/\.[^/.]+$/, '')}</p>
               </div>`).join('')}
               ${diplomaFiles.map((f, i) => `
-              <div class="cert-item">
-                <img src="${f}" alt="毕业证书">
+              <div class="cert-item" data-lightbox-type="diploma" data-lightbox-index="${designFiles.length + i}">
+                <img src="${f}" alt="毕业证书" style="cursor: pointer;">
                 <p>${(diplomaFileNames[i] || '毕业证书').replace(/\.[^/.]+$/, '')}</p>
               </div>`).join('')}
             </div>
@@ -534,7 +535,7 @@ function renderPage(pageData) {
           <div class="intellectual-subtitle">商标</div>
           <h3>${trademark.name || ''}</h3>
           <div class="intellectual-info">
-            <p><span>商标图案：</span>${trademark.logoFile ? `<a class="paper-link intellectual-link" href="${trademark.logoFile}" data-image="${trademark.logoFile}">查看商标→</a>` : '<span class="paper-link disabled">暂无商标图</span>'}</p>
+            <p><span>商标图案：</span>${trademark.logoFile ? `<a class="paper-link intellectual-link" href="${trademark.logoFile}" data-lightbox-group="trademark" data-lightbox-image="${trademark.logoFile}">查看商标→</a>` : '<span class="paper-link disabled">暂无商标图</span>'}</p>
             ${trademark.number ? `<p><span>申请/注册号：</span>${trademark.number}</p>` : ''}
           </div>
         </div>
@@ -571,9 +572,9 @@ function renderPage(pageData) {
           const certLabels = certImgs.map((_, i) => (i < certFileNames.length ? certFileNames[i] : '证书').replace(/\.[^/.]+$/, ''))
           return `
         <div class="cert-card">
-          <div class="cert-image" data-images='${JSON.stringify(certImgs)}' data-labels='${JSON.stringify(certLabels)}'>
-            <img src="${certImgs[0]}" alt="证书">
-            <div class="portfolio-slider-overlay"><p>${certLabels[0]}</p></div>
+          <div class="cert-image" data-images='${JSON.stringify(certImgs)}' data-labels='${JSON.stringify(certLabels)}' data-lightbox-group="cert-${cert.name || ''}">
+            <img src="${certImgs[0]}" alt="证书" style="cursor: pointer;">
+            <div class="portfolio-slider-overlay"><p>1/${certImgs.length}</p></div>
           </div>
           <div class="cert-content">
             <h3>${cert.name || ''}</h3>
@@ -614,9 +615,9 @@ function renderPage(pageData) {
               const honorLabels = honorImgs.map((_, i) => (i < honorFileNames.length ? honorFileNames[i] : '奖项').replace(/\.[^/.]+$/, ''))
               return `
             <div class="award-card-scroll">
-              <div class="award-image" data-images='${JSON.stringify(honorImgs)}' data-labels='${JSON.stringify(honorLabels)}'>
-                <img src="${honorImgs[0]}" alt="奖项">
-                <div class="portfolio-slider-overlay"><p>${honorLabels[0]}</p></div>
+              <div class="award-image" data-images='${JSON.stringify(honorImgs)}' data-labels='${JSON.stringify(honorLabels)}' data-lightbox-group="honor-${award.name || ''}">
+                <img src="${honorImgs[0]}" alt="奖项" style="cursor: pointer;">
+                <div class="portfolio-slider-overlay"><p>1/${honorImgs.length}</p></div>
               </div>
               <div class="award-content">
                 <h3>${award.name || ''}</h3>
@@ -982,20 +983,152 @@ function renderPage(pageData) {
     initCardScroll('.cert-grid', 'cert-prev', 'cert-next', '.cert-scroll-container', '.cert-card');
     initCardScroll('.skills-grid', 'skills-prev', 'skills-next', '.skills-scroll-container', '.skill-card');
 
-    document.querySelectorAll('.intellectual-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const imageUrl = link.dataset.image;
-        const lightbox = document.createElement('div');
-        lightbox.className = 'lightbox';
-        lightbox.innerHTML = '<div class="lightbox-content"><img src="' + imageUrl + '" alt="商标图案"><button class="lightbox-close">×</button></div>';
-        document.body.appendChild(lightbox);
-        
-        lightbox.addEventListener('click', (e) => {
-          if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
-            lightbox.remove();
+    // Unified lightbox for all image modules
+    const lightboxGroups = {};
+
+    document.querySelectorAll('[data-lightbox-group]').forEach(el => {
+      const group = el.dataset.lightboxGroup;
+      if (!lightboxGroups[group]) {
+        lightboxGroups[group] = { images: [], labels: [] };
+      }
+
+      // Portfolio: data-lightbox-images on each item
+      if (el.dataset.lightboxImages) {
+        lightboxGroups[group].images = JSON.parse(el.dataset.lightboxImages);
+        const items = document.querySelectorAll('[data-lightbox-group="' + group + '"]');
+        items.forEach(item => {
+          const idx = parseInt(item.dataset.lightboxIndex);
+          const name = item.querySelector('img')?.alt || '';
+          if (!lightboxGroups[group].labels[idx]) {
+            lightboxGroups[group].labels[idx] = name;
           }
         });
+      }
+
+      // Slider-type (portfolio-slider, cert-image, award-image): data-images + data-labels
+      if (el.dataset.images) {
+        lightboxGroups[group].images = JSON.parse(el.dataset.images);
+        lightboxGroups[group].labels = JSON.parse(el.dataset.labels || '[]');
+      }
+
+      // Education image grid: collect from child .cert-item elements
+      if (el.classList.contains('edu-image-grid')) {
+        const items = el.querySelectorAll('.cert-item');
+        lightboxGroups[group].images = Array.from(items).map(item => item.querySelector('img').src);
+        lightboxGroups[group].labels = Array.from(items).map(item => item.querySelector('p')?.textContent || item.querySelector('img').alt);
+      }
+
+      // Trademark link: single image, collect all in group
+      if (el.dataset.lightboxImage) {
+        if (!lightboxGroups[group].images.includes(el.dataset.lightboxImage)) {
+          lightboxGroups[group].images.push(el.dataset.lightboxImage);
+          lightboxGroups[group].labels.push('商标图案');
+        }
+      }
+    });
+
+    function openLightbox(group, index) {
+      const { images, labels } = lightboxGroups[group];
+      if (!images || images.length === 0) return;
+      index = Math.min(Math.max(index, 0), images.length - 1);
+
+      const lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      const hasMultiple = images.length > 1;
+      lightbox.innerHTML =
+        '<div class="lightbox-overlay"></div>' +
+        '<div class="lightbox-content">' +
+        '<button class="lightbox-close">×</button>' +
+        (hasMultiple ? '<button class="lightbox-prev">‹</button>' : '') +
+        '<img src="' + images[index] + '" alt="' + (labels[index] || '') + '">' +
+        (hasMultiple ? '<button class="lightbox-next">›</button>' : '') +
+        (hasMultiple ? '<div class="lightbox-counter">' + (index + 1) + ' / ' + images.length + '</div>' : '') +
+        (labels[index] ? '<div class="lightbox-caption">' + labels[index] + '</div>' : '') +
+        '</div>';
+      document.body.appendChild(lightbox);
+
+      function showSlide(i) {
+        const img = lightbox.querySelector('.lightbox-content img');
+        const caption = lightbox.querySelector('.lightbox-caption');
+        const counter = lightbox.querySelector('.lightbox-counter');
+        img.src = images[i];
+        img.alt = labels[i] || '';
+        if (caption) caption.textContent = labels[i] || '';
+        if (counter) counter.textContent = (i + 1) + ' / ' + images.length;
+        index = i;
+      }
+
+      lightbox.querySelector('.lightbox-overlay').addEventListener('click', () => lightbox.remove());
+      lightbox.querySelector('.lightbox-close').addEventListener('click', () => lightbox.remove());
+
+      const prevBtn = lightbox.querySelector('.lightbox-prev');
+      const nextBtn = lightbox.querySelector('.lightbox-next');
+      if (prevBtn) prevBtn.addEventListener('click', () => showSlide((index - 1 + images.length) % images.length));
+      if (nextBtn) nextBtn.addEventListener('click', () => showSlide((index + 1) % images.length));
+
+      const onKey = (e) => {
+        if (!lightbox.isConnected) {
+          document.removeEventListener('keydown', onKey);
+          return;
+        }
+        if (e.key === 'Escape') lightbox.remove();
+        if (e.key === 'ArrowLeft' && prevBtn) showSlide((index - 1 + images.length) % images.length);
+        if (e.key === 'ArrowRight' && nextBtn) showSlide((index + 1) % images.length);
+      };
+      document.addEventListener('keydown', onKey);
+    }
+
+    // Portfolio click
+    document.querySelectorAll('.portfolio-image-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const group = item.dataset.lightboxGroup;
+        const idx = parseInt(item.dataset.lightboxIndex);
+        if (group) openLightbox(group, idx);
+      });
+    });
+
+    // Portfolio slider click - read currentIndex from dataset
+    document.querySelectorAll('.portfolio-slider').forEach(slider => {
+      const group = slider.dataset.lightboxGroup;
+      if (!group) return;
+
+      slider.addEventListener('click', (e) => {
+        const idx = parseInt(slider.dataset.currentIndex || '0');
+        openLightbox(group, idx);
+      });
+    });
+
+    // Education cert-item click
+    document.querySelectorAll('.edu-image-grid').forEach(grid => {
+      const group = grid.dataset.lightboxGroup;
+      grid.querySelectorAll('.cert-item img').forEach((img, i) => {
+        img.addEventListener('click', () => {
+          if (group) openLightbox(group, i);
+        });
+      });
+    });
+
+    // Trademark link click
+    document.querySelectorAll('.intellectual-link').forEach((link, linkIdx) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const group = link.dataset.lightboxGroup;
+        if (group) {
+          const allLinks = document.querySelectorAll('.intellectual-link[data-lightbox-group="' + group + '"]');
+          const idx = Array.from(allLinks).findIndex(l => l === link);
+          openLightbox(group, idx >= 0 ? idx : 0);
+        }
+      });
+    });
+
+    // Click handler for cert-image and award-image - click on container div
+    document.querySelectorAll('.cert-image, .award-image').forEach(box => {
+      const group = box.dataset.lightboxGroup;
+      if (!group) return;
+
+      box.addEventListener('click', (e) => {
+        const idx = parseInt(box.dataset.currentIndex || '0');
+        openLightbox(group, idx);
       });
     });
 
@@ -1025,6 +1158,7 @@ function renderPage(pageData) {
         dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
         dot.addEventListener('click', () => {
           currentIndex = i;
+          slider.dataset.currentIndex = i;
           updateSlider();
           resetInterval();
         });
@@ -1033,6 +1167,7 @@ function renderPage(pageData) {
 
       function updateSlider() {
         imgEl.src = images[currentIndex];
+        slider.dataset.currentIndex = currentIndex;
         overlayEl.textContent = labels[currentIndex];
         dotsContainer.querySelectorAll('.slider-dot').forEach((dot, i) => {
           dot.classList.toggle('active', i === currentIndex);
@@ -1055,7 +1190,7 @@ function renderPage(pageData) {
       slider.addEventListener('mouseleave', () => resetInterval());
     });
 
-    document.querySelectorAll('#certifications .cert-image').forEach(slider => {
+    document.querySelectorAll('#certifications .cert-image, #awards .award-image').forEach(slider => {
       const images = JSON.parse(slider.dataset.images);
       const imgEl = slider.querySelector('img');
       const overlayEl = slider.querySelector('.portfolio-slider-overlay p');
@@ -1064,7 +1199,8 @@ function renderPage(pageData) {
 
       function updateSlider() {
         imgEl.src = images[currentIndex];
-        overlayEl.textContent = (currentIndex + 1) + '/' + images.length;
+        slider.dataset.currentIndex = currentIndex;
+        if (overlayEl) overlayEl.textContent = (currentIndex + 1) + '/' + images.length;
       }
 
       function nextSlide() {

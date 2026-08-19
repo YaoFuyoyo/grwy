@@ -1886,7 +1886,7 @@
         <div style="color: #64748b; margin-bottom: 24px;">生成个人网页</div>
         
         <div style="background: #fff; border: 2px dashed #e2e8f0; border-radius: 12px; padding: 16px; margin: 0 auto 16px; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center;">
-          <img src="/images/alipay-placeholder.png" alt="支付宝收款码" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; document.getElementById('qrPlaceholder').style.display='flex';">
+          <img src="/images/alipay-placeholder.svg" alt="支付宝收款码" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; document.getElementById('qrPlaceholder').style.display='flex';">
           <div id="qrPlaceholder" style="display: none; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8;">
             <div style="font-size: 48px; margin-bottom: 8px;">📱</div>
             <div style="font-size: 12px;">支付宝收款码</div>
@@ -1918,7 +1918,7 @@
           <a id="generatedUrl" href="#" target="_blank" style="font-size: 16px; color: #a855f7; word-break: break-all;">grwy.zzyy99.cn/xxx/000001</a>
         </div>
         <button class="btn btn-secondary" style="width: 100%; margin-bottom: 8px;" onclick="copyUrl()">复制链接</button>
-        <a id="openUrlBtn" href="#" target="_blank" class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #a855f7, #d946ef);">在新标签页打开</a>
+        <button id="viewRecordsBtn" class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #a855f7, #d946ef);" onclick="viewRecords()">查看生成记录</button>
       </div>
     </div>
   </div>
@@ -4517,6 +4517,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${data.pageTitle || data.name || '个人主页'}</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/preview-style.css">
 </head>
@@ -4626,7 +4627,7 @@
           ${data.birthday ? `<div class="info-item"><span class="label">出生日期</span><span class="value">${data.birthday}</span></div>` : ''}
           ${data.phone ? `<div class="info-item"><span class="label">电话</span><span class="value">${data.phone}</span></div>` : ''}
           ${data.email ? `<div class="info-item"><span class="label">邮箱</span><span class="value">${data.email}</span></div>` : ''}
-          ${data.github ? `<div class="info-item"><span class="label">GitHub</span><span class="value">${data.github}</span></div>` : ''}
+          ${data.github ? `<div class="info-item"><span class="label">GitHub</span><span class="value"><a href="${data.github.startsWith('http') ? data.github : 'https://github.com/' + data.github}" target="_blank" rel="noopener">${data.github}</a></span></div>` : ''}
           ${data.hometown ? `<div class="info-item"><span class="label">籍贯</span><span class="value">${data.hometown}</span></div>` : ''}
           ${data.educationLevel ? `<div class="info-item"><span class="label">学历</span><span class="value">${data.educationLevel}</span></div>` : ''}
           ${data.driving ? `<div class="info-item"><span class="label">驾龄</span><span class="value">${data.driving}</span></div>` : ''}
@@ -4706,8 +4707,8 @@
         <div class="portfolio-scroll-track" id="portfolio-track">
           <div class="portfolio-images" id="portfolio-images-scroll">
             ${(data.portfolioItems || []).map((item, index) => `
-            <div class="portfolio-image-item">
-              <img src="${item.url}" alt="${item.name}">
+            <div class="portfolio-image-item" data-lightbox-group="portfolio" data-lightbox-images='${JSON.stringify((data.portfolioItems || []).map(item => item.url))}' data-lightbox-index="${index}">
+              <img src="${item.url}" alt="${item.name}" style="cursor: pointer;">
               <div class="portfolio-name-overlay"><p>${item.name}</p></div>
             </div>
             `).join('')}
@@ -4761,8 +4762,8 @@
                   <span class="portfolio-title-left">${work.industry || ''}</span>
                   <span class="portfolio-title-right">成果展示</span>
                 </div>
-                <div class="portfolio-slider" data-images='${JSON.stringify(resultImgs)}' data-labels='${JSON.stringify(resultLabels)}'>
-                  <img class="portfolio-slider-img" src="${resultImgs[0]}" alt="成果展示">
+                <div class="portfolio-slider" data-images='${JSON.stringify(resultImgs)}' data-labels='${JSON.stringify(resultLabels)}' data-lightbox-group="result-${work.time || ''}-${work.company || ''}">
+                  <img class="portfolio-slider-img" src="${resultImgs[0]}" alt="成果展示" style="cursor: pointer;">
                   <div class="portfolio-slider-overlay"><p>${resultLabels[0]}</p></div>
                 </div>
                 <div class="portfolio-slider-dots"></div>
@@ -4895,15 +4896,15 @@
               ` : ''}
             </div>
             ${hasEduImages ? `
-            <div class="edu-image-grid">
+            <div class="edu-image-grid" data-lightbox-group="edu-${edu.school || ''}-${idx}">
               ${designFiles.map((f, i) => `
-              <div class="cert-item">
-                <img src="${f}" alt="毕业设计">
+              <div class="cert-item" data-lightbox-type="design" data-lightbox-index="${i}">
+                <img src="${f}" alt="毕业设计" style="cursor: pointer;">
                 <p>${(designFileNames[i] || '毕业设计').replace(/\.[^/.]+$/, '')}</p>
               </div>`).join('')}
               ${diplomaFiles.map((f, i) => `
-              <div class="cert-item">
-                <img src="${f}" alt="毕业证书">
+              <div class="cert-item" data-lightbox-type="diploma" data-lightbox-index="${designFiles.length + i}">
+                <img src="${f}" alt="毕业证书" style="cursor: pointer;">
                 <p>${(diplomaFileNames[i] || '毕业证书').replace(/\.[^/.]+$/, '')}</p>
               </div>`).join('')}
             </div>
@@ -4995,7 +4996,7 @@
           <div class="intellectual-subtitle">商标</div>
           <h3>${trademark.name || ''}</h3>
           <div class="intellectual-info">
-            <p><span>商标图案：</span>${trademark.logoFile ? `<a class="paper-link intellectual-link" href="${trademark.logoFile}" data-image="${trademark.logoFile}">查看商标→</a>` : '<span class="paper-link disabled">暂无商标图</span>'}</p>
+            <p><span>商标图案：</span>${trademark.logoFile ? `<a class="paper-link intellectual-link" href="${trademark.logoFile}" data-lightbox-group="trademark" data-lightbox-image="${trademark.logoFile}">查看商标→</a>` : '<span class="paper-link disabled">暂无商标图</span>'}</p>
             ${trademark.number ? `<p><span>申请/注册号：</span>${trademark.number}</p>` : ''}
           </div>
         </div>
@@ -5032,9 +5033,9 @@
           const certLabels = certImgs.map((_, i) => (i < certFileNames.length ? certFileNames[i] : '证书').replace(/\.[^/.]+$/, ''))
           return `
         <div class="cert-card">
-          <div class="cert-image" data-images='${JSON.stringify(certImgs)}' data-labels='${JSON.stringify(certLabels)}'>
-            <img src="${certImgs[0]}" alt="证书">
-            <div class="portfolio-slider-overlay"><p>${certLabels[0]}</p></div>
+          <div class="cert-image" data-images='${JSON.stringify(certImgs)}' data-labels='${JSON.stringify(certLabels)}' data-lightbox-group="cert-${cert.name || ''}">
+            <img src="${certImgs[0]}" alt="证书" style="cursor: pointer;">
+            <div class="portfolio-slider-overlay"><p>1/${certImgs.length}</p></div>
           </div>
           <div class="cert-content">
             <h3>${cert.name || ''}</h3>
@@ -5075,9 +5076,9 @@
               const honorLabels = honorImgs.map((_, i) => (i < honorFileNames.length ? honorFileNames[i] : '奖项').replace(/\.[^/.]+$/, ''))
               return `
             <div class="award-card-scroll">
-              <div class="award-image" data-images='${JSON.stringify(honorImgs)}' data-labels='${JSON.stringify(honorLabels)}'>
-                <img src="${honorImgs[0]}" alt="奖项">
-                <div class="portfolio-slider-overlay"><p>${honorLabels[0]}</p></div>
+              <div class="award-image" data-images='${JSON.stringify(honorImgs)}' data-labels='${JSON.stringify(honorLabels)}' data-lightbox-group="honor-${award.name || ''}">
+                <img src="${honorImgs[0]}" alt="奖项" style="cursor: pointer;">
+                <div class="portfolio-slider-overlay"><p>1/${honorImgs.length}</p></div>
               </div>
               <div class="award-content">
                 <h3>${award.name || ''}</h3>
@@ -5117,7 +5118,7 @@
           <h3>联系方式</h3>
           ${data.phone ? `<p>电话：${data.phone}</p>` : ''}
           ${data.email ? `<p>邮箱：${data.email}</p>` : ''}
-          ${data.github ? `<p>GitHub：${data.github}</p>` : ''}
+          ${data.github ? `<p>GitHub：<a href="${data.github.startsWith('http') ? data.github : 'https://github.com/' + data.github}" target="_blank" rel="noopener">${data.github}</a></p>` : ''}
           ${data.wechat ? `<p>微信：${data.wechat}</p>` : ''}
           ${data.qq ? `<p>QQ：${data.qq}</p>` : ''}
           ${data.weibo ? `<p>微博：${data.weibo}</p>` : ''}
@@ -5443,20 +5444,145 @@
     initCardScroll('.cert-grid', 'cert-prev', 'cert-next', '.cert-scroll-container', '.cert-card');
     initCardScroll('.skills-grid', 'skills-prev', 'skills-next', '.skills-scroll-container', '.skill-card');
 
+    // Unified lightbox for all image modules
+    const lightboxGroups = {};
+
+    document.querySelectorAll('[data-lightbox-group]').forEach(el => {
+      const group = el.dataset.lightboxGroup;
+      if (!lightboxGroups[group]) {
+        lightboxGroups[group] = { images: [], labels: [] };
+      }
+
+      if (el.dataset.lightboxImages) {
+        lightboxGroups[group].images = JSON.parse(el.dataset.lightboxImages);
+        const items = document.querySelectorAll('[data-lightbox-group="' + group + '"]');
+        items.forEach(item => {
+          const idx = parseInt(item.dataset.lightboxIndex);
+          const name = item.querySelector('img')?.alt || '';
+          if (!lightboxGroups[group].labels[idx]) {
+            lightboxGroups[group].labels[idx] = name;
+          }
+        });
+      }
+
+      if (el.dataset.images) {
+        lightboxGroups[group].images = JSON.parse(el.dataset.images);
+        lightboxGroups[group].labels = JSON.parse(el.dataset.labels || '[]');
+      }
+
+      if (el.classList.contains('edu-image-grid')) {
+        const items = el.querySelectorAll('.cert-item');
+        lightboxGroups[group].images = Array.from(items).map(item => item.querySelector('img').src);
+        lightboxGroups[group].labels = Array.from(items).map(item => item.querySelector('p')?.textContent || item.querySelector('img').alt);
+      }
+
+      if (el.dataset.lightboxImage) {
+        if (!lightboxGroups[group].images.includes(el.dataset.lightboxImage)) {
+          lightboxGroups[group].images.push(el.dataset.lightboxImage);
+          lightboxGroups[group].labels.push('商标图案');
+        }
+      }
+    });
+
+    function openLightbox(group, index) {
+      const { images, labels } = lightboxGroups[group];
+      if (!images || images.length === 0) return;
+      index = Math.min(Math.max(index, 0), images.length - 1);
+
+      const lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      const hasMultiple = images.length > 1;
+      lightbox.innerHTML =
+        '<div class="lightbox-overlay"></div>' +
+        '<div class="lightbox-content">' +
+        '<button class="lightbox-close">×</button>' +
+        (hasMultiple ? '<button class="lightbox-prev">‹</button>' : '') +
+        '<img src="' + images[index] + '" alt="' + (labels[index] || '') + '">' +
+        (hasMultiple ? '<button class="lightbox-next">›</button>' : '') +
+        (hasMultiple ? '<div class="lightbox-counter">' + (index + 1) + ' / ' + images.length + '</div>' : '') +
+        (labels[index] ? '<div class="lightbox-caption">' + labels[index] + '</div>' : '') +
+        '</div>';
+      document.body.appendChild(lightbox);
+
+      function showSlide(i) {
+        const img = lightbox.querySelector('.lightbox-content img');
+        const caption = lightbox.querySelector('.lightbox-caption');
+        const counter = lightbox.querySelector('.lightbox-counter');
+        img.src = images[i];
+        img.alt = labels[i] || '';
+        if (caption) caption.textContent = labels[i] || '';
+        if (counter) counter.textContent = (i + 1) + ' / ' + images.length;
+        index = i;
+      }
+
+      lightbox.querySelector('.lightbox-overlay').addEventListener('click', () => lightbox.remove());
+      lightbox.querySelector('.lightbox-close').addEventListener('click', () => lightbox.remove());
+
+      const prevBtn = lightbox.querySelector('.lightbox-prev');
+      const nextBtn = lightbox.querySelector('.lightbox-next');
+      if (prevBtn) prevBtn.addEventListener('click', () => showSlide((index - 1 + images.length) % images.length));
+      if (nextBtn) nextBtn.addEventListener('click', () => showSlide((index + 1) % images.length));
+
+      const onKey = (e) => {
+        if (!lightbox.isConnected) {
+          document.removeEventListener('keydown', onKey);
+          return;
+        }
+        if (e.key === 'Escape') lightbox.remove();
+        if (e.key === 'ArrowLeft' && prevBtn) showSlide((index - 1 + images.length) % images.length);
+        if (e.key === 'ArrowRight' && nextBtn) showSlide((index + 1) % images.length);
+      };
+      document.addEventListener('keydown', onKey);
+    }
+
+    document.querySelectorAll('.portfolio-image-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const group = item.dataset.lightboxGroup;
+        const idx = parseInt(item.dataset.lightboxIndex);
+        if (group) openLightbox(group, idx);
+      });
+    });
+
+    // Portfolio slider click - click on container div (img has pointer-events:none)
+    document.querySelectorAll('.portfolio-slider').forEach(slider => {
+      const group = slider.dataset.lightboxGroup;
+      if (!group) return;
+
+      slider.addEventListener('click', (e) => {
+        const idx = parseInt(slider.dataset.currentIndex || '0');
+        openLightbox(group, idx);
+      });
+    });
+
+    document.querySelectorAll('.edu-image-grid').forEach(grid => {
+      const group = grid.dataset.lightboxGroup;
+      grid.querySelectorAll('.cert-item img').forEach((img, i) => {
+        img.addEventListener('click', () => {
+          if (group) openLightbox(group, i);
+        });
+      });
+    });
+
     document.querySelectorAll('.intellectual-link').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        const imageUrl = link.dataset.image;
-        const lightbox = document.createElement('div');
-        lightbox.className = 'lightbox';
-        lightbox.innerHTML = '<div class="lightbox-content"><img src="' + imageUrl + '" alt="商标图案"><button class="lightbox-close">×</button></div>';
-        document.body.appendChild(lightbox);
-        
-        lightbox.addEventListener('click', (e) => {
-          if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
-            lightbox.remove();
-          }
-        });
+        const group = link.dataset.lightboxGroup;
+        if (group) {
+          const allLinks = document.querySelectorAll('.intellectual-link[data-lightbox-group="' + group + '"]');
+          const idx = Array.from(allLinks).findIndex(l => l === link);
+          openLightbox(group, idx >= 0 ? idx : 0);
+        }
+      });
+    });
+
+    // Click handler for cert-image and award-image - click on container div
+    document.querySelectorAll('.cert-image, .award-image').forEach(box => {
+      const group = box.dataset.lightboxGroup;
+      if (!group) return;
+
+      box.addEventListener('click', (e) => {
+        const idx = parseInt(box.dataset.currentIndex || '0');
+        openLightbox(group, idx);
       });
     });
 
@@ -5486,6 +5612,7 @@
         dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
         dot.addEventListener('click', () => {
           currentIndex = i;
+          slider.dataset.currentIndex = i;
           updateSlider();
           resetInterval();
         });
@@ -5494,6 +5621,7 @@
 
       function updateSlider() {
         imgEl.src = images[currentIndex];
+        slider.dataset.currentIndex = currentIndex;
         overlayEl.textContent = labels[currentIndex];
         dotsContainer.querySelectorAll('.slider-dot').forEach((dot, i) => {
           dot.classList.toggle('active', i === currentIndex);
@@ -5516,7 +5644,7 @@
       slider.addEventListener('mouseleave', () => resetInterval());
     });
 
-    document.querySelectorAll('#certifications .cert-image').forEach(slider => {
+    document.querySelectorAll('#certifications .cert-image, #awards .award-image').forEach(slider => {
       const images = JSON.parse(slider.dataset.images);
       const imgEl = slider.querySelector('img');
       const overlayEl = slider.querySelector('.portfolio-slider-overlay p');
@@ -5525,7 +5653,8 @@
 
       function updateSlider() {
         imgEl.src = images[currentIndex];
-        overlayEl.textContent = (currentIndex + 1) + '/' + images.length;
+        slider.dataset.currentIndex = currentIndex;
+        if (overlayEl) overlayEl.textContent = (currentIndex + 1) + '/' + images.length;
       }
 
       function nextSlide() {
@@ -5611,6 +5740,7 @@
         showToast('请填写专属网址', 'error')
         return
       }
+      showLoading('正在生成网页...')
       // 调试模式：跳过支付环节，直接生成网页
       const debugOrderId = 'debug_' + Date.now()
       createPage(debugOrderId)
@@ -5743,11 +5873,12 @@
         })
         const data = await response.json()
 
+        hideLoading()
+
         if (data.ok) {
           generatedPageUrl = `https://grwy.zzyy99.cn/${subdomain}/${data.page.ownerId}`
           document.getElementById('generatedUrl').textContent = generatedPageUrl
           document.getElementById('generatedUrl').href = generatedPageUrl
-          document.getElementById('openUrlBtn').href = generatedPageUrl
           document.getElementById('successModal').classList.add('active')
           showToast(isEditing ? '更新成功' : '生成成功')
         } else if (data.error === 'SUBDOMAIN_EXISTS') {
@@ -5756,6 +5887,7 @@
           showToast(data.message || (isEditing ? '更新失败' : '生成失败'), 'error')
         }
       } catch (err) {
+        hideLoading()
         showToast(isEditing ? '更新页面失败' : '创建页面失败', 'error')
       }
     }
@@ -5763,6 +5895,10 @@
     function copyUrl() {
       navigator.clipboard.writeText(generatedPageUrl)
       showToast('链接已复制')
+    }
+
+    function viewRecords() {
+      window.location.href = 'account.html?section=records'
     }
 
     document.addEventListener('DOMContentLoaded', () => {
