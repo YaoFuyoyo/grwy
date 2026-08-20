@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="/images/logo.svg">
-  <title>案例展示 - 志在瑶远</title>
+  <title>模版范例 - 志在瑶远</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
+    body {
+      background: #F7F8FA;
+    }
+
     .page-content {
       max-width: 1200px;
       margin: 0 auto;
@@ -152,11 +156,10 @@
         <span class="logo-text">志在瑶远</span>
       </a>
       <div class="header-right">
-        <a href="editor.html" class="nav-link">编辑器</a>
+        <a href="#" class="nav-link" onclick="goToEditor()">编辑器</a>
         <a href="examples.html" class="nav-link active">模板范例</a>
         <div class="auth-buttons" id="authButtons">
-          <button class="btn btn-secondary" onclick="openLogin()">登录</button>
-          <button class="btn btn-primary" onclick="openRegister()">注册</button>
+          <button class="btn btn-primary" onclick="openLogin()">登录</button>
         </div>
         <div class="user-avatar-container" id="userAvatarContainer" style="display: none;">
         <div class="user-avatar" id="userAvatar">
@@ -192,6 +195,7 @@
       </div>
       </div>
     </div>
+    <div class="header-divider"></div>
   </header>
 
   <main class="page-content">
@@ -201,91 +205,91 @@
     </div>
 
     <div class="examples-grid" id="examplesGrid">
-      <div class="example-card" onclick="openExample('example/001')">
+      <div class="example-card" onclick="openExample('xiaozhi/U000001')">
         <div class="example-preview" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
           <div class="example-avatar">👨‍💼</div>
         </div>
         <div class="example-info">
-          <div class="example-name">张三</div>
+          <div class="example-name">小志</div>
           <div class="example-title">产品经理 | 科技蓝主题</div>
           <div class="example-bio">专注于用户体验设计和产品策略规划，拥有丰富的互联网产品经验...</div>
           <div class="example-footer">
-            <div class="example-url">grwy.zzyy99.cn/example/001</div>
+            <div class="example-url">grwy.zzyy99.cn/xiaozhi/U000001</div>
             <button class="example-btn">查看详情</button>
           </div>
         </div>
       </div>
 
-      <div class="example-card" onclick="openExample('example/002')">
+      <div class="example-card" onclick="openExample('ayao/U000001')">
         <div class="example-preview" style="background: linear-gradient(135deg, #a855f7, #d946ef);">
           <div class="example-avatar">🎨</div>
         </div>
         <div class="example-info">
-          <div class="example-name">李四</div>
+          <div class="example-name">阿瑶</div>
           <div class="example-title">UI设计师 | 未来紫主题</div>
           <div class="example-bio">热爱设计，追求极致视觉体验，作品涵盖品牌设计、界面设计...</div>
           <div class="example-footer">
-            <div class="example-url">grwy.zzyy99.cn/example/002</div>
+            <div class="example-url">grwy.zzyy99.cn/ayao/U000001</div>
             <button class="example-btn">查看详情</button>
           </div>
         </div>
       </div>
 
-      <div class="example-card" onclick="openExample('example/003')">
+      <div class="example-card" onclick="openExample('yuanyuan/U000001')">
         <div class="example-preview" style="background: linear-gradient(135deg, #0f172a, #1e293b);">
           <div class="example-avatar">💻</div>
         </div>
         <div class="example-info">
-          <div class="example-name">王五</div>
+          <div class="example-name">远远</div>
           <div class="example-title">全栈工程师 | 曜石黑主题</div>
           <div class="example-bio">热爱技术，专注于Web开发和系统架构，参与多个大型项目...</div>
           <div class="example-footer">
-            <div class="example-url">grwy.zzyy99.cn/example/003</div>
+            <div class="example-url">grwy.zzyy99.cn/yuanyuan/U000001</div>
             <button class="example-btn">查看详情</button>
           </div>
         </div>
       </div>
 
-      <div class="example-card" onclick="openExample('example/004')">
+      <div class="example-card" onclick="openExample('awen/U000001')">
         <div class="example-preview" style="background: linear-gradient(135deg, #22c55e, #4ade80);">
           <div class="example-avatar">📚</div>
         </div>
         <div class="example-info">
-          <div class="example-name">赵六</div>
+          <div class="example-name">阿文</div>
           <div class="example-title">研究员 | 森林绿主题</div>
           <div class="example-bio">专注于人工智能领域研究，发表多篇学术论文，拥有多项专利...</div>
           <div class="example-footer">
-            <div class="example-url">grwy.zzyy99.cn/example/004</div>
+            <div class="example-url">grwy.zzyy99.cn/awen/U000001</div>
             <button class="example-btn">查看详情</button>
           </div>
         </div>
       </div>
 
-      <div class="example-card" onclick="openExample('example/005')">
+      <div class="example-card" onclick="openExample('lele/U000001')">
         <div class="example-preview" style="background: linear-gradient(135deg, #f97316, #fb923c);">
           <div class="example-avatar">📊</div>
         </div>
         <div class="example-info">
-          <div class="example-name">钱七</div>
+          <div class="example-name">乐乐</div>
           <div class="example-title">数据分析师 | 活力橙主题</div>
           <div class="example-bio">擅长数据分析和可视化，帮助企业做出数据驱动的决策...</div>
           <div class="example-footer">
-            <div class="example-url">grwy.zzyy99.cn/example/005</div>
+            <div class="example-url">grwy.zzyy99.cn/lele/U000001</div>
             <button class="example-btn">查看详情</button>
           </div>
         </div>
       </div>
 
-      <div class="example-card" onclick="openExample('example/006')">
+      <div class="example-card" onclick="openExample('xiaoan/U000001')">
         <div class="example-preview" style="background: linear-gradient(135deg, #ffffff, #f8fafc); color: #64748b;">
           <div class="example-avatar">📝</div>
         </div>
         <div class="example-info">
-          <div class="example-name">孙八</div>
+          <div class="example-name">小安</div>
           <div class="example-title">自由撰稿人 | 极简白主题</div>
           <div class="example-bio">热爱写作，专注于科技和生活类内容创作，作品广受好评...</div>
           <div class="example-footer">
-            <div class="example-url">grwy.zzyy99.cn/example/006</div>
+            <div class="example-url">grwy.zzyy99.cn/xiaoan/U000001</div>
             <button class="example-btn">查看详情</button>
           </div>
         </div>
@@ -295,7 +299,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p class="footer-text">© 2026 志在瑶远信息技术有限公司</p>
+      <p class="footer-text">© 2026 志在瑶远 · 个人网页一站式生成平台</p>
     </div>
   </footer>
 
@@ -414,6 +418,10 @@
           closeModal('loginModal')
           showToast('登录成功')
           await checkAuth()
+          if (sessionStorage.getItem('redirectToEditor') === '1') {
+            sessionStorage.removeItem('redirectToEditor')
+            window.location.href = 'editor.html'
+          }
         } else {
           showToast(data.message, 'error')
         }
@@ -524,6 +532,16 @@
         return
       }
       window.location.href = `account.html?section=${section}`
+    }
+
+    function goToEditor() {
+      const token = getToken()
+      if (!token) {
+        sessionStorage.setItem('redirectToEditor', '1')
+        openLogin()
+        return
+      }
+      window.location.href = 'editor.html'
     }
 
     function openExample(url) {

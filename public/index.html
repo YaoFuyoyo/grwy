@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="/images/logo.svg">
-  <title>志在瑶远 - 个人网页生成平台</title>
+  <title>志在瑶远 - 一键生成个人网页</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,11 +15,10 @@
         <span class="logo-text">志在瑶远</span>
       </a>
       <div class="header-right">
-        <a href="editor.html" class="nav-link">编辑器</a>
+        <a href="#" class="nav-link" onclick="goToEditor()">编辑器</a>
         <a href="examples.html" class="nav-link">模板范例</a>
         <div class="auth-buttons" id="authButtons">
-          <button class="btn btn-secondary" onclick="openLogin()">登录</button>
-          <button class="btn btn-primary" onclick="openRegister()">注册</button>
+          <button class="btn btn-primary" onclick="openLogin()">登录</button>
         </div>
         <div class="user-avatar-container" id="userAvatarContainer" style="display: none;">
         <div class="user-avatar" id="userAvatar">
@@ -55,87 +54,81 @@
       </div>
       </div>
     </div>
+    <div class="header-divider"></div>
   </header>
 
   <main>
     <section class="hero-section">
-      <div class="container">
-        <div class="hero-content">
+      <div class="hero-content">
           <div class="hero-text">
-            <h1>一键生成你的专属<br>个人主页</h1>
-            <p>无需代码，只需填写资料、选择模板，即可生成精美的个人网页。支持9种色彩主题、12个展示模块，完美适配移动端。</p>
-            <div class="hero-features">
-              <div class="feature-item">
-                <div class="feature-icon">9</div>
-                <span>种色彩主题</span>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon">12</div>
-                <span>个展示模块</span>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon">✓</div>
-                <span>移动端适配</span>
-              </div>
-            </div>
+            <div class="hero-tag">零代码 · 10分钟搭建</div>
+            <h1>10分钟，拥有你的<br>专属个人网页</h1>
+            <p class="hero-desc">无需编程基础，实时预览可视化编辑，自动生成响应式网页并一键发布，立即获得专属网址链接。</p>
             <div class="hero-actions">
-              <button class="btn btn-primary btn-large" onclick="goToEditor()">立即创建个人网页</button>
-              <button class="btn btn-secondary btn-large" onclick="goToHistory()">生成记录</button>
+              <button class="btn-hero-primary" onclick="goToEditor()">立即创建个人主页</button>
+              <button class="btn-hero-secondary" onclick="goToHistory()">生成记录</button>
             </div>
           </div>
-          <div class="hero-preview">
-            <div class="preview-header">
-              <div class="preview-dot red"></div>
-              <div class="preview-dot yellow"></div>
-              <div class="preview-dot green"></div>
-              <div class="preview-url">grwy.zzyy99.cn/example/001</div>
-            </div>
-            <div class="preview-content">
-              <div class="preview-card">
-                <div class="preview-avatar">👤</div>
-                <div class="preview-name">张三</div>
-                <div class="preview-title">产品经理</div>
-                <div class="preview-bio">热爱生活，追求卓越。专注于用户体验设计和产品策略规划，拥有丰富的互联网产品经验。</div>
+          <div class="hero-preview-wrapper">
+            <div class="hero-preview">
+            <div class="browser-bar">
+              <div class="browser-dots">
+                <div class="browser-dot red"></div>
+                <div class="browser-dot yellow"></div>
+                <div class="browser-dot green"></div>
               </div>
+              <div class="browser-url">grwy.zzyy99.cn/yourname</div>
             </div>
+            <div class="browser-content">
+              <div class="preview-avatar"></div>
+              <div class="preview-name">林清欢</div>
+              <div class="preview-title">产品设计师 · 自由职业者</div>
+              <div class="preview-bio">用设计连接人与产品，专注体验与品牌表达。</div>
+              <div class="preview-tags">
+                <span class="preview-tag">UI设计</span>
+                <span class="preview-tag">品牌</span>
+                <span class="preview-tag">插画</span>
+              </div>
+              <button class="preview-view-btn" onclick="window.location.href='examples.html'">查看作品集</button>
+            </div>
+          </div>
           </div>
         </div>
-      </div>
     </section>
 
     <section class="templates-section">
       <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">看看别人怎么写</h2>
-          <p class="section-subtitle">选择适合你的模板风格，打造独特的个人品牌</p>
+        <div class="section-header-row">
+          <div class="section-title-main">精选模板 · 总有一款适合你</div>
+          <div class="section-subtitle-right">选好模板，填入资料，即刻生成专属网页</div>
         </div>
         <div class="templates-grid">
           <div class="template-card" onclick="goToEditor('theme-simple-white')">
-            <div class="template-preview template-simple-white">极简白</div>
+            <div class="template-thumb thumb-simple-white"></div>
             <div class="template-info">
               <div class="template-name">极简白</div>
-              <div class="template-desc">清新简约，适合个人博客</div>
+              <div class="template-desc">干净留白，专注内容</div>
             </div>
           </div>
           <div class="template-card" onclick="goToEditor('theme-onyx-black')">
-            <div class="template-preview template-onyx-black">曜石黑</div>
+            <div class="template-thumb thumb-onyx-black"></div>
             <div class="template-info">
               <div class="template-name">曜石黑</div>
-              <div class="template-desc">深邃大气，适合设计师</div>
+              <div class="template-desc">沉稳大气，质感高级</div>
             </div>
           </div>
           <div class="template-card" onclick="goToEditor('theme-tech-blue')">
-            <div class="template-preview template-tech-blue">科技蓝</div>
+            <div class="template-thumb thumb-tech-blue"></div>
             <div class="template-info">
               <div class="template-name">科技蓝</div>
-              <div class="template-desc">现代科技，适合程序员</div>
+              <div class="template-desc">理性专业，科技感强</div>
             </div>
           </div>
           <div class="template-card" onclick="goToEditor('theme-future-purple')">
-            <div class="template-preview template-future-purple">未来紫</div>
+            <div class="template-thumb thumb-future-purple"></div>
             <div class="template-info">
               <div class="template-name">未来紫</div>
-              <div class="template-desc">梦幻优雅，适合创意工作者</div>
+              <div class="template-desc">潮流个性，活力十足</div>
             </div>
           </div>
         </div>
@@ -264,6 +257,10 @@
           closeModal('loginModal')
           showToast('登录成功')
           await checkAuth()
+          if (sessionStorage.getItem('redirectToEditor') === '1') {
+            sessionStorage.removeItem('redirectToEditor')
+            window.location.href = 'editor.html'
+          }
         } else {
           showToast(data.message, 'error')
         }
@@ -382,6 +379,7 @@
     function goToEditor(theme) {
       const token = getToken()
       if (!token) {
+        sessionStorage.setItem('redirectToEditor', '1')
         openLogin()
         return
       }
@@ -398,7 +396,13 @@
       window.location.href = 'account.html?section=records'
     }
 
-    document.addEventListener('DOMContentLoaded', checkAuth)
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth()
+      const urlParams = new URLSearchParams(window.location.search)
+      if (urlParams.get('login') === '1') {
+        openLogin()
+      }
+    })
 
     document.addEventListener('click', (e) => {
       if (e.target.classList.contains('modal-overlay')) {
