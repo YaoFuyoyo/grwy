@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
       }
 
       const scene = SCENE_MAP[action]
-      const valid = consumeVerifiedCode(phone, scene, code)
+      const valid = await consumeVerifiedCode(phone, scene, code)
       if (!valid) {
         return res.status(401).json({ ok: false, error: 'CODE_INVALID', message: '验证码错误或已失效' })
       }
@@ -74,7 +74,7 @@ module.exports = async (req, res) => {
       }
 
       const scene = SCENE_MAP[action]
-      const valid = consumeVerifiedCode(phone, scene, code)
+      const valid = await consumeVerifiedCode(phone, scene, code)
       if (!valid) {
         return res.status(401).json({ ok: false, error: 'CODE_INVALID', message: '验证码错误或已失效' })
       }
@@ -149,7 +149,7 @@ module.exports = async (req, res) => {
       }
 
       const scene = SCENE_MAP[action]
-      const valid = consumeVerifiedCode(phone, scene, code)
+      const valid = await consumeVerifiedCode(phone, scene, code)
       if (!valid) {
         return res.status(401).json({ ok: false, error: 'CODE_INVALID', message: '验证码错误或已失效' })
       }
@@ -191,7 +191,7 @@ module.exports = async (req, res) => {
       }
 
       const scene = SCENE_MAP[action]
-      const valid = consumeVerifiedCode(newPhone, scene, code)
+      const valid = await consumeVerifiedCode(newPhone, scene, code)
       if (!valid) {
         return res.status(401).json({ ok: false, error: 'CODE_INVALID', message: '验证码错误或已失效' })
       }

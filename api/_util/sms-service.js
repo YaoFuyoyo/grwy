@@ -1,11 +1,24 @@
 const DypnsapiClient = require('@alicloud/dypnsapi20170525').default
 const { CheckSmsVerifyCodeRequest } = require('@alicloud/dypnsapi20170525')
-
-const smsStore = new Map()
+const { getCollection } = require('./db')
 
 const SMS_EXPIRE_MS = 5 * 60 * 1000
 
 let dypnsClient = null
+
+let ttlIndexReady = false
+
+async function ensureCodeTtlIndex() {
+  if (ttlIndexReady) return
+  const collection = await getCollection('zzyy_auth', 'sms_codes')
+  try {
+    // MongoDB 上让 expiresAt 到期的验证码自动删除，避免数据累积
+    await collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+  } catch (e) {
+    // 本地内存模式不支持 createIndex，忽略
+  }
+  ttlIndexReady = true
+}
 
 function initClient() {
   if (dypnsClient) return
@@ -35,30 +48,35 @@ async function checkSmsCode(phone, code) {
   }
 }
 
-function storeVerifiedCode(phone, scene, code) {
-  const key = `${phone}_${scene}`
+async function storeVerifiedCode(phone, scene, code) {
+  await ensureCodeTtlIndex()
+  const collection = await getCollection('zzyy_auth', 'sms_codes')
   const expiresAt = Date.now() + SMS_EXPIRE_MS
-  smsStore.set(key, { code, expiresAt, phone, scene })
-  console.log('[SMS] Stored code:', { key, code, expiresAt: new Date(expiresAt).toISOString() })
+  await collection.updateOne(
+    { phone, scene },
+    { $set: { code, expiresAt, phone, scene } },
+    { upsert: true }
+  )
+  console.log('[SMS] Stored code:', { phone, scene, expiresAt: new Date(expiresAt).toISOString() })
 }
 
-function consumeVerifiedCode(phone, scene, code) {
-  const key = `${phone}_${scene}`
-  const entry = smsStore.get(key)
-  console.log('[SMS] Consume check:', { key, inputCode: code, entry: entry ? { storedCode: entry.code, expiresAt: new Date(entry.expiresAt).toISOString() } : null, storeKeys: [...smsStore.keys()] })
+async function consumeVerifiedCode(phone, scene, code) {
+  const collection = await getCollection('zzyy_auth', 'sms_codes')
+  const entry = await collection.findOne({ phone, scene })
+  console.log('[SMS] Consume check:', { phone, scene, inputCode: code, found: !!entry })
   if (!entry) return false
   if (Date.now() > entry.expiresAt) {
-    smsStore.delete(key)
-    console.log('[SMS] Code expired for key:', key)
+    await collection.deleteOne({ phone, scene })
+    console.log('[SMS] Code expired for key:', `${phone}_${scene}`)
     return false
   }
   if (entry.code === code) {
-    smsStore.delete(key)
-    console.log('[SMS] Code matched and consumed for key:', key)
+    await collection.deleteOne({ phone, scene })
+    console.log('[SMS] Code matched and consumed for key:', `${phone}_${scene}`)
     return true
   }
-  console.log('[SMS] Code mismatch:', { stored: entry.code, input: code })
+  console.log('[SMS] Code mismatch')
   return false
 }
 
-module.exports = { checkSmsCode, storeVerifiedCode, consumeVerifiedCode, smsStore, SMS_EXPIRE_MS }
+module.exports = { checkSmsCode, storeVerifiedCode, consumeVerifiedCode, SMS_EXPIRE_MS }

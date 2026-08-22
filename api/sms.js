@@ -69,7 +69,7 @@ async function sendSmsCode(phone, scene) {
   const response = await dypnsClient.sendSmsVerifyCode(request)
   const body = response.body || response
   if (body && body.success === true) {
-    storeVerifiedCode(phone, scene, code)
+    await storeVerifiedCode(phone, scene, code)
   }
   return body
 }
@@ -175,7 +175,7 @@ module.exports = async (req, res) => {
       }
 
       try {
-        const localValid = consumeVerifiedCode(phone, scene, code)
+        const localValid = await consumeVerifiedCode(phone, scene, code)
         if (localValid) {
           return res.status(200).json({ ok: true, message: '验证码验证成功' })
         }
