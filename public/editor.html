@@ -7,6 +7,16 @@
   <title>编辑器 - 志在瑶远</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
     :root {
       --color-primary: #7B38EB;
       --color-primary-light: #9D4EDD;
@@ -42,7 +52,8 @@
 
     .editor-container {
       display: flex;
-      height: calc(100vh - 60px);
+      flex: 1;
+      min-height: 0;
     }
 
     .editor-sidebar {
@@ -1404,11 +1415,11 @@
         <a href="examples.html" class="nav-link">模板范例</a>
         <div class="user-avatar-container" id="userAvatarContainer">
         <div class="user-avatar" id="userAvatar">
-          <img id="userAvatarImg" src="/images/default-avatar.svg" alt="用户头像">
+          <img id="userAvatarImg" src="/images/UserAvatar.png" alt="用户头像">
         </div>
         <div class="user-dropdown">
           <div class="user-dropdown-header">
-            <img class="user-dropdown-avatar" id="userDropdownAvatar" src="/images/default-avatar.svg" alt="用户头像">
+            <img class="user-dropdown-avatar" id="userDropdownAvatar" src="/images/UserAvatar.png" alt="用户头像">
             <div class="user-dropdown-info">
               <div class="user-dropdown-name" id="userName">加载中...</div>
               <div class="user-dropdown-id" id="userId">ID: --</div>
@@ -2049,7 +2060,7 @@
     }
 
     function updateUserDisplay(user) {
-      const defaultAvatar = '/images/default-avatar.svg'
+      const defaultAvatar = '/images/UserAvatar.png'
       const avatarUrl = user.avatar || defaultAvatar
       
       document.getElementById('userAvatarImg').src = avatarUrl
@@ -2573,7 +2584,8 @@
     function selectColor(color) {
       currentTheme = color
       document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('active'))
-      event.currentTarget.classList.add('active')
+      const swatch = document.querySelector(`.color-swatch[data-color="${color}"]`)
+      if (swatch) swatch.classList.add('active')
       refreshPreview()
     }
 
@@ -4522,8 +4534,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/preview-style.css">
 </head>
-<body class="${themeClass}">
-  <nav>
+<body class="${themeClass} display-${config.homeDisplay}">
+  <nav${config.homeDisplay === 'life-large' ? ' style="background:#ffffff!important;backdrop-filter:none!important;border-bottom:1px solid var(--border-color)!important;"' : ''}>
     <div class="nav-left">
       ${data.avatar ? `<img src="${data.avatar}" alt="头像" class="nav-logo">` : ''}
       <div class="nav-brand">
@@ -4565,16 +4577,17 @@
         <div class="hero-bg-slide ${i === 0 ? 'active' : ''}" style="background-image: url('${photoSrc(img)}')"></div>
       `).join('') : ''}
     </div>
-    <div class="hero-overlay"></div>
     <div class="hero-content">
-      <div class="hero-text hero-text-center">
-        <h1>${data.name || '姓名'}</h1>
-        <p class="subtitle">${data.position || ''}</p>
-        <p class="intro">${(data.bio || '').replace(/\n/g, '<br>')}</p>
-        <div class="hero-buttons">
-          ${hasHomePortfolio ? '<a href="#portfolio" class="btn" onclick="scrollToSection(event, \'portfolio\')">查看作品集</a>' : ''}
-          ${hasHomeResume ? `<a href="${data.resumeUrl || '#'}" class="btn" target="_blank">下载简历</a>` : ''}
-          ${hasHomeContact ? '<a href="#footer" class="btn" onclick="scrollToSection(event, \'footer\')">请联系我</a>' : ''}
+      <div class="hero-text hero-text-right">
+        <div class="hero-text-card">
+          <h1>${data.name || '姓名'}</h1>
+          <p class="subtitle">${data.position || ''}</p>
+          <p class="intro">${(data.bio || '').replace(/\n/g, '<br>')}</p>
+          <div class="hero-buttons">
+            ${hasHomePortfolio ? '<a href="#portfolio" class="btn" onclick="scrollToSection(event, \'portfolio\')">查看作品集</a>' : ''}
+            ${hasHomeResume ? `<a href="${data.resumeUrl || '#'}" class="btn" target="_blank">下载简历</a>` : ''}
+            ${hasHomeContact ? '<a href="#footer" class="btn" onclick="scrollToSection(event, \'footer\')">请联系我</a>' : ''}
+          </div>
         </div>
       </div>
     </div>
@@ -5037,10 +5050,10 @@
           <div class="cert-image" data-images='${JSON.stringify(certImgs)}' data-labels='${JSON.stringify(certLabels)}' data-lightbox-group="cert-${cert.name || ''}">
             <img src="${certImgs[0]}" alt="证书" style="cursor: pointer;">
             <div class="portfolio-slider-overlay"><p>1/${certImgs.length}</p></div>
+            ${cert.time ? `<span class="cert-time-tag">${cert.time}</span>` : ''}
           </div>
           <div class="cert-content">
             <h3>${cert.name || ''}</h3>
-            ${cert.time ? `<p>${cert.time}</p>` : ''}
           </div>
         </div>
         `}).join('')}
@@ -5080,6 +5093,7 @@
               <div class="award-image" data-images='${JSON.stringify(honorImgs)}' data-labels='${JSON.stringify(honorLabels)}' data-lightbox-group="honor-${award.name || ''}">
                 <img src="${honorImgs[0]}" alt="奖项" style="cursor: pointer;">
                 <div class="portfolio-slider-overlay"><p>1/${honorImgs.length}</p></div>
+                ${award.time ? `<span class="cert-time-tag">${award.time}</span>` : ''}
               </div>
               <div class="award-content">
                 <h3>${award.name || ''}</h3>

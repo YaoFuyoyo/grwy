@@ -60,8 +60,8 @@ function renderPage(pageData) {
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/preview-style.css">
 </head>
-<body class="${themeClass}">
-  <nav>
+<body class="${themeClass} display-${config.homeDisplay}">
+  <nav${config.homeDisplay === 'life-large' ? ' style="background:#ffffff!important;backdrop-filter:none!important;border-bottom:1px solid var(--border-color)!important;"' : ''}>
     <div class="nav-left">
       ${data.avatar ? `<img src="${data.avatar}" alt="头像" class="nav-logo">` : ''}
       <div class="nav-brand">
@@ -103,16 +103,17 @@ function renderPage(pageData) {
         <div class="hero-bg-slide ${i === 0 ? 'active' : ''}" style="background-image: url('${photoSrc(img)}')"></div>
       `).join('') : ''}
     </div>
-    <div class="hero-overlay"></div>
     <div class="hero-content">
-      <div class="hero-text hero-text-center">
-        <h1>${data.name || '姓名'}</h1>
-        <p class="subtitle">${data.position || ''}</p>
-        <p class="intro">${(data.bio || '').replace(/\n/g, '<br>')}</p>
-        <div class="hero-buttons">
-          ${hasHomePortfolio ? '<a href="#portfolio" class="btn" onclick="scrollToSection(event, \'portfolio\')">查看作品集</a>' : ''}
-          ${hasHomeResume ? `<a href="${data.resumeUrl || '#'}" class="btn" target="_blank">下载简历</a>` : ''}
-          ${hasHomeContact ? '<a href="#footer" class="btn" onclick="scrollToSection(event, \'footer\')">请联系我</a>' : ''}
+      <div class="hero-text hero-text-right">
+        <div class="hero-text-card">
+          <h1>${data.name || '姓名'}</h1>
+          <p class="subtitle">${data.position || ''}</p>
+          <p class="intro">${(data.bio || '').replace(/\n/g, '<br>')}</p>
+          <div class="hero-buttons">
+            ${hasHomePortfolio ? '<a href="#portfolio" class="btn" onclick="scrollToSection(event, \'portfolio\')">查看作品集</a>' : ''}
+            ${hasHomeResume ? `<a href="${data.resumeUrl || '#'}" class="btn" target="_blank">下载简历</a>` : ''}
+            ${hasHomeContact ? '<a href="#footer" class="btn" onclick="scrollToSection(event, \'footer\')">请联系我</a>' : ''}
+          </div>
         </div>
       </div>
     </div>
@@ -575,10 +576,10 @@ function renderPage(pageData) {
           <div class="cert-image" data-images='${JSON.stringify(certImgs)}' data-labels='${JSON.stringify(certLabels)}' data-lightbox-group="cert-${cert.name || ''}">
             <img src="${certImgs[0]}" alt="证书" style="cursor: pointer;">
             <div class="portfolio-slider-overlay"><p>1/${certImgs.length}</p></div>
+            ${cert.time ? `<span class="cert-time-tag">${cert.time}</span>` : ''}
           </div>
           <div class="cert-content">
             <h3>${cert.name || ''}</h3>
-            ${cert.time ? `<p>${cert.time}</p>` : ''}
           </div>
         </div>
         `}).join('')}
@@ -618,6 +619,7 @@ function renderPage(pageData) {
               <div class="award-image" data-images='${JSON.stringify(honorImgs)}' data-labels='${JSON.stringify(honorLabels)}' data-lightbox-group="honor-${award.name || ''}">
                 <img src="${honorImgs[0]}" alt="奖项" style="cursor: pointer;">
                 <div class="portfolio-slider-overlay"><p>1/${honorImgs.length}</p></div>
+                ${award.time ? `<span class="cert-time-tag">${award.time}</span>` : ''}
               </div>
               <div class="award-content">
                 <h3>${award.name || ''}</h3>

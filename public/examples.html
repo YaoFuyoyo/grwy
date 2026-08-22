@@ -6,6 +6,13 @@
   <link rel="icon" type="image/png" href="/images/logo.svg">
   <title>模版范例 - 志在瑶远</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.AliyunCaptchaConfig = {
+      region: 'cn',
+      prefix: 'mdrqh6',
+    };
+  </script>
+  <script src="https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js"></script>
   <style>
     body {
       background: #F7F8FA;
@@ -57,24 +64,10 @@
     }
 
     .example-preview {
+      width: 100%;
       height: 200px;
-      background: linear-gradient(135deg, #3b82f6, #6366f1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      position: relative;
-    }
-
-    .example-avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
+      object-fit: cover;
+      display: block;
     }
 
     .example-info {
@@ -163,11 +156,11 @@
         </div>
         <div class="user-avatar-container" id="userAvatarContainer" style="display: none;">
         <div class="user-avatar" id="userAvatar">
-          <img id="userAvatarImg" src="/images/default-avatar.svg" alt="用户头像">
+          <img id="userAvatarImg" src="/images/UserAvatar.png" alt="用户头像">
         </div>
         <div class="user-dropdown">
           <div class="user-dropdown-header">
-            <img class="user-dropdown-avatar" id="userDropdownAvatar" src="/images/default-avatar.svg" alt="用户头像">
+            <img class="user-dropdown-avatar" id="userDropdownAvatar" src="/images/UserAvatar.png" alt="用户头像">
             <div class="user-dropdown-info">
               <div class="user-dropdown-name" id="userName">加载中...</div>
               <div class="user-dropdown-id" id="userId">ID: --</div>
@@ -187,7 +180,7 @@
               问题反馈
             </button>
             <div class="user-dropdown-divider"></div>
-            <button class="user-dropdown-item logout" onclick="logout()">
+            <button class="user-dropdown-item logout" onclick="confirmLogout()">
               退出登录
             </button>
           </div>
@@ -206,13 +199,11 @@
 
     <div class="examples-grid" id="examplesGrid">
       <div class="example-card" onclick="openExample('xiaozhi/U000001')">
-        <div class="example-preview" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
-          <div class="example-avatar">👨‍💼</div>
-        </div>
+        <img class="example-preview" src="/images/xiaozhi.png" alt="小志">
         <div class="example-info">
           <div class="example-name">小志</div>
-          <div class="example-title">产品经理 | 科技蓝主题</div>
-          <div class="example-bio">专注于用户体验设计和产品策略规划，拥有丰富的互联网产品经验...</div>
+          <div class="example-title">芯片研发 | 集成电路 | 半导体设计</div>
+          <div class="example-bio">微电子博士，8年芯片前端设计验证经验，主导多款CPU/GPU流片...</div>
           <div class="example-footer">
             <div class="example-url">grwy.zzyy99.cn/xiaozhi/U000001</div>
             <button class="example-btn">查看详情</button>
@@ -221,13 +212,11 @@
       </div>
 
       <div class="example-card" onclick="openExample('ayao/U000001')">
-        <div class="example-preview" style="background: linear-gradient(135deg, #a855f7, #d946ef);">
-          <div class="example-avatar">🎨</div>
-        </div>
+        <img class="example-preview" src="/images/ayao.png" alt="阿瑶">
         <div class="example-info">
           <div class="example-name">阿瑶</div>
-          <div class="example-title">UI设计师 | 未来紫主题</div>
-          <div class="example-bio">热爱设计，追求极致视觉体验，作品涵盖品牌设计、界面设计...</div>
+          <div class="example-title">产品规划 | 用户增长 | 数据驱动</div>
+          <div class="example-bio">5年互联网产品经验，擅长C/B端产品孵化与增长，数据驱动服务超500万用户...</div>
           <div class="example-footer">
             <div class="example-url">grwy.zzyy99.cn/ayao/U000001</div>
             <button class="example-btn">查看详情</button>
@@ -236,13 +225,11 @@
       </div>
 
       <div class="example-card" onclick="openExample('yuanyuan/U000001')">
-        <div class="example-preview" style="background: linear-gradient(135deg, #0f172a, #1e293b);">
-          <div class="example-avatar">💻</div>
-        </div>
+        <img class="example-preview" src="/images/yuanyuan.png" alt="远远">
         <div class="example-info">
           <div class="example-name">远远</div>
-          <div class="example-title">全栈工程师 | 曜石黑主题</div>
-          <div class="example-bio">热爱技术，专注于Web开发和系统架构，参与多个大型项目...</div>
+          <div class="example-title">数据洞察 | 商业智能 | 决策支持</div>
+          <div class="example-bio">统计学硕士，6年数据全链路分析经验，建模驱动决策，创造商业价值超亿元...</div>
           <div class="example-footer">
             <div class="example-url">grwy.zzyy99.cn/yuanyuan/U000001</div>
             <button class="example-btn">查看详情</button>
@@ -251,13 +238,11 @@
       </div>
 
       <div class="example-card" onclick="openExample('awen/U000001')">
-        <div class="example-preview" style="background: linear-gradient(135deg, #22c55e, #4ade80);">
-          <div class="example-avatar">📚</div>
-        </div>
+        <img class="example-preview" src="/images/awen.png" alt="阿文">
         <div class="example-info">
           <div class="example-name">阿文</div>
-          <div class="example-title">研究员 | 森林绿主题</div>
-          <div class="example-bio">专注于人工智能领域研究，发表多篇学术论文，拥有多项专利...</div>
+          <div class="example-title">前端开发 | 后端架构 | 云原生部署</div>
+          <div class="example-bio">7年全栈开发，精通React/Vue与Node/Python，擅长高并发架构，开源贡献5000+ Star...</div>
           <div class="example-footer">
             <div class="example-url">grwy.zzyy99.cn/awen/U000001</div>
             <button class="example-btn">查看详情</button>
@@ -266,13 +251,11 @@
       </div>
 
       <div class="example-card" onclick="openExample('lele/U000001')">
-        <div class="example-preview" style="background: linear-gradient(135deg, #f97316, #fb923c);">
-          <div class="example-avatar">📊</div>
-        </div>
+        <img class="example-preview" src="/images/lele.png" alt="乐乐">
         <div class="example-info">
           <div class="example-name">乐乐</div>
-          <div class="example-title">数据分析师 | 活力橙主题</div>
-          <div class="example-bio">擅长数据分析和可视化，帮助企业做出数据驱动的决策...</div>
+          <div class="example-title">婚纱摄影 | 人像美学 | 情感记录</div>
+          <div class="example-bio">8年婚纱摄影经验，服务2000+对新人，擅自然光与情感捕捉，作品屡获国际大奖...</div>
           <div class="example-footer">
             <div class="example-url">grwy.zzyy99.cn/lele/U000001</div>
             <button class="example-btn">查看详情</button>
@@ -281,13 +264,11 @@
       </div>
 
       <div class="example-card" onclick="openExample('xiaoan/U000001')">
-        <div class="example-preview" style="background: linear-gradient(135deg, #ffffff, #f8fafc); color: #64748b;">
-          <div class="example-avatar">📝</div>
-        </div>
+        <img class="example-preview" src="/images/xiaoan.png" alt="小安">
         <div class="example-info">
           <div class="example-name">小安</div>
-          <div class="example-title">自由撰稿人 | 极简白主题</div>
-          <div class="example-bio">热爱写作，专注于科技和生活类内容创作，作品广受好评...</div>
+          <div class="example-title">深度写作 | 内容策划 | 品牌文案</div>
+          <div class="example-bio">10年创作经验，深耕商业与品牌故事，发表500万字，获多项写作大奖...</div>
           <div class="example-footer">
             <div class="example-url">grwy.zzyy99.cn/xiaoan/U000001</div>
             <button class="example-btn">查看详情</button>
@@ -309,20 +290,39 @@
         <h3 class="modal-title">登录</h3>
         <button class="modal-close" onclick="closeModal('loginModal')">×</button>
       </div>
+      <div class="modal-tabs">
+        <div class="modal-tab active" data-tab="password" onclick="switchLoginTab('password')">密码登录</div>
+        <div class="modal-tab" data-tab="sms" onclick="switchLoginTab('sms')">验证码登录</div>
+      </div>
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
           <label class="form-label">手机号</label>
           <input type="tel" class="form-input" id="loginPhone" placeholder="请输入手机号" required>
           <div class="form-error" id="loginPhoneError"></div>
         </div>
-        <div class="form-group">
-          <label class="form-label">密码</label>
-          <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" required>
-          <div class="form-error" id="loginPasswordError"></div>
+        <div id="loginPasswordGroup">
+          <div class="form-group">
+            <label class="form-label">密码</label>
+            <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" required>
+            <div class="form-error" id="loginPasswordError"></div>
+          </div>
+        </div>
+        <div id="loginSmsGroup" style="display:none">
+          <div class="form-group">
+            <label class="form-label">验证码</label>
+            <div class="sms-input-row">
+              <input type="text" class="form-input sms-code-input" id="loginSmsCode" placeholder="请输入验证码" maxlength="6">
+              <button type="button" class="btn-sms" id="loginSendCodeBtn" onclick="sendLoginSmsCode()">获取验证码</button>
+            </div>
+            <div class="form-error" id="loginSmsError"></div>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">登录</button>
-        <div class="form-switch">
-          还没有账号？<a href="#" onclick="closeModal('loginModal'); openRegister()">立即注册</a>
+        <div class="form-switch-row">
+          <div class="form-switch">
+            还没有账号？<a href="#" onclick="closeModal('loginModal'); openRegister()">立即注册</a>
+          </div>
+          <a href="#" class="forgot-link" onclick="closeModal('loginModal'); openForgotPassword()">忘记密码？</a>
         </div>
       </form>
     </div>
@@ -346,9 +346,17 @@
           <div class="form-error" id="registerNameError"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">密码</label>
-          <input type="password" class="form-input" id="registerPassword" placeholder="请输入密码（至少6位）" required>
-          <div class="form-error" id="registerPasswordError"></div>
+          <label class="form-label">验证码</label>
+          <div class="sms-input-row">
+            <input type="text" class="form-input sms-code-input" id="registerSmsCode" placeholder="请输入验证码" maxlength="6">
+            <button type="button" class="btn-sms" id="registerSendCodeBtn" onclick="sendRegisterSmsCode()">获取验证码</button>
+          </div>
+          <div class="form-error" id="registerSmsError"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">设置密码</label>
+          <input type="password" class="form-input" id="registerSmsPassword" placeholder="请设置密码（至少6位）" required>
+          <div class="form-error" id="registerSmsPasswordError"></div>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">注册</button>
         <div class="form-switch">
@@ -358,10 +366,74 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="forgotPasswordModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">重置密码</h3>
+        <button class="modal-close" onclick="closeModal('forgotPasswordModal')">×</button>
+      </div>
+      <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
+        <div class="form-group">
+          <label class="form-label">手机号</label>
+          <input type="tel" class="form-input" id="forgotPhone" placeholder="请输入注册时的手机号" required>
+          <div class="form-error" id="forgotPhoneError"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">验证码</label>
+          <div class="sms-input-row">
+            <input type="text" class="form-input sms-code-input" id="forgotSmsCode" placeholder="请输入验证码" maxlength="6">
+            <button type="button" class="btn-sms" id="forgotSendCodeBtn" onclick="sendForgotSmsCode()">获取验证码</button>
+          </div>
+          <div class="form-error" id="forgotSmsError"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">新密码</label>
+          <input type="password" class="form-input" id="forgotNewPassword" placeholder="请输入新密码（至少6位）" required>
+          <div class="form-error" id="forgotPasswordError"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">确认新密码</label>
+          <input type="password" class="form-input" id="forgotConfirmPassword" placeholder="请再次输入新密码" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">重置密码</button>
+        <div class="form-switch">
+          想起密码了？<a href="#" onclick="closeModal('forgotPasswordModal'); openLogin()">返回登录</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">确认退出</h3>
+        <button class="modal-close" onclick="closeModal('logoutModal')">×</button>
+      </div>
+      <div style="text-align: center; padding: 24px 0;">
+        <div style="font-size: 48px; margin-bottom: 16px;">👋</div>
+        <div style="font-size: 16px; color: #1e293b; margin-bottom: 24px;">确认要退出登录吗？</div>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn btn-secondary" style="flex: 1;" onclick="closeModal('logoutModal')">取消</button>
+          <button class="btn btn-primary" style="flex: 1;" onclick="confirmLogoutAction()">确认退出</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
+
+  <div id="captcha-element" style="display:none"></div>
+  <button id="captcha-button" style="display:none"></button>
 
   <script>
     const API_BASE = window.location.hostname === 'localhost' ? `${window.location.protocol}//${window.location.host}/api` : '/api'
+
+    const CAPTCHA_SCENE_ID = '12g27qq3'
+    let captchaInstance = null
+    let captchaInitPromise = null
+    let pendingSmsRequest = null
+
+    let currentLoginTab = 'password'
 
     function getToken() {
       return localStorage.getItem('token') || ''
@@ -391,42 +463,198 @@
       document.getElementById('registerModal').classList.add('active')
     }
 
+    function openForgotPassword() {
+      document.getElementById('forgotPasswordModal').classList.add('active')
+    }
+
     function closeModal(modalId) {
       document.getElementById(modalId).classList.remove('active')
+    }
+
+    function switchLoginTab(tab) {
+      currentLoginTab = tab
+      const tabs = document.querySelectorAll('#loginModal .modal-tab')
+      tabs.forEach(t => t.classList.remove('active'))
+      document.querySelector(`#loginModal [data-tab="${tab}"]`).classList.add('active')
+      document.getElementById('loginPasswordGroup').style.display = tab === 'password' ? '' : 'none'
+      document.getElementById('loginSmsGroup').style.display = tab === 'sms' ? '' : 'none'
+    }
+
+    function initCaptcha() {
+      if (captchaInstance) return Promise.resolve(captchaInstance)
+      if (captchaInitPromise) return captchaInitPromise
+      if (typeof window.initAliyunCaptcha !== 'function') {
+        console.error('Aliyun Captcha SDK not loaded')
+        return Promise.reject(new Error('SDK not loaded'))
+      }
+      captchaInitPromise = new Promise((resolve, reject) => {
+        window.initAliyunCaptcha({
+          SceneId: CAPTCHA_SCENE_ID,
+          mode: 'popup',
+          element: '#captcha-element',
+          button: '#captcha-button',
+          captchaVerifyCallback: async function(captchaVerifyParam) {
+            if (!pendingSmsRequest) {
+              return { captchaResult: false, bizResult: false }
+            }
+            const { phone, scene, buttonId } = pendingSmsRequest
+            const btn = document.getElementById(buttonId)
+            if (btn) {
+              btn.disabled = true
+              btn.textContent = '发送中...'
+            }
+            try {
+              const response = await fetch(`${API_BASE}/sms?action=send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone, scene, captchaVerifyParam })
+              })
+              const data = await response.json()
+              if (data.ok) {
+                showToast('验证码已发送，请查收短信')
+                startCountdown(buttonId)
+              } else {
+                showToast(data.message, 'error')
+                if (btn) {
+                  btn.disabled = false
+                  btn.textContent = '获取验证码'
+                }
+              }
+              return { captchaResult: true, bizResult: data.ok }
+            } catch (err) {
+              showToast('网络错误', 'error')
+              if (btn) {
+                btn.disabled = false
+                btn.textContent = '获取验证码'
+              }
+              return { captchaResult: true, bizResult: false }
+            }
+          },
+          onBizResultCallback: function(bizResult) {
+            pendingSmsRequest = null
+          },
+          getInstance: function(instance) {
+            captchaInstance = instance
+            resolve(instance)
+          },
+          slideStyle: {
+            width: 320,
+            height: 40
+          },
+          language: 'cn'
+        })
+        setTimeout(() => reject(new Error('Captcha init timeout')), 5000)
+      })
+      return captchaInitPromise
+    }
+
+    async function sendSmsCode(phone, scene, buttonId) {
+      if (!/^1[3-9]\d{9}$/.test(phone)) {
+        showToast('请输入正确的手机号', 'error')
+        return
+      }
+      pendingSmsRequest = { phone, scene, buttonId }
+      try {
+        const captcha = await initCaptcha()
+        if (!captcha) {
+          showToast('验证服务加载失败，请刷新页面', 'error')
+          return
+        }
+        document.getElementById('captcha-button').click()
+      } catch (e) {
+        showToast('验证服务加载失败，请刷新页面', 'error')
+      }
+    }
+
+    function startCountdown(buttonId) {
+      const btn = document.getElementById(buttonId)
+      if (!btn) return
+      let seconds = 60
+      btn.disabled = true
+      btn.textContent = `${seconds}s 后重发`
+      const timer = setInterval(() => {
+        seconds--
+        if (seconds <= 0) {
+          clearInterval(timer)
+          btn.disabled = false
+          btn.textContent = '获取验证码'
+        } else {
+          btn.textContent = `${seconds}s 后重发`
+        }
+      }, 1000)
+    }
+
+    function sendLoginSmsCode() {
+      const phone = document.getElementById('loginPhone').value
+      sendSmsCode(phone, 'login', 'loginSendCodeBtn')
+    }
+
+    function sendRegisterSmsCode() {
+      const phone = document.getElementById('registerPhone').value
+      sendSmsCode(phone, 'register', 'registerSendCodeBtn')
+    }
+
+    function sendForgotSmsCode() {
+      const phone = document.getElementById('forgotPhone').value
+      sendSmsCode(phone, 'resetPassword', 'forgotSendCodeBtn')
     }
 
     async function handleLogin(e) {
       e.preventDefault()
       const phone = document.getElementById('loginPhone').value
-      const password = document.getElementById('loginPassword').value
-
-      if (!phone || !password) {
-        showToast('请填写完整信息', 'error')
+      if (!phone) {
+        showToast('请输入手机号', 'error')
         return
       }
 
-      try {
-        const response = await fetch(`${API_BASE}/auth?action=login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, password })
-        })
-        const data = await response.json()
-
-        if (data.ok) {
-          setToken(data.token)
-          closeModal('loginModal')
-          showToast('登录成功')
-          await checkAuth()
-          if (sessionStorage.getItem('redirectToEditor') === '1') {
-            sessionStorage.removeItem('redirectToEditor')
-            window.location.href = 'editor.html'
-          }
-        } else {
-          showToast(data.message, 'error')
+      if (currentLoginTab === 'sms') {
+        const code = document.getElementById('loginSmsCode').value
+        if (!code) {
+          showToast('请输入验证码', 'error')
+          return
         }
-      } catch (err) {
-        showToast('网络错误', 'error')
+        try {
+          const response = await fetch(`${API_BASE}/auth?action=login-sms`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, code })
+          })
+          const data = await response.json()
+          if (data.ok) {
+            setToken(data.token)
+            closeModal('loginModal')
+            showToast('登录成功')
+            await checkAuth()
+          } else {
+            showToast(data.message, 'error')
+          }
+        } catch (err) {
+          showToast('网络错误', 'error')
+        }
+      } else {
+        const password = document.getElementById('loginPassword').value
+        if (!password) {
+          showToast('请输入密码', 'error')
+          return
+        }
+        try {
+          const response = await fetch(`${API_BASE}/auth?action=login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, password })
+          })
+          const data = await response.json()
+          if (data.ok) {
+            setToken(data.token)
+            closeModal('loginModal')
+            showToast('登录成功')
+            await checkAuth()
+          } else {
+            showToast(data.message, 'error')
+          }
+        } catch (err) {
+          showToast('网络错误', 'error')
+        }
       }
     }
 
@@ -434,26 +662,28 @@
       e.preventDefault()
       const phone = document.getElementById('registerPhone').value
       const name = document.getElementById('registerName').value
-      const password = document.getElementById('registerPassword').value
+      const code = document.getElementById('registerSmsCode').value
+      const password = document.getElementById('registerSmsPassword').value
 
-      if (!phone || !name || !password) {
+      if (!phone || !name) {
         showToast('请填写完整信息', 'error')
         return
       }
-
-      if (password.length < 6) {
+      if (!code) {
+        showToast('请输入验证码', 'error')
+        return
+      }
+      if (!password || password.length < 6) {
         showToast('密码至少6位', 'error')
         return
       }
-
       try {
-        const response = await fetch(`${API_BASE}/auth?action=register`, {
+        const response = await fetch(`${API_BASE}/auth?action=register-sms`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, password, name })
+          body: JSON.stringify({ phone, code, name, password })
         })
         const data = await response.json()
-
         if (data.ok) {
           setToken(data.token)
           closeModal('registerModal')
@@ -467,7 +697,57 @@
       }
     }
 
-    async function logout() {
+    async function handleForgotPassword(e) {
+      e.preventDefault()
+      const phone = document.getElementById('forgotPhone').value
+      const code = document.getElementById('forgotSmsCode').value
+      const newPassword = document.getElementById('forgotNewPassword').value
+      const confirmPassword = document.getElementById('forgotConfirmPassword').value
+
+      if (!phone || !code || !newPassword) {
+        showToast('请填写完整信息', 'error')
+        return
+      }
+
+      if (newPassword.length < 6) {
+        showToast('密码至少6位', 'error')
+        return
+      }
+
+      if (newPassword !== confirmPassword) {
+        showToast('两次输入的密码不一致', 'error')
+        return
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/auth?action=reset-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, code, newPassword })
+        })
+        const data = await response.json()
+        if (data.ok) {
+          closeModal('forgotPasswordModal')
+          showToast('密码重置成功，请登录')
+          openLogin()
+        } else {
+          showToast(data.message, 'error')
+        }
+      } catch (err) {
+        showToast('网络错误', 'error')
+      }
+    }
+
+    function confirmLogout() {
+      document.getElementById('logoutModal').classList.add('active')
+    }
+
+    async function confirmLogoutAction() {
+      closeModal('logoutModal')
+      await handleLogout()
+    }
+
+    async function handleLogout() {
       const token = getToken()
       if (token) {
         try {
@@ -516,7 +796,7 @@
     }
 
     function updateUserDisplay(user) {
-      const defaultAvatar = '/images/default-avatar.svg'
+      const defaultAvatar = '/images/UserAvatar.png'
       const avatarUrl = user.avatar || defaultAvatar
       
       document.getElementById('userAvatarImg').src = avatarUrl

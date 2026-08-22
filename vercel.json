@@ -5,7 +5,8 @@
     "api/payment.js": { "maxDuration": 30 },
     "api/examples.js": { "maxDuration": 30 },
     "api/upload.js": { "maxDuration": 30 },
-    "api/user.js": { "maxDuration": 30 }
+    "api/user.js": { "maxDuration": 30 },
+    "api/sms.js": { "maxDuration": 30 }
   },
   "rewrites": [
     { "source": "/editor", "destination": "/editor.html" },
